@@ -8,6 +8,6 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY app.js ./
+COPY src src
 
-CMD ["node", "src/app.js"]
+CMD ["npm", "run", "start"]

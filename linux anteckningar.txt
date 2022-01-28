@@ -23,3 +23,5 @@ WSL Remote extesion för VSCode måste vara installerat
 explorer.exe . // Öppna root folder för Ubuntu
 
 code . // skriv i insert_code_here mappen i Ubuntu för att öppna VSCode
+
+sudo chmod 666 /var/run/docker.sock // när man for docker premission denied socket tjofagräsen
