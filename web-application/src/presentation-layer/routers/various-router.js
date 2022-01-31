@@ -14,4 +14,8 @@ router.get("/contact", function(request, response){
 	response.render("contact.hbs")
 })
 
+router.get("/createChallange", function(request, response){
+	response.render("createChallange.hbs")
+})
+
 module.exports = router
