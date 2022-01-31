@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "codemirror": "^5.65.1",
     "express": "^4.17.2",
     "express-handlebars": "^5.2.0",
     "mysql": "^2.18.1"
