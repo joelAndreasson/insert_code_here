@@ -5,6 +5,8 @@ CREATE TABLE challenges (
     progLanguage VARCHAR(127),
     difficulty VARCHAR(127),
     description VARCHAR(255),
+    datePublished DATE,
+    numOfPlays INT,
     userId INT
 );
 
