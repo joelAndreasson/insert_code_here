@@ -1,6 +1,6 @@
 const path = require('path')
 const express = require('express')
-const expressHandlebars = require('express-handlebars')
+const { engine } = require('express-handlebars')
 
 const variousRouter = require('./routers/various-router')
 const accountRouter = require('./routers/account-router')
@@ -12,7 +12,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 // Note: This code is for an old version of express-handlebars.
 // One should use newest version of packages.
-app.engine('hbs', expressHandlebars({
+app.engine('hbs', engine({
 	extname: 'hbs',
 	defaultLayout: 'main',
 	layoutsDir: path.join(__dirname, 'layouts')
