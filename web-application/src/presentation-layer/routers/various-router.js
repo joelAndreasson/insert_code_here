@@ -18,4 +18,8 @@ router.get("/createChallange", function(request, response){
 	response.render("createChallange.hbs")
 })
 
+router.get("/challangesList", function(request, response){
+	response.render("challangesList.hbs")
+})
+
 module.exports = router
