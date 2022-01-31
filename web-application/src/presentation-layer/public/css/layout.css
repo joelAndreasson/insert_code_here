@@ -14,6 +14,10 @@ footer {
 	width: 100%;
   }
 
+.border-bottom{
+	border-bottom: 2px solid gray;
+}
+
 
 .main {
 	display: flex;

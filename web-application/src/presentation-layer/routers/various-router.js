@@ -22,4 +22,8 @@ router.get("/challangesList", function(request, response){
 	response.render("challangesList.hbs")
 })
 
+router.get("/viewChallange", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
+	response.render("viewChallange.hbs")
+})
+
 module.exports = router
