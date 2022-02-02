@@ -15,15 +15,15 @@ router.get("/contact", function(request, response){
 })
 
 router.get("/createChallange", function(request, response){
-	response.render("createChallange.hbs")
+	response.render("create-challange.hbs")
 })
 
 router.get("/challangesList", function(request, response){
-	response.render("challangesList.hbs") // add databse information 
+	response.render("challanges-list.hbs") // add databse information 
 })
 
 router.get("/viewChallange", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
-	response.render("viewChallange.hbs")
+	response.render("view-challange.hbs")
 })
 
 router.get("/profile", function(request,response){
