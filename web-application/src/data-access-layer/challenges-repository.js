@@ -48,6 +48,3 @@ exports.createChallenge = function(challenge, callback){
 	})
 	
 }
-
-
-
