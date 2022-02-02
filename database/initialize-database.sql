@@ -1,5 +1,5 @@
 CREATE TABLE challenges (
-    challengeId INT AUTO_INCREMENT PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255),
     challengeText VARCHAR(255),
     progLanguage VARCHAR(127),
@@ -11,19 +11,19 @@ CREATE TABLE challenges (
 );
 
 CREATE TABLE comments (
-    commentId INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     commentText VARCHAR(255),
     userId INT,
     challengeId INT,
-    FOREIGN KEY(challengeId) REFERENCES challenges(challengeId)
+    FOREIGN KEY(challengeId) REFERENCES challenges(id)
 );
 
 CREATE TABLE solutions (
-    solutionId INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     placement INT,
     solutionText VARCHAR(255),
     challengeId INT,
-    FOREIGN KEY(challengeId) REFERENCES challenges(challengeId)
+    FOREIGN KEY(challengeId) REFERENCES challenges(id)
 );
 
 -- Create a table to store user accounts in.
