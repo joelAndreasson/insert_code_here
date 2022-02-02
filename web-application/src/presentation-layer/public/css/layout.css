@@ -7,6 +7,24 @@ body{
 	min-height: 100%;
 }
 
+footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+  }
+
+.border-bottom{
+	border-bottom: 2px solid gray;
+}
+
+
+.main {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+  }
+
 #entire-page{
 	max-width: 800px;
 	margin: 0 auto;
