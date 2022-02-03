@@ -8,11 +8,27 @@ router.get("/create", function(request, response){
 })
 
 router.get("/", function(request, response){
-	response.render("challenges-list.hbs") // add databse information 
+
+    challengeManager.getAllChallenges(function(errors, challenges){
+		const model = {
+			errors: errors,
+			challenges: challenges
+		}
+		response.render("challenges-list.hbs", model)
+	})
 })
 
-router.get("/view", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
-	response.render("view-challenge.hbs")
+router.get("/:id", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
+
+    const id = request.params.id
+	
+	challengeManager.getChallengeById(id, function(errors, challenge){
+		const model = {
+			errors: errors,
+			challenge: challenge
+		}
+		response.render("view-challenge.hbs", model)
+	})
 })
 
 
