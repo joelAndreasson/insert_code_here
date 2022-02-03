@@ -4,6 +4,7 @@ const { engine } = require('express-handlebars')
 
 const variousRouter = require('./routers/various-router')
 const accountRouter = require('./routers/account-router')
+const challengeRouter = require('./routers/challenge-router')
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Attach all routers.
 app.use('/', variousRouter)
 app.use('/accounts', accountRouter)
+app.use('/challenges', challengeRouter)
 
 // Start listening for incoming HTTP requests!
 app.listen(8080, function(){

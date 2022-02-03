@@ -1,4 +1,4 @@
-const challengeRepository = require('../data-access-layer/challanges-repository') // CHALLENGE!! SINGULAR
+const challengeRepository = require('../data-access-layer/challenges-repository') // CHALLENGE!! SINGULAR
 
 
 exports.getAllChallenges = function(callback){
@@ -20,6 +20,6 @@ exports.createChallenge = function(account, callback){
 	}
     */
 	
-	accountRepository.createAccount(account, callback)
+	challengeRepository.createChallenge(challenge, callback)
 	
 }
