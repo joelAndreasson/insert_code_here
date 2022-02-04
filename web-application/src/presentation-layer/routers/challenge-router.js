@@ -4,7 +4,7 @@ const challengeManager = require('../../business-logic-layer/challenge-manager')
 const router = express.Router()
 
 router.get("/create", function(request, response){
-	response.render("create-challenge.hbs")
+	response.render("challenge-create.hbs")
 })
 
 router.get("/", function(request, response){
@@ -14,11 +14,11 @@ router.get("/", function(request, response){
 			errors: errors,
 			challenges: challenges
 		}
-		response.render("challenges-list.hbs", model)
+		response.render("challenge-list.hbs", model)
 	})
 })
 
-router.get("/:id", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
+router.get("/:id/preview", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
 
     const id = request.params.id
 	
@@ -27,7 +27,7 @@ router.get("/:id", function(request,response){ //change this when database is ad
 			errors: errors,
 			challenge: challenge
 		}
-		response.render("view-challenge.hbs", model)
+		response.render("challenge-preview.hbs", model)
 	})
 })
 
