@@ -1,0 +1,22 @@
+{{#if errors.length}}
+    <p>Is someone there? >:( ... Hmm, must have been the wind</p>
+    <ul>
+        {{#each errors}}
+            <p>{{this}}</p>
+        {{/each}}
+    </ul>
+{{else}}
+    {{#if challenge}}
+        <h1>{{challenge.title}}</h1>
+        <p>{{challenge.description}}</p>
+        <p>{{challenge.challangeText}}</p>
+        <p>{{challenge.datePublished}}</p>
+        <p>{{challenge.userId}}</p>
+        <p>{{challenge.numOfPlays}}</p>
+        <p>{{challenge.difficulty}}</p>
+        <p>{{challenge.progLanguage}}</p>
+    {{else}}
+        <p>This challenge does not exist</p>
+    {{/if}}
+{{/if}}
+
