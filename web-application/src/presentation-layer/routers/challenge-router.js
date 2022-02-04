@@ -18,7 +18,7 @@ router.get("/", function(request, response){
 	})
 })
 
-router.get("/:id/preview", function(request,response){ //change this when database is added so it takes challenge id in url and sends information in model.
+router.get("/:id/preview", function(request,response){ 
 
     const id = request.params.id
 	
@@ -29,6 +29,19 @@ router.get("/:id/preview", function(request,response){ //change this when databa
 		}
 		response.render("challenge-preview.hbs", model)
 	})
+})
+
+router.get('/:id/play', function(request, response){
+	const id = request.params.id
+
+	challengeManager.getChallengeById(id, function(errors, challenge){
+		const model = {
+			errors: errors,
+			challenge: challenge
+		}
+		response.render("challenge-play.hbs", model)
+	})
+	
 })
 
 

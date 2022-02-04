@@ -7,14 +7,17 @@
     </ul>
 {{else}}
     {{#if challenge}}
-        <h1>{{challenge.title}}</h1>
-        <p>{{challenge.description}}</p>
-        <p>{{challenge.challangeText}}</p>
-        <p>{{challenge.datePublished}}</p>
-        <p>{{challenge.userId}}</p>
-        <p>{{challenge.numOfPlays}}</p>
-        <p>{{challenge.difficulty}}</p>
-        <p>{{challenge.progLanguage}}</p>
+        <div class="content">
+            <h1>{{challenge.title}}</h1>
+            <p>Description: {{challenge.description}}</p>
+            <p>Content: {{challenge.challangeText}}</p>
+            <p>Published: {{challenge.datePublished}}</p>
+            <p>By: {{challenge.userId}}</p>
+            <p>Number of plays: {{challenge.numOfPlays}}</p>
+            <p>Difficulty: {{challenge.difficulty}}</p>
+            <p>Language: {{challenge.progLanguage}}</p>
+        </div>
+        
     {{else}}
         <p>This challenge does not exist</p>
     {{/if}}
