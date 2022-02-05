@@ -3,8 +3,41 @@ const challengeManager = require('../../business-logic-layer/challenge-manager')
 
 const router = express.Router()
 
+
+
+class Challenge{ // Should probably be put elsewhere
+	constructor(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId){
+		this.title = title
+		this.challengeText = challengeText
+		this.progLanguage = progLanguage
+		this.difficulty = difficulty
+		this.description = description
+		this.datePublished = datePublished
+		this.numOfPlays = numOfPlays
+		this.userId = userId
+	}
+}
+
 router.get("/create", function(request, response){
 	response.render("challenge-create.hbs")
+})
+
+router.post('/create', function(request, response){
+	const title = request.body.title
+	const challengeText = request.body.challengeText
+	const progLanguage = "JavaScript" // Dummy values
+	const difficulty = "Medium"
+	const description = request.body.description
+	const datePublished = "2022-02-05"
+	const numOfPlays = 0
+	const userId = 1
+
+	const challenge = new Challenge(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
+
+	challengeManager.createChallenge(challenge, function(error, id){
+		response.redirect('/challenge/' + id + '/preview')
+	})
+
 })
 
 router.get("/", function(request, response){

@@ -9,7 +9,7 @@ exports.getChallengeById = function(id, callback){
 	challengeRepository.getChallengeById(id, callback)
 }
 
-exports.createChallenge = function(account, callback){
+exports.createChallenge = function(challenge, callback){
 	
 	/* TODO: Validate challenge
 	const errors = accountValidator.getErrorsNewAccount(account)

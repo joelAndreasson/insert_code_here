@@ -1,74 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSERT_CODE_HERE</title>
-</head>
-<body>
-    <h1>Create Challange</h1>
-    <div class="section">
-        <form class="is-half" action="">
-            <!-- Challange name -->
-            <div class="field">
-                <label class="label">Challange Name</label>
-                <div class="control">
-                    <input class=".input" type="text" placeholder="Challange Name" name="challangeName">
-                </div>
+<h1>Create Challange</h1>
+<div class="section">
+    <form class="is-half" action="/challenges/create" method="post">
+        <!-- Challange name -->
+        <div class="field">
+            <label class="label">Challange Title</label>
+            <div class="control">
+                <input class=".input" type="text" placeholder="Challange Title" name="title" value="{{title}}">
             </div>
-            <!-- Language -->
-            <div class="field">
-                <label class="label">Language</label>
-                <div class="control">
-                    <select name="challangeLanguage">
-                        <option selected>Language</option>
-                        <option value="temp-c++">C++</option>
-                        <option value="temp-python">Python</option>
-                        <option value="temp-kotlin">Kotlin</option>
-                    </select>
-                </div>
+        </div>
+        <!-- Language -->
+        <div class="field">
+            <label class="label">Language</label>
+            <div class="control">
+                <select name="challangeLanguage">
+                    <option selected>Language</option>
+                    <option value="temp-c++">C++</option>
+                    <option value="temp-python">Python</option>
+                    <option value="temp-kotlin">Kotlin</option>
+                </select>
             </div>
-            <!-- Challange Text -->
-            <div class="field">
-                <label class="label">Challange Text</label>
-                <div class="control">
-                    <input type="textarea" placeholder="Challange Text" name="challangeText">
-                </div>
+        </div>
+        <!-- Challange Text -->
+        <div class="field">
+            <label class="label">Challange Text</label>
+            <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                <input type="text" placeholder="Challange Text" name="challangeText" value="{{challengeText}}">
             </div>
-            <!-- Description -->
-            <div class="field">
-                <label class="label">Description</label>
-                <div class="control">
-                    <input type="textarea" placeholder="Description" name="description">
-                </div>
+        </div>
+        <!-- Description -->
+        <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+                <input type="text" placeholder="Description" name="description" value="{{description}}">
             </div>
-            <!-- Difficulty -->
-            <div class="field">
-                <div class="control">
-                    <label class="radio">
-                        <input value="Bronze" type="radio" name="difficulty">
-                        Bronze
-                    </label>
-                    <label class="radio">
-                        <input value="Silver" type="radio" name="difficulty">
-                        Silver
-                    </label>
-                    <label class="radio">
-                        <input value="Gold" type="radio" name="difficulty">
-                        Gold
-                    </label>
-                </div>
+        </div>
+        <!-- Difficulty -->
+        <div class="field">
+            <div class="control">
+                <label class="radio">
+                    <input value="Bronze" type="radio" name="difficulty">
+                    Bronze
+                </label>
+                <label class="radio">
+                    <input value="Silver" type="radio" name="difficulty">
+                    Silver
+                </label>
+                <label class="radio">
+                    <input value="Gold" type="radio" name="difficulty">
+                    Gold
+                </label>
             </div>
-            <!-- Submit buttons -->
-            <div class="field is-grouped">
-                <div class="control">
-                    <button class="button is-success">Create</button>
-                </div>
-                <div class="control">
-                    <button class="button is-danger">Cancel</button>
-                </div>
+        </div>
+        <!-- Submit buttons -->
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-success" type="submit" value="Create">Create</button>
             </div>
-        </form>
-    </div>
-</body>
-</html>
+            <div class="control">
+                <button class="button is-danger">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
