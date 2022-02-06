@@ -8,6 +8,10 @@ const challengeRouter = require('./routers/challenge-router')
 
 const app = express()
 
+app.use(express.urlencoded({
+	extended: false
+}))
+
 // Setup express-handlebars.
 app.set('views', path.join(__dirname, 'views'))
 

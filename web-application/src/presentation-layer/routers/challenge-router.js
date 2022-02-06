@@ -25,7 +25,7 @@ router.get("/create", function(request, response){
 router.post('/create', function(request, response){
 	const title = request.body.title
 	const challengeText = request.body.challengeText
-	const progLanguage = "JavaScript" // Dummy values
+	const progLanguage = "JavaScript" // Hardcoded dummy values
 	const difficulty = "Medium"
 	const description = request.body.description
 	const datePublished = "2022-02-05"
@@ -35,7 +35,8 @@ router.post('/create', function(request, response){
 	const challenge = new Challenge(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
 
 	challengeManager.createChallenge(challenge, function(error, id){
-		response.redirect('/challenge/' + id + '/preview')
+		// TODO: Add error handling
+		response.redirect('/challenges/' + id + '/preview')
 	})
 
 })
