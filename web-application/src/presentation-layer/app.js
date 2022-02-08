@@ -25,6 +25,7 @@ app.engine('hbs', engine({
 
 // Handle static files in the public folder.
 app.use(express.static(path.join(__dirname, 'public')))
+//app.use(express.static(path.join(__dirname, 'codemirror'))) // SHOULD MAYBE BE REMOVED???
 
 // Attach all routers.
 app.use('/', variousRouter)
