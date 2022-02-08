@@ -12,11 +12,11 @@
         <div class="field">
             <label class="label">Language</label>
             <div class="control">
-                <select name="progLanguage">
+                <select name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
                     <option selected>Language</option>
-                    <option value="temp-c++">C++</option>
-                    <option value="temp-python">Python</option>
-                    <option value="temp-kotlin">Kotlin</option>
+                    <option>C++</option>
+                    <option>Python</option>
+                    <option>Kotlin</option>
                 </select>
             </div>
         </div>
@@ -37,18 +37,12 @@
         <!-- Difficulty -->
         <div class="field">
             <div class="control">
-                <label class="radio">
-                    <input value="Bronze" type="radio" name="difficulty">
-                    Bronze
-                </label>
-                <label class="radio">
-                    <input value="Silver" type="radio" name="difficulty">
-                    Silver
-                </label>
-                <label class="radio">
-                    <input value="Gold" type="radio" name="difficulty">
-                    Gold
-                </label>
+                <select name="difficulty">
+                    <option selected>Difficulty</option>
+                    <option>Easy</option>
+                    <option>Medium</option>
+                    <option>Hard</option>
+                </select>
             </div>
         </div>
         <!-- Submit buttons -->

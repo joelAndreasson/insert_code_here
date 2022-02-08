@@ -3,7 +3,19 @@ const challengeManager = require('../../business-logic-layer/challenge-manager')
 
 const router = express.Router()
 
+function getTodaysDate(){
+	const today = new Date()
 
+	const yyyy = today.getFullYear()
+
+	let mm = today.getMonth()
+	mm = mm < 10 ? "0" + mm : mm;
+
+	let dd = today.getDay()
+	dd = dd < 10 ? "0" + dd : dd;
+
+	return yyyy + "-" + mm + "-" + dd
+}
 
 class Challenge{ // Should probably be put elsewhere
 	constructor(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId){
@@ -25,12 +37,12 @@ router.get("/create", function(request, response){
 router.post('/create', function(request, response){
 	const title = request.body.title
 	const challengeText = request.body.challengeText
-	const progLanguage = "JavaScript" // Hardcoded dummy values
-	const difficulty = "Medium"
+	const progLanguage = request.body.progLanguage
+	const difficulty = request.body.difficulty
 	const description = request.body.description
-	const datePublished = "2022-02-05"
+	const datePublished = getTodaysDate()
 	const numOfPlays = 0
-	const userId = 1
+	const userId = 1 // Should get the userId of the account that crated this challenge
 
 	const challenge = new Challenge(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
 
