@@ -46,5 +46,4 @@ exports.createChallenge = function(challenge, callback){
 			callback([], results.insertId)
 		}
 	})
-	
 }
