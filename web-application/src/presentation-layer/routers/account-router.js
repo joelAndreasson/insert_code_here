@@ -35,4 +35,19 @@ router.get('/:username', function(request, response){
 	
 })
 
+router.post("/createAccount", function(request,response){
+	const account = {
+		username: request.body.username,
+		password: request.body.password1,
+		password2: request.body.password2
+	}
+	accountManager.createAccount(account, function(errors,account){
+		const model = {
+			errors: errors,
+			account: account
+		}
+		response.render("profile.hbs", model)
+	})
+})
+
 module.exports = router
