@@ -56,6 +56,13 @@ router.get('/:id/play', function(request, response){
 	const id = request.params.id
 
 	challengeManager.getChallengeById(id, function(errors, challenge){
+
+		const re = /INSERT[\d]/g
+		regexArray = challenge.challengeText.match(re) // REGEX NOT FINISHED
+
+		console.log(regexArray)
+		challenge.challengeText = challenge.challengeText.replace(re, "HEJ")
+
 		const model = {
 			errors: errors,
 			challenge: challenge
