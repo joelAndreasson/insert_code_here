@@ -14,7 +14,7 @@ CREATE TABLE comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     commentText VARCHAR(255),
     userId INT,
-    challengeId INT,
+    challengeId INT UNSIGNED,
     FOREIGN KEY(challengeId) REFERENCES challenges(id)
 );
 
@@ -22,7 +22,7 @@ CREATE TABLE solutions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     placement INT,
     solutionText VARCHAR(255),
-    challengeId INT,
+    challengeId INT UNSIGNED,
     FOREIGN KEY(challengeId) REFERENCES challenges(id)
 );
 

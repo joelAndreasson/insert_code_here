@@ -54,7 +54,7 @@ exports.createAccount = function(account, callback){
 	db.query(query, values, function(error, results){
 		if(error){
 			// TODO: Look for usernameUnique violation.
-			callback([error.code], null)
+			callback(['databaseError'], null)
 		}else{
 			callback([], results.insertId)
 		}
