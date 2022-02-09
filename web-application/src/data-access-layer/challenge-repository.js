@@ -4,7 +4,7 @@ const db = require('./db')
 // Challenges
 exports.getAllChallenges = function(callback){
 
-    const query = 'SELECT * FROM challenges ORDER BY challengeId ASC'
+    const query = 'SELECT * FROM challenges ORDER BY id DESC'
     const values = []
 
     db.query(query, values, function(error, challenges){
@@ -48,6 +48,3 @@ exports.createChallenge = function(challenge, callback){
 	})
 	
 }
-
-
-

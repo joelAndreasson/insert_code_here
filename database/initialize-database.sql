@@ -36,3 +36,8 @@ CREATE TABLE accounts (
 
 -- Create a dummy account for testing.
 INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
+
+-- Inserting dummy challenge for testing
+INSERT INTO challenges (title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId) VALUES ("DB title", "DB challengeText", "DB progLanguage", "DB difficulty", "DB description", "2022-02-03", 1337, 420);
+INSERT INTO challenges (title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId) VALUES ("DB title2", "DB challengeText2", "DB progLanguage2", "DB difficulty2", "DB description2", "2022-02-04", 1338, 421);
+
