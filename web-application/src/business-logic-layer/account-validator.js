@@ -12,6 +12,8 @@ exports.getErrorsNewAccount = function(account){
 		errors.push("usernameTooShort")
 	}else if(MAX_USERNAME_LENGTH < account.username.length){
 		errors.push("usernameTooLong")
+	}else if(account.password2 != account.password){
+		errors.push("Passwords does not match")
 	}
 	
 	return errors
