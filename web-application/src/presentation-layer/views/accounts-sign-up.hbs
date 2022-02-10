@@ -2,11 +2,11 @@
 	<h2>Sign up</h2>
 	<p>Create a new account using the form below.</p>
 </div>
-<form action="/accounts/createAccount">
+<form action="/accounts/createAccount" method="post">
 	<div class="field">
 		<label class="label">Username</label>
 		<div class="control has-icons-left has-icons-right">
-			<input class="input" type="text" placeholder="Username" value="{{username}}" name="username">
+			<input class="input" type="text" placeholder="Username" value="{{accountInformation.username}}" name="username">
 		</div>
 		<label class="label">Password</label>
 		<div class="control has-icons-left has-icons-right">
@@ -19,3 +19,10 @@
 		<input type="submit" class="button is-success" value="Sign up">
 	</div>
 </form>
+<ul>
+	{{#each errors}}
+		<li class="has-text-danger">
+			{{this}}
+		</li>
+	{{/each}}
+</ul>

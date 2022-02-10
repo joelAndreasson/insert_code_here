@@ -22,7 +22,6 @@ router.get("/", function(request, response){
 })
 
 router.get('/:username', function(request, response){
-	
 	const username = request.params.username
 	
 	accountManager.getAccountByUsername(username, function(errors, account){
@@ -36,17 +35,25 @@ router.get('/:username', function(request, response){
 })
 
 router.post("/createAccount", function(request,response){
-	const account = {
+	const accountInformation = {
 		username: request.body.username,
-		password: request.body.password1,
+		password: request.body.password,
 		password2: request.body.password2
 	}
-	accountManager.createAccount(account, function(errors,account){
-		const model = {
-			errors: errors,
-			account: account
+	accountManager.createAccount(accountInformation, function(errors,account){
+		if(errors.length > 0){
+			const model = {
+				errors: errors,
+				accountInformation
+			}
+			response.render("accounts-sign-up.hbs", model)
+		}else{
+			const model = {
+				errors: errors,
+				account: account
+			}
+			response.render("profile.hbs", model)
 		}
-		response.render("profile.hbs", model)
 	})
 })
 

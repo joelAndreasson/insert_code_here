@@ -1,18 +1,20 @@
 const MIN_USERNAME_LENGTH = 3
 const MAX_USERNAME_LENGTH = 10
 
-exports.getErrorsNewAccount = function(account){
+exports.getErrorsNewAccount = function(accountInformation){
 	
 	const errors = []
 	
 	// Validate username.
-	if(!account.hasOwnProperty("username")){
+	if(!accountInformation.hasOwnProperty("username")){
 		errors.push("usernameMissing")
-	}else if(account.username.length < MIN_USERNAME_LENGTH){
+	}else if(accountInformation.username.length < MIN_USERNAME_LENGTH){
 		errors.push("usernameTooShort")
-	}else if(MAX_USERNAME_LENGTH < account.username.length){
+	}
+	if(MAX_USERNAME_LENGTH < accountInformation.username.length){
 		errors.push("usernameTooLong")
-	}else if(account.password2 != account.password){
+	}
+	if(accountInformation.password2 != accountInformation.password){
 		errors.push("Passwords does not match")
 	}
 	
