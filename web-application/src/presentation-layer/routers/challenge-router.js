@@ -12,6 +12,7 @@ router.get("/create", function(request, response){
 router.post('/create', function(request, response){
 	const title = request.body.title
 	const challengeText = request.body.challengeText
+	const solutionText = request.body.solutionText
 	const progLanguage = request.body.progLanguage
 	const difficulty = request.body.difficulty
 	const description = request.body.description
@@ -19,7 +20,7 @@ router.post('/create', function(request, response){
 	const numOfPlays = 0
 	const userId = 1 // Should get the userId of the account that created this challenge
 
-	const challenge = new challengeManager.Challenge(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
+	const challenge = new challengeManager.Challenge(title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
 
 	challengeManager.createChallenge(challenge, function(error, id){
 		// TODO: Add error handling
@@ -57,10 +58,10 @@ router.get('/:id/play', function(request, response){
 
 	challengeManager.getChallengeById(id, function(errors, challenge){
 
-		const blankRe = /insert/g
-		const solutionRe = /(?<=ans\s+).*?(?=\s+END)/g
-		challengeBlanks = challenge.challengeText.match(blankRe) // REGEX NOT FINISHED
-		challengeSolutions = challenge.description.match(solutionRe)
+		const challengeRegex = /insert/g
+		const solutionRegex = /(?<=ANSWER:\s+).*?(?=\s+END)/g
+		challengeBlanks = challenge.challengeText.match(challengeRegex) // REGEX NOT FINISHED
+		challengeSolutions = challenge.solutionText.match(solutionRegex)
 
 		console.log(challengeBlanks)
 		console.log(challengeSolutions)
@@ -75,6 +76,10 @@ router.get('/:id/play', function(request, response){
 	})
 	
 })
+/*
+router.post('/:id/play', function(request, response){
+	const changedChallengeText = request.body.challengeText
+})*/
 
 
 module.exports = router

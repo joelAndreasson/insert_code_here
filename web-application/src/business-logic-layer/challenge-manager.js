@@ -15,9 +15,10 @@ exports.getTodaysDate = function(){
 }
 
 exports.Challenge = class Challenge{
-	constructor(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId){
+	constructor(title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId){
 		this.title = title
 		this.challengeText = challengeText
+		this.solutionText = solutionText
 		this.progLanguage = progLanguage
 		this.difficulty = difficulty
 		this.description = description
