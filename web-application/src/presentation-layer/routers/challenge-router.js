@@ -58,16 +58,6 @@ router.get('/:id/play', function(request, response){
 
 	challengeManager.getChallengeById(id, function(errors, challenge){
 
-		const challengeRegex = /insert/g
-		const solutionRegex = /(?<=ANSWER:\s+).*?(?=\s+END)/g
-		challengeBlanks = challenge.challengeText.match(challengeRegex) // REGEX NOT FINISHED
-		challengeSolutions = challenge.solutionText.match(solutionRegex)
-
-		console.log(challengeBlanks)
-		console.log(challengeSolutions)
-	
-		//challenge.challengeText = challenge.challengeText.replace(blankRe, "HEJ")
-
 		const model = {
 			errors: errors,
 			challenge: challenge
@@ -76,10 +66,20 @@ router.get('/:id/play', function(request, response){
 	})
 	
 })
-/*
+
 router.post('/:id/play', function(request, response){
+	const id = request.params.id
 	const changedChallengeText = request.body.challengeText
-})*/
+
+	challengeManager.getResultsFromChallengeTextWithId(id, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers){
+		const model = {
+			numOfRightAnswers: numOfRightAnswers,
+			totalNumOfAnswers: totalNumOfAnswers
+		}
+	
+		response.render('challenge-completed.hbs', model)
+	})
+})
 
 
 module.exports = router

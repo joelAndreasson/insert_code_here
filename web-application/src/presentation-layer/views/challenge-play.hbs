@@ -8,17 +8,21 @@
 {{else}}
     {{#if challenge}}
         <div class="content">
-            <h1>{{challenge.title}}</h1>
-            <p>challengeText: {{challenge.challengeText}}</p>
-            <textarea name="challengeText">{{challenge.challengeText}}</textarea>
-            <p>solutionText</p>
-            <textarea name="solutionText">{{challenge.solutionText}}</textarea>
-            <p>description: {{challenge.description}}</p>
-            <p>datePublished: {{challenge.datePublished}}</p>
-            <p>userId: {{challenge.userId}}</p>
-            <p>numOfPlays: {{challenge.numOfPlays}}</p>
-            <p>difficulty: {{challenge.difficulty}}</p>
-            <p>progLanguage: {{challenge.progLanguage}}</p>
+            <form class="is-half" action="/challenges/{{challenge.id}}/play" method="post">
+                <h1>{{challenge.title}}</h1>
+                <p>challengeText: {{challenge.challengeText}}</p>
+                <textarea name="challengeText">{{challenge.challengeText}}</textarea>
+                <p>solutionText: {{challenge.solutionText}}</p>
+                <textarea name="solutionText">{{challenge.solutionText}}</textarea>
+                <p>description: {{challenge.description}}</p>
+                <p>datePublished: {{challenge.datePublished}}</p>
+                <p>userId: {{challenge.userId}}</p>
+                <p>numOfPlays: {{challenge.numOfPlays}}</p>
+                <p>difficulty: {{challenge.difficulty}}</p>
+                <p>progLanguage: {{challenge.progLanguage}}</p>
+
+                <button class="button is-success" type="submit" value="Submit">Submit</button>
+            </form>
         </div>
         
     {{else}}
