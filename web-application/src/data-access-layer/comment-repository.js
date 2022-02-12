@@ -28,7 +28,7 @@ exports.getCommentsByChallengeId = function(challengeId, callback){
             callback(['databaseError'], null)
         }
         else{
-            callback([], comments[0])
+            callback([], comments)
         }
     })
 }

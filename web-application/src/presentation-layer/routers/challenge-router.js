@@ -1,5 +1,6 @@
 const express = require('express')
 const challengeManager = require('../../business-logic-layer/challenge-manager')
+const commentManager = require('../../business-logic-layer/comment-manager')
 
 const router = express.Router()
 
@@ -44,12 +45,20 @@ router.get("/:id/preview", function(request,response){
 
     const id = request.params.id
 	
+	let allErrors = []
+
 	challengeManager.getChallengeById(id, function(errors, challenge){
-		const model = {
-			errors: errors,
-			challenge: challenge
-		}
-		response.render("challenge-preview.hbs", model)
+		allErrors.push(...errors)
+		commentManager.getCommentsByChallengeId(id, function(errors, comments){
+			allErrors.push(...errors)
+
+			const model = {
+				errors: allErrors,
+				challenge: challenge,
+				comments: comments
+			}
+			response.render("challenge-preview.hbs", model)
+		})
 	})
 })
 
@@ -77,7 +86,7 @@ router.post('/:id/play', function(request, response){
 			totalNumOfAnswers: totalNumOfAnswers
 		}
 	
-		response.render('challenge-completed.hbs', model) // POST request should mabye redirect instead?
+		response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
 	})
 })
 

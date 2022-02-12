@@ -14,7 +14,7 @@ exports.getTodaysDate = function(){ //Should maybe be moved elsewhere?
 	return yyyy + "-" + mm + "-" + dd
 }
 
-exports.Challenge = class Challenge{s //Should maybe be moved elsewhere?
+exports.Challenge = class Challenge{ //Should maybe be moved elsewhere?
 	constructor(title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId){
 		this.title = title
 		this.challengeText = challengeText

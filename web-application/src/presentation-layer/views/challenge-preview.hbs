@@ -36,38 +36,30 @@
 
 
         <!-- PLACEHOLDER COMMENTS -->
-        <div class="border-bottom"></div>
-        <div class="card">
-            <div class="card-content">
-                <p class="subtitle">
-                    Mattias
-                </p>
-                <div class="content">
-                    Such a nice text, and the challange was nice too.
+
+        {{#if comments.length}}
+
+            <div class="border-bottom"></div>
+
+            {{#each comments}}
+                <div class="card">
+                    <div class="card-content">
+                        <p class="subtitle">
+                            userId: {{userId}}
+                        </p>
+                        <div class="content">
+                            commentText: {{commentText}}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <p class="subtitle">
-                    Joel
-                </p>
-                <div class="content">
-                    Get a job!
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-content">
-                <p class="subtitle">
-                    To emotinally connected man
-                </p>
-                <div class="content">
-                    When i was a small child... bla bla bla life story comment.
-                </div>
-            </div>
-        </div>
-        <!-- END OF PLACEHOLDER COMMENTS -->
+            {{/each}}
+
+        {{else}}
+            <p>No comments exist on this challenge yet.</p>
+        {{/if}}
+
+        
+    
 
     {{else}}
         <p>This challenge does not exist.</p>
