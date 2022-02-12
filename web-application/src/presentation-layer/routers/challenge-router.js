@@ -4,8 +4,6 @@ const commentManager = require('../../business-logic-layer/comment-manager')
 
 const router = express.Router()
 
-
-
 router.get("/create", function(request, response){
 	response.render("challenge-create.hbs")
 })
@@ -41,9 +39,9 @@ router.get("/", function(request, response){
 	})
 })
 
-router.get("/:id/preview", function(request,response){ 
+router.get("/:id/preview", function(request,response){ // id should mabye be challengeId instead?
 
-    const id = request.params.id
+    const id = request.params.id // id should mabye be challengeId instead?
 	
 	let allErrors = []
 

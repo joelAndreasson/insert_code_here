@@ -10,9 +10,7 @@
     {{#if challenge}}
 
         <h1 class="has-text-centered is-size-2">{{challenge.title}}</h1>
-        <div class="box m-4">
-
-        </div>
+        <div class="box m-4"></div>
         <div class="has-text-centered">
             <a href="/challenges/{{challenge.id}}/play">
                 <button class="button is-primary is-large is-rounded">
@@ -35,7 +33,13 @@
         
 
 
-        <!-- PLACEHOLDER COMMENTS -->
+        <div class="has-text-centered">
+            <a href="/challenges/{{challenge.id}}/comments/create">
+                <button class="button is-primary is-large is-rounded">
+                    Add Comment
+                </button>
+            </a>
+        </div>
 
         {{#if comments.length}}
 
@@ -58,8 +62,6 @@
             <p>No comments exist on this challenge yet.</p>
         {{/if}}
 
-        
-    
 
     {{else}}
         <p>This challenge does not exist.</p>
