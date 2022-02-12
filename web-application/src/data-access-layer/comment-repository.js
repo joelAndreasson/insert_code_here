@@ -2,25 +2,26 @@ const db = require('./db')
 
 
 //Comments
-exports.getCommentsByChallengeId = function(challengeId, callback){
-	
-	const query = `SELECT * FROM comments WHERE challengeId = ?`
-	const values = [challengeId]
-	
-	db.query(query, values, function(error, comments){
-		if(error){
-			callback(['databaseError'], null)
-		}else{
-			callback([], comments)
-		}
-	})
-	
-}
 
 exports.getCommentById = function(id, callback){
     
     const query = 'SELECT * FROM comments WHERE id = ? LIMIT 1'
     const values = [id]
+
+    db.query(query, values, function(error, comments){
+        if(error){
+            callback(['databaseError'], null)
+        }
+        else{
+            callback([], comments[0])
+        }
+    })
+}
+
+exports.getCommentsByChallengeId = function(challengeId, callback){
+    
+    const query = 'SELECT * FROM comments WHERE challengeId = ? ORDER BY challengeId DESC'
+    const values = [challengeId]
 
     db.query(query, values, function(error, comments){
         if(error){

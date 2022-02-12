@@ -77,7 +77,7 @@ router.post('/:id/play', function(request, response){
 			totalNumOfAnswers: totalNumOfAnswers
 		}
 	
-		response.render('challenge-completed.hbs', model)
+		response.render('challenge-completed.hbs', model) // POST request should mabye redirect instead?
 	})
 })
 
