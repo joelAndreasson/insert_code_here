@@ -38,8 +38,12 @@
 				<div class="navbar-end">
 					<div class="navbar-item">
 						<div class="buttons">
-							<a class="button is-primary" href="/accounts/sign-up">Sign up</a>
-							<a class="button is-dark" href="/accounts/sign-in">Sign in</a>
+							{{#if isLoggedIn}}
+								<h5>is logged in!</h5>
+							{{else}}
+								<a class="button is-primary" href="/accounts/sign-up">Sign up</a>
+								<a class="button is-dark" href="/accounts/sign-in">Sign in</a>
+							{{/if}}
 						</div>
 					</div>
 				</div>

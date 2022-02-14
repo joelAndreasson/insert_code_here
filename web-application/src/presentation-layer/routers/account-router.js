@@ -1,6 +1,7 @@
 const express = require('express')
 const accountManager = require('../../business-logic-layer/account-manager')
 
+
 const router = express.Router()
 
 router.get("/sign-up", function(request, response){
@@ -32,6 +33,33 @@ router.get('/:username', function(request, response){
 		response.render("accounts-show-one.hbs", model)
 	})
 	
+})
+
+router.post("/login", function(request, response){ // check if this could be improved and move things that should be in in another layer
+	const accountInformation = {
+		username: request.body.username,
+		password: request.body.password
+	}
+
+	accountManager.getAccountByUsername(accountInformation.username, function(errors, account){
+		if(errors.length > 0){
+			const model = {
+				errors: errors
+			}
+			response.render("accounts-sign-in.hbs", model)
+		}else{
+			if(accountInformation.password == account.password){
+				request.session.isLoggedIn = true
+				response.redirect("/")
+			}else{
+				const model = {
+					error: "Could not sign in, please enter account credentials again."
+				}
+				response.render("accounts-sign-in.hbs", model)
+			}
+		}
+	})
+
 })
 
 router.post("/createAccount", function(request,response){
