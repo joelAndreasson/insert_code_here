@@ -4,6 +4,16 @@ const accountManager = require('../../business-logic-layer/account-manager')
 
 const router = express.Router()
 
+router.get("/sign-out", function(request, response){
+	request.session.destroy(function(error){
+		if(error){
+			// load internal server error page.
+		}else{
+			response.redirect("/")
+		}
+	})
+})
+
 router.get("/sign-up", function(request, response){
 	response.render("accounts-sign-up.hbs")
 })
