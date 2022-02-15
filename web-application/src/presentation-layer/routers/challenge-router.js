@@ -9,6 +9,7 @@ router.get("/create", function(request, response){
 })
 
 router.post('/create', function(request, response){
+	/*
 	const title = request.body.title
 	const challengeText = request.body.challengeText
 	const solutionText = request.body.solutionText
@@ -17,10 +18,24 @@ router.post('/create', function(request, response){
 	const description = request.body.description
 	const datePublished = challengeManager.getTodaysDate()
 	const numOfPlays = 0
-	const userId = 1 // Should get the userId of the account that created this challenge
+	const userId = 1
 
 	const challenge = new challengeManager.Challenge(title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
+	*/ 
 
+	const challenge = {
+		title: request.body.title,
+		challengeText: request.body.challengeText,
+		solutionText: request.body.solutionText,
+		progLanguage: request.body.progLanguage,
+		difficulty: request.body.difficulty,
+		description: request.body.description,
+		datePublished: challengeManager.getTodaysDate(),
+		numOfPlays: 0,
+		userId: 1 // Should get the userId of the account that created this challenge
+	}
+
+	
 	challengeManager.createChallenge(challenge, function(error, id){
 		// TODO: Add error handling
 		response.redirect('/challenges/' + id + '/preview')

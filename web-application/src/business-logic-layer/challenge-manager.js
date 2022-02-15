@@ -14,20 +14,6 @@ exports.getTodaysDate = function(){ //Should maybe be moved elsewhere?
 	return yyyy + "-" + mm + "-" + dd
 }
 
-exports.Challenge = class Challenge{ //Should maybe be moved elsewhere?
-	constructor(title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId){
-		this.title = title
-		this.challengeText = challengeText
-		this.solutionText = solutionText
-		this.progLanguage = progLanguage
-		this.difficulty = difficulty
-		this.description = description
-		this.datePublished = datePublished
-		this.numOfPlays = numOfPlays
-		this.userId = userId
-	}
-}
-
 exports.getResultsFromChallengeTextWithId = function(id, changedChallengeText, callback){
 
 	challengeRepository.getChallengeById(id, function(errors, challenge){

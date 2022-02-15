@@ -5,7 +5,8 @@ const router = express.Router({ mergeParams: true })
 
 router.get("/create", function(request, response){
     const challengeId = request.params.id
-
+    
+    // TODO: Error handeling
     const model = {
         challengeId: challengeId
     }
@@ -14,15 +15,16 @@ router.get("/create", function(request, response){
 })
 
 router.post('/create', function(request, response){
-	const commentText = request.body.commentText
-    const userId = 42 // Hardcoded dummy value, replace with actual accountId
-    const challengeId = request.params.id
 
-	const comment = new commentManager.Comment(commentText, userId, challengeId)
+    const comment = {
+        commentText: request.body.commentText,
+        userId: 42, // Hardcoded dummy value, replace with actual accountId
+        challengeId: request.params.id
+    }
 
 	commentManager.createComment(comment, function(error, id){
 		// TODO: Add error handling
-		response.redirect('/challenges/' + challengeId + '/preview')
+		response.redirect('/challenges/' + comment.challengeId + '/preview')
 	})
 
 })
