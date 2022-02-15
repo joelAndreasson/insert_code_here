@@ -1,14 +1,6 @@
 const commentRepository = require('../data-access-layer/comment-repository')
 
 
-exports.Comment = class Comment{
-    constructor(commentText, userId, challengeId){
-        this.commentText = commentText
-        this.userId = userId
-        this.challengeId = challengeId
-    }
-}
-
 exports.getCommentById = function(id, callback){
     commentRepository.getCommentById(id, callback)
 }
