@@ -7,7 +7,7 @@ const ALL_DIFFICULTIES = ["Easy", "Medium", "Hard"] // Hardcoded difficulties, i
 const MIN_DESCRIPTION_LENGTH = 5
 
 
-exports.getErrorsNewChallenge = function(challenge){
+exports.getErrorsNewChallenge = function(challenge){ // ADD MORE VALIDATIONS, that there needs to be at least one "[[INSERT_CODE_HERE]] etc"
 
     const errors = []
 

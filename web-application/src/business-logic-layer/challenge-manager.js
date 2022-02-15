@@ -46,15 +46,12 @@ exports.getChallengeById = function(id, callback){
 
 exports.createChallenge = function(challenge, callback){
 	
-	// TODO: Validate challenge
 	const errors = challengeValidator.getErrorsNewChallenge(challenge)
 	
 	if(0 < errors.length){
 		callback(errors, null)
 		return
 	}
-    
 	
 	challengeRepository.createChallenge(challenge, callback)
-	
 }
