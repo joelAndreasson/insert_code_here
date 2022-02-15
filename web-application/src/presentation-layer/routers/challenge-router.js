@@ -9,19 +9,6 @@ router.get("/create", function(request, response){
 })
 
 router.post('/create', function(request, response){
-	/*
-	const title = request.body.title
-	const challengeText = request.body.challengeText
-	const solutionText = request.body.solutionText
-	const progLanguage = request.body.progLanguage
-	const difficulty = request.body.difficulty
-	const description = request.body.description
-	const datePublished = challengeManager.getTodaysDate()
-	const numOfPlays = 0
-	const userId = 1
-
-	const challenge = new challengeManager.Challenge(title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
-	*/ 
 
 	const challenge = {
 		title: request.body.title,
@@ -36,9 +23,22 @@ router.post('/create', function(request, response){
 	}
 
 	
-	challengeManager.createChallenge(challenge, function(error, id){
+	challengeManager.createChallenge(challenge, function(errors, id){
 		// TODO: Add error handling
-		response.redirect('/challenges/' + id + '/preview')
+
+		if(errors.length == 0){
+			response.redirect('/challenges/' + id + '/preview')
+		}
+		else{
+			const model = {
+				errors: errors,
+				challenge: challenge
+			}
+
+			response.render('challenge-create.hbs', model)
+		}
+
+		
 	})
 
 })

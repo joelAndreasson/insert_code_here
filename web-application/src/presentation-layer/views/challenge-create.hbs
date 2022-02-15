@@ -1,11 +1,21 @@
 <h1>Create Challange</h1>
 <div class="section">
+
+    {{#if errors.length}}
+        <p>Oh no, something went wrong:</p>
+        <ul>
+            {{#each errors}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    {{/if}}
+
     <form class="is-half" action="/challenges/create" method="post">
         <!-- Challange name -->
         <div class="field">
             <label class="label">Challange Title</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Challange Title" name="title" value="{{title}}">
+                <input class="input" type="text" placeholder="Challange Title" name="title" value="{{challenge.title}}">
             </div>
         </div>
         <!-- Language -->
@@ -25,7 +35,7 @@
         <div class="field">
             <label class="label">Challenge Text</label>
             <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
-                <textarea name="challengeText" placeholder="Challenge Text">{{challengeText}}</textarea>
+                <textarea name="challengeText" placeholder="Challenge Text">{{challenge.challengeText}}</textarea>
             </div>
         </div>
 
@@ -34,7 +44,7 @@
         <div class="field">
             <label class="label">Solution Text</label>
             <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
-                <textarea name="solutionText" placeholder="Solution Text">{{solutionText}}</textarea>
+                <textarea name="solutionText" placeholder="Solution Text">{{challenge.solutionText}}</textarea>
             </div>
         </div>
 
@@ -43,7 +53,7 @@
         <div class="field">
             <label class="label">Description</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Description" name="description" value="{{description}}">
+                <input class="input" type="text" placeholder="Description" name="description" value="{{challenge.description}}">
             </div>
         </div>
         <!-- Difficulty -->

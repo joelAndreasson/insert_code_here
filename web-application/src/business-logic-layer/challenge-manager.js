@@ -1,4 +1,5 @@
 const challengeRepository = require('../data-access-layer/challenge-repository')
+const challengeValidator = require('../business-logic-layer/challenge-validator')
 
 exports.getTodaysDate = function(){ //Should maybe be moved elsewhere?
 	const today = new Date()
@@ -45,14 +46,14 @@ exports.getChallengeById = function(id, callback){
 
 exports.createChallenge = function(challenge, callback){
 	
-	/* TODO: Validate challenge
-	const errors = accountValidator.getErrorsNewAccount(account)
+	// TODO: Validate challenge
+	const errors = challengeValidator.getErrorsNewChallenge(challenge)
 	
 	if(0 < errors.length){
 		callback(errors, null)
 		return
 	}
-    */
+    
 	
 	challengeRepository.createChallenge(challenge, callback)
 	
