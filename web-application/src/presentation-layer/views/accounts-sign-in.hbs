@@ -16,3 +16,11 @@
 		<input type="submit" class="button is-success" value="Sign in">
 	</div>
 </form>
+<ul>
+	{{#each errors}}
+		<li class="has-text-danger">
+			{{this}}
+		</li>
+	{{/each}}
+	
+</ul>

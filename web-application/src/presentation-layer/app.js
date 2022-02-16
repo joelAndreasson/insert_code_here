@@ -7,6 +7,7 @@ const mySqlStore = require('express-mysql-session')
 const mySql = require('mysql')
 const MySQLStore = require('express-mysql-session')
 
+
 const variousRouter = require('./routers/various-router')
 const accountRouter = require('./routers/account-router')
 const challengeRouter = require('./routers/challenge-router')
@@ -23,6 +24,9 @@ app.use(session({
 	saveUninitialized: false,
 	resave: false
 }))
+
+// bcrypt variables
+
 
 const options = {
 	host: 'localhost',

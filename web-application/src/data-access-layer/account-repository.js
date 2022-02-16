@@ -41,10 +41,28 @@ exports.getAccountByUsername = function(username, callback){
 }
 
 /*
+	Retrives the account by password and username.
+	Possible errors: databaseError
+	Succes value: The fetched account
+*/
+exports.getAccountByCredentials = function(loginCredentials, callback){
+	const query = `SELECT * FROM accounts WHERE username = ? AND username = ? LIMIT 1`
+	const values = [loginCredentials.username, loginCredentials.password]
+	
+	db.query(query, values, function(error, accounts){
+		if(error){
+			callback(['databaseError'], null)
+		}else{
+			callback([], accounts[0])
+		}
+	})
+}
+
+/*
 	Creates a new account.
 	account: {username: "The username", password: "The password"}
 	Possible errors: databaseError, usernameTaken
-	Success value: The id of the new account.
+	Success value: The id of the new account. NOT TRUE RIGHT NOW
 */
 exports.createAccount = function(accountInformation, callback){
 	

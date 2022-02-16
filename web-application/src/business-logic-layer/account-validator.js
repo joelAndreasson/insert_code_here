@@ -21,3 +21,4 @@ exports.getErrorsNewAccount = function(accountInformation){
 	return errors
 	
 }
+
