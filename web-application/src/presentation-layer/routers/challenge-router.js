@@ -1,29 +1,44 @@
 const express = require('express')
 const challengeManager = require('../../business-logic-layer/challenge-manager')
+const commentManager = require('../../business-logic-layer/comment-manager')
 
 const router = express.Router()
-
-
 
 router.get("/create", function(request, response){
 	response.render("challenge-create.hbs")
 })
 
 router.post('/create', function(request, response){
-	const title = request.body.title
-	const challengeText = request.body.challengeText
-	const progLanguage = request.body.progLanguage
-	const difficulty = request.body.difficulty
-	const description = request.body.description
-	const datePublished = challengeManager.getTodaysDate()
-	const numOfPlays = 0
-	const userId = 1 // Should get the userId of the account that created this challenge
 
-	const challenge = new challengeManager.Challenge(title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId)
+	const challenge = {
+		title: request.body.title,
+		challengeText: request.body.challengeText,
+		solutionText: request.body.solutionText,
+		progLanguage: request.body.progLanguage,
+		difficulty: request.body.difficulty,
+		description: request.body.description,
+		datePublished: challengeManager.getTodaysDate(),
+		numOfPlays: 0,
+		userId: 1 // Should get the userId of the account that created this challenge
+	}
 
-	challengeManager.createChallenge(challenge, function(error, id){
+	
+	challengeManager.createChallenge(challenge, function(errors, id){
 		// TODO: Add error handling
-		response.redirect('/challenges/' + id + '/preview')
+
+		if(errors.length == 0){
+			response.redirect('/challenges/' + id + '/preview')
+		}
+		else{
+			const model = {
+				errors: errors,
+				challenge: challenge
+			}
+
+			response.render('challenge-create.hbs', model)
+		}
+
+		
 	})
 
 })
@@ -39,16 +54,24 @@ router.get("/", function(request, response){
 	})
 })
 
-router.get("/:id/preview", function(request,response){ 
+router.get("/:id/preview", function(request,response){ // id should mabye be challengeId instead?
 
-    const id = request.params.id
+    const id = request.params.id // id should mabye be challengeId instead?
 	
+	let allErrors = []
+
 	challengeManager.getChallengeById(id, function(errors, challenge){
-		const model = {
-			errors: errors,
-			challenge: challenge
-		}
-		response.render("challenge-preview.hbs", model)
+		allErrors.push(...errors)
+		commentManager.getCommentsByChallengeId(id, function(errors, comments){
+			allErrors.push(...errors)
+
+			const model = {
+				errors: allErrors,
+				challenge: challenge,
+				comments: comments
+			}
+			response.render("challenge-preview.hbs", model)
+		})
 	})
 })
 
@@ -57,12 +80,6 @@ router.get('/:id/play', function(request, response){
 
 	challengeManager.getChallengeById(id, function(errors, challenge){
 
-		const re = /INSERT[\d]/g
-		regexArray = challenge.challengeText.match(re) // REGEX NOT FINISHED
-
-		console.log(regexArray)
-		challenge.challengeText = challenge.challengeText.replace(re, "HEJ")
-
 		const model = {
 			errors: errors,
 			challenge: challenge
@@ -70,6 +87,20 @@ router.get('/:id/play', function(request, response){
 		response.render("challenge-play.hbs", model)
 	})
 	
+})
+
+router.post('/:id/play', function(request, response){
+	const id = request.params.id
+	const changedChallengeText = request.body.challengeText
+
+	challengeManager.getResultsFromChallengeTextWithId(id, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers){
+		const model = {
+			numOfRightAnswers: numOfRightAnswers,
+			totalNumOfAnswers: totalNumOfAnswers
+		}
+	
+		response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
+	})
 })
 
 

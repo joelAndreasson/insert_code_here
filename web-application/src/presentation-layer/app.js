@@ -11,7 +11,10 @@ const MySQLStore = require('express-mysql-session')
 const variousRouter = require('./routers/various-router')
 const accountRouter = require('./routers/account-router')
 const challengeRouter = require('./routers/challenge-router')
+const commentRouter = require('./routers/comment-router') // MAYBE THIS IS NOT NEEDED??
+
 const { baseModel } = require('./base-model.js')
+
 
 const app = express()
 
@@ -62,6 +65,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', variousRouter)
 app.use('/accounts', accountRouter)
 app.use('/challenges', challengeRouter)
+app.use('/challenges/:id/comments', commentRouter) // MAYBE THIS IS NOT NEEDED??
 
 // Start listening for incoming HTTP requests!
 app.listen(8080, function(){

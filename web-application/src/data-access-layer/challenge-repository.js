@@ -34,9 +34,9 @@ exports.getChallengeById = function(id, callback){
 
 exports.createChallenge = function(challenge, callback){
 	
-	const query = `INSERT INTO challenges (title, challengeText, progLanguage, difficulty, description, datePublished, numOfPlays, userId) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-	const values = [challenge.title, challenge.challengeText, challenge.progLanguage, challenge.difficulty, challenge.description, challenge.datePublished, challenge.numOfPlays, challenge.userId]
+	const query = `INSERT INTO challenges (title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	const values = [challenge.title, challenge.challengeText, challenge.solutionText, challenge.progLanguage, challenge.difficulty, challenge.description, challenge.datePublished, challenge.numOfPlays, challenge.userId]
 	
 	db.query(query, values, function(error, results){
 		if(error){
