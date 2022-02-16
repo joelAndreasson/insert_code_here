@@ -3,20 +3,24 @@
 	<p>Sign in using the form below.</p>
 </div>
 
-<form action="">
-	
-	<form action="">
-		<div class="field">
-			<label class="label">Username</label>
-			<div class="control has-icons-left has-icons-right">
-				<input class="input" type="text" placeholder="Username" value="">
-			</div>
-			<label class="label">Password</label>
-			<div class="control has-icons-left has-icons-right">
-				<input class="input" type="password" placeholder="Password" value="">
-			</div>
-			<input type="submit" class="button is-success" value="Sign in">
+<form action="/accounts/login" method="POST">
+	<div class="field">
+		<label class="label">Username</label>
+		<div class="control has-icons-left has-icons-right">
+			<input class="input" type="text" placeholder="Username" name="username">
 		</div>
-	</form>
-	
+		<label class="label">Password</label>
+		<div class="control has-icons-left has-icons-right">
+			<input class="input" type="password" placeholder="Password" name="password">
+		</div>
+		<input type="submit" class="button is-success" value="Sign in">
+	</div>
 </form>
+<ul>
+	{{#each errors}}
+		<li class="has-text-danger">
+			{{this}}
+		</li>
+	{{/each}}
+	
+</ul>

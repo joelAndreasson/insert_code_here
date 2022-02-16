@@ -23,12 +23,12 @@ CREATE TABLE comments (
 CREATE TABLE accounts (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(50) NOT NULL,
-	password VARCHAR(30) NOT NULL,
+	password VARCHAR(60) NOT NULL,
 	CONSTRAINT usernameUnique UNIQUE (username)
 );
 
 -- Create a dummy account for testing.
-INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
+-- INSERT INTO accounts (username, password) VALUES ("Alice", "abc123");
 
 -- Inserting dummy values for testing
 INSERT INTO challenges (title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId) VALUES ("DB title", "DB challengeText", "DB solutionText", "DB progLanguage", "DB difficulty", "DB description", "2022-02-03", 1337, 420);

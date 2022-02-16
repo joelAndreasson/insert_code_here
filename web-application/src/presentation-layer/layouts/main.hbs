@@ -30,16 +30,22 @@
 				<div class="navbar-start">
 					<a class="navbar-item" href="/">Home</a>
 					<a class="navbar-item" href="/accounts">Accounts</a>
-					<a class="navbar-item" href="/challenges/create">Create Challenge</a>
 					<a class="navbar-item" href="/challenges/">View Challenges</a>
-					<a class="navbar-item" href="/profile">Profile</a>
+					{{#if isLoggedIn}}
+						<a class="navbar-item" href="/challenges/create">Create Challenge</a>
+						<a class="navbar-item" href="/profile">Profile</a>
+					{{/if}}
 				</div>
 				
 				<div class="navbar-end">
 					<div class="navbar-item">
 						<div class="buttons">
-							<a class="button is-primary" href="/accounts/sign-up">Sign up</a>
-							<a class="button is-dark" href="/accounts/sign-in">Sign in</a>
+							{{#if isLoggedIn}}
+								<a class="button is-danger" href="/accounts/sign-out">sign out</a>
+							{{else}}
+								<a class="button is-primary" href="/accounts/sign-up">Sign up</a>
+								<a class="button is-dark" href="/accounts/sign-in">Sign in</a>
+							{{/if}}
 						</div>
 					</div>
 				</div>
