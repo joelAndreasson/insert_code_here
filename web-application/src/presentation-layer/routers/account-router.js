@@ -1,9 +1,6 @@
 const express = require('express')
 const accountManager = require('../../business-logic-layer/account-manager')
-const bcrypt = require('bcrypt')
 
-// bcrypt variables
-const saltRounds = 10
 
 
 const router = express.Router()
@@ -55,34 +52,22 @@ router.post("/login", function(request, response){ // check if this could be imp
 		password: request.body.password
 	}
 
-	accountManager.getAccountByUsername(accountCredentials.username, function(errors, account){
+	accountManager.login(accountCredentials, function(errors, account){
+		console.log("error log: "+errors)
+		console.log("account log: "+account)
 		if(errors.length > 0){ // if there are errors
-			console.log("database error")
 			const model = {
 				errors: errors
 			}
 			response.render("accounts-sign-in.hbs", model)
-		}else{ // no errors, compare password with hashed password 
-			if(account == undefined){
-				const model = { // did not manage to login.
-					errors: ["There is no account matching those credentials, check credentials spelling."]
-				}
-				response.render("accounts-sign-in.hbs", model)
-			}else if(bcrypt.compareSync(accountCredentials.password, account.password)){ // managed to login
-				request.session.isLoggedIn = true
-				response.redirect('/')
-			}else{
-				const model = { // did not manage to login.
-					errors: ["There is no account matching those credentials, check credentials spelling."]
-				}
-				response.render("accounts-sign-in.hbs", model)
-			}
-		} 
-		console.log("i should not be here!")
+		}else{ // no errors, login
+			request.session.isLoggedIn = true
+			response.redirect("/")
+		}
 	})
 })
 
-router.post("/createAccount", function(request,response){
+router.post("/create", function(request,response){
 	const accountInformation = {
 		username: request.body.username,
 		password: request.body.password,
