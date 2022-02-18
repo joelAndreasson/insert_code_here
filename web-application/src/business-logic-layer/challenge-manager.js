@@ -1,6 +1,8 @@
 const challengeRepository = require('../data-access-layer/challenge-repository')
 const challengeValidator = require('../business-logic-layer/challenge-validator')
 
+const ANSWERS_REGEX = /(?<=\[\[).*?(?=\]\])/g // HARDCODED AT MULTIPLE PLACES, should be global instead?
+
 exports.getTodaysDate = function(){ //Should maybe be moved elsewhere?
 	const today = new Date()
 
@@ -18,20 +20,30 @@ exports.getTodaysDate = function(){ //Should maybe be moved elsewhere?
 exports.getResultsFromChallengeTextWithId = function(id, changedChallengeText, callback){
 
 	challengeRepository.getChallengeById(id, function(errors, challenge){
-		//TODO: Error handling
-
-		const regex = /(?<=\[\[).*?(?=\]\])/g
-
-		const enteredAnswers = changedChallengeText.match(regex)
-		const solutionAnswers = challenge.solutionText.match(regex)
-
-		let numOfRightAnswers = 0
-		let totalNumOfAnswers = solutionAnswers.length
-		for(i = 0; i < totalNumOfAnswers; i+=1){
-			numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+		if(errors.length > 0){
+			callback(errors, null, null, null)
+			return
 		}
-
-		callback([], numOfRightAnswers, totalNumOfAnswers)
+		else{
+			const enteredAnswers = changedChallengeText.match(ANSWERS_REGEX)
+			const solutionAnswers = challenge.solutionText.match(ANSWERS_REGEX)
+	
+			const validationErrors = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
+	
+			if(validationErrors.length > 0){
+				callback(validationErrors, null, null, challenge)
+				return
+			}
+			else{
+				let numOfRightAnswers = 0
+				let totalNumOfAnswers = solutionAnswers.length
+				for(i = 0; i < totalNumOfAnswers; i+=1){
+					numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+				}
+		
+				callback([], numOfRightAnswers, totalNumOfAnswers, null)
+			}
+		}
 	})
 }
 
@@ -46,10 +58,10 @@ exports.getChallengeById = function(id, callback){
 
 exports.createChallenge = function(challenge, callback){
 	
-	const errors = challengeValidator.getErrorsNewChallenge(challenge)
+	const validationErrors = challengeValidator.getErrorsNewChallenge(challenge)
 	
-	if(0 < errors.length){
-		callback(errors, null)
+	if(0 < validationErrors.length){
+		callback(validationErrors, null)
 		return
 	}
 	

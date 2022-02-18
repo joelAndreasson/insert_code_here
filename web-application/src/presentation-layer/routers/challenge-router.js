@@ -24,18 +24,17 @@ router.post('/create', function(request, response){
 
 	
 	challengeManager.createChallenge(challenge, function(errors, id){
-		// TODO: Add error handling
 
-		if(errors.length == 0){
-			response.redirect('/challenges/' + id + '/preview')
-		}
-		else{
+		if(errors.length > 0){
 			const model = {
 				errors: errors,
 				challenge: challenge
 			}
 
 			response.render('challenge-create.hbs', model)
+		}
+		else{
+			response.redirect('/challenges/' + id + '/preview')
 		}
 
 		
@@ -93,13 +92,27 @@ router.post('/:id/play', function(request, response){
 	const id = request.params.id
 	const changedChallengeText = request.body.challengeText
 
-	challengeManager.getResultsFromChallengeTextWithId(id, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers){
-		const model = {
-			numOfRightAnswers: numOfRightAnswers,
-			totalNumOfAnswers: totalNumOfAnswers
+	challengeManager.getResultsFromChallengeTextWithId(id, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
+		
+		if(errors.length > 0){
+
+			challenge.challengeText = changedChallengeText
+
+			const model = {
+				errors: errors,
+				challenge: challenge
+			}
+
+			response.render('challenge-play.hbs', model)
 		}
-	
-		response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
+		else{
+			const model = {
+				numOfRightAnswers: numOfRightAnswers,
+				totalNumOfAnswers: totalNumOfAnswers
+			}
+		
+			response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
+		}
 	})
 })
 
