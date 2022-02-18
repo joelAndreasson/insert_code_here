@@ -1,8 +1,17 @@
 <h1>Create comment</h1>
 
+{{#if errors.length}}
+    <p>Oh no, something went wrong:</p>
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+{{/if}}
+
 <form action="/challenges/{{challengeId}}/comments/create" method="post">
 
-    <textarea name="commentText" placeholder="Comment Text">{{commentText}}</textarea>
+    <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
 
     <div class="control">
         <button class="button is-success" type="submit" value="Create">Create</button>

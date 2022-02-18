@@ -20,7 +20,7 @@ exports.getCommentById = function(id, callback){
 
 exports.getCommentsByChallengeId = function(challengeId, callback){
     
-    const query = 'SELECT * FROM comments WHERE challengeId = ? ORDER BY challengeId DESC'
+    const query = 'SELECT * FROM comments WHERE challengeId = ? ORDER BY id DESC'
     const values = [challengeId]
 
     db.query(query, values, function(error, comments){

@@ -22,11 +22,20 @@ router.post('/create', function(request, response){
         challengeId: request.params.id
     }
 
-	commentManager.createComment(comment, function(error, id){
-		// TODO: Add error handling
-		response.redirect('/challenges/' + comment.challengeId + '/preview')
-	})
+	commentManager.createComment(comment, function(errors, id){
+		if(errors.length > 0){
+            const model = {
+                errors: errors,
+                challengeId: comment.challengeId,
+                comment: comment
+            }
 
+            response.render('comment-create.hbs', model)
+        }
+        else{
+            response.redirect('/challenges/' + comment.challengeId + '/preview')
+        }
+	})
 })
 
 module.exports = router
