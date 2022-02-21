@@ -53,8 +53,6 @@ router.post("/login", function(request, response){ // check if this could be imp
 	}
 
 	accountManager.login(accountCredentials, function(errors, account){
-		console.log("error log: "+errors)
-		console.log("account log: "+account)
 		if(errors.length > 0){ // if there are errors
 			const model = {
 				errors: errors

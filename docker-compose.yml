@@ -9,6 +9,7 @@ services:
       - "./web-application/src:/web-application/src"
     depends_on:
       - database
+      #- sessionStore maybe?
   database:
     build: ./database
     ports:
@@ -16,3 +17,9 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=theRootPassword
       - MYSQL_DATABASE=webAppDatabase
+  sessionStore:
+    image: redis
+    #build: ./sessions_store may not be needed.
+    restart: always
+    ports: 
+      - '6379:6379'
