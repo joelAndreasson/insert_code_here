@@ -1,5 +1,13 @@
 version: '3'
 services:
+  redis:
+      build: ./redis
+      container_name: redis
+      image: redis
+      ports: 
+        - '6379:6379'
+      expose:
+        - 6379
   "web-application":
     build: "./web-application"
     ports:
@@ -9,7 +17,12 @@ services:
       - "./web-application/src:/web-application/src"
     depends_on:
       - database
-      #- sessionStore maybe?
+      - redis
+    links: 
+      - redis
+    environment:
+      - REDIS_URL=redis://redis
+      #- COMPOSE_HTTP_TIMEOUT=200
   database:
     build: ./database
     ports:
@@ -17,9 +30,4 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=theRootPassword
       - MYSQL_DATABASE=webAppDatabase
-  sessionStore:
-    image: redis
-    #build: ./sessions_store may not be needed.
-    restart: always
-    ports: 
-      - '6379:6379'
+  
