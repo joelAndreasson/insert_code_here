@@ -9,6 +9,7 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
+					//console.log(error)
 					callback(['databaseError'], null)
 				}
 				else{
