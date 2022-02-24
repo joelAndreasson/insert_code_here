@@ -3,17 +3,60 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const mySqlStore = require('express-mysql-session')
+const mySqlStore = require('express-mysql-session') // duplicates?
 const mySql = require('mysql')
 const MySQLStore = require('express-mysql-session')
+const awilix = require('awilix')
 
+const accountRepository = require('../data-access-layer/account-repository')
+const challengeRepository = require('../data-access-layer/challenge-repository')
+const commentRepository = require('../data-access-layer/comment-repository')
+
+const accountManager = require('../business-logic-layer/account-manager')
+const challengeManager = require('../business-logic-layer/challenge-manager')
+const commentManager = require('../business-logic-layer/comment-manager')
+
+const accountValidator = require('../business-logic-layer/account-validator')
+const challengeValidator = require('../business-logic-layer/challenge-validator')
+const commentValidator = require('../business-logic-layer/comment-validator')
 
 const variousRouter = require('./routers/various-router')
 const accountRouter = require('./routers/account-router')
 const challengeRouter = require('./routers/challenge-router')
-const commentRouter = require('./routers/comment-router') // MAYBE THIS IS NOT NEEDED??
+const commentRouter = require('./routers/comment-router')
+
+const db = require('../data-access-layer/db')
+
+const container = awilix.createContainer()
+container.register("accountRepository", awilix.asFunction(accountRepository))
+container.register("challengeRepository", awilix.asFunction(challengeRepository))
+container.register("commentRepository", awilix.asFunction(commentRepository))
+
+container.register("accountManager", awilix.asFunction(accountManager))
+container.register("challengeManager", awilix.asFunction(challengeManager))
+container.register("commentManager", awilix.asFunction(commentManager))
+
+container.register("accountValidator", awilix.asFunction(accountValidator))
+container.register("challengeValidator", awilix.asFunction(challengeValidator))
+container.register("commentValidator", awilix.asFunction(commentValidator))
+
+container.register("variousRouter", awilix.asFunction(variousRouter))
+container.register("accountRouter", awilix.asFunction(accountRouter))
+container.register("challengeRouter", awilix.asFunction(challengeRouter))
+container.register("commentRouter", awilix.asFunction(commentRouter))
+
+//container.register("mySql", awilix.asClass(mySql)) // NOT WORKING
+container.register("db", awilix.asFunction(db))
+
+const theAccountRouter = container.resolve("accountRouter")
+const theChallengeRouter = container.resolve("challengeRouter")
+const theVariousRouter = container.resolve("variousRouter")
+const theCommentRouter = container.resolve("commentRouter")
+
+
 
 const { baseModel } = require('./base-model.js')
+const { asFunction } = require('awilix')
 
 
 const app = express()
@@ -62,10 +105,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 //app.use(express.static(path.join(__dirname, 'codemirror'))) // SHOULD MAYBE BE REMOVED???
 
 // Attach all routers.
-app.use('/', variousRouter)
-app.use('/accounts', accountRouter)
-app.use('/challenges', challengeRouter)
-app.use('/challenges/:id/comments', commentRouter) // MAYBE THIS IS NOT NEEDED??
+app.use('/', theVariousRouter)
+app.use('/accounts', theAccountRouter)
+app.use('/challenges', theChallengeRouter)
+app.use('/challenges/:id/comments', theCommentRouter) 
 
 // Start listening for incoming HTTP requests!
 app.listen(8080, function(){
