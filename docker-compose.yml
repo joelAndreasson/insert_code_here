@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   redis:
       build: ./redis
@@ -30,4 +30,14 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=theRootPassword
       - MYSQL_DATABASE=webAppDatabase
+  postgres:
+    build: "./postgres-database"
+    ports:
+      - "5432:5432"
+    container_name: "postgres-database"
+    image: postgres
+    environment:
+      - POSTGRES_DATABASE=postgresDatabase
+      - POSTGRES_PASSWORD=hejsan123
+
   
