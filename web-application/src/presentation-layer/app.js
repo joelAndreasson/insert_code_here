@@ -3,9 +3,15 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-const mySqlStore = require('express-mysql-session') // duplicates?
 const mySql = require('mysql')
-const MySQLStore = require('express-mysql-session')
+const redis = require('redis')
+const redisClient = redis.createClient(process.env.REDIS_URL)
+const RedisStore = require('connect-redis')(session)
+	
+redisClient.on("error", function(err) {
+    console.log("Error " + err);
+});
+
 const awilix = require('awilix')
 
 const accountRepository = require('../data-access-layer/account-repository')
@@ -58,7 +64,6 @@ const theCommentRouter = container.resolve("commentRouter")
 const { baseModel } = require('./base-model.js')
 const { asFunction } = require('awilix')
 
-
 const app = express()
 
 app.use(express.urlencoded({
@@ -66,24 +71,20 @@ app.use(express.urlencoded({
 }))
 
 app.use(session({
+	store: new RedisStore({ client: redisClient,  ttl: 60 * 60 * 1  }),
 	secret: "jasirhwenvjhsduyqkvhsaoeruhgrhasdfm",
 	saveUninitialized: false,
 	resave: false
 }))
 
-// bcrypt variables
-
-
 const options = {
 	host: 'localhost',
 	port: 3306,
 	user: 'db_user',
-	password: 'theRootPassword',
-	database: 'sessionsDb'
+	password: 'theRootPassword'
 }
 
 var connection = mySql.createConnection(options)
-var sessionStore = new MySQLStore({}, connection)
 
 
 app.use(cookieParser())
