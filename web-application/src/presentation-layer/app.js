@@ -51,7 +51,6 @@ container.register("accountRouter", awilix.asFunction(accountRouter))
 container.register("challengeRouter", awilix.asFunction(challengeRouter))
 container.register("commentRouter", awilix.asFunction(commentRouter))
 
-//container.register("mySql", awilix.asClass(mySql)) // NOT WORKING
 container.register("db", awilix.asFunction(db))
 
 const theAccountRouter = container.resolve("accountRouter")
@@ -103,7 +102,6 @@ app.engine('hbs', engine({
 
 // Handle static files in the public folder.
 app.use(express.static(path.join(__dirname, 'public')))
-//app.use(express.static(path.join(__dirname, 'codemirror'))) // SHOULD MAYBE BE REMOVED???
 
 // Attach all routers.
 app.use('/', theVariousRouter)
