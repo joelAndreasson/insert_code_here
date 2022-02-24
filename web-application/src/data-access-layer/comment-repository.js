@@ -1,50 +1,49 @@
-const db = require('./db')
+//const db = require('./db')
 
 
-//Comments
+module.exports = function({db}){
+    return{
+        getCommentById: function(id, callback){
+            const query = 'SELECT * FROM comments WHERE id = ? LIMIT 1'
+            const values = [id]
 
-exports.getCommentById = function(id, callback){
-    
-    const query = 'SELECT * FROM comments WHERE id = ? LIMIT 1'
-    const values = [id]
+            db.query(query, values, function(error, comments){
+                if(error){
+                    callback(['databaseError'], null)
+                }
+                else{
+                    callback([], comments[0])
+                }
+            })
+        },
 
-    db.query(query, values, function(error, comments){
-        if(error){
-            callback(['databaseError'], null)
+        getCommentsByChallengeId: function(challengeId, callback){
+            const query = 'SELECT * FROM comments WHERE challengeId = ? ORDER BY id DESC'
+            const values = [challengeId]
+
+            db.query(query, values, function(error, comments){
+                if(error){
+                    callback(['databaseError'], null)
+                }
+                else{
+                    callback([], comments)
+                }
+            })
+        },
+
+        createComment: function(comment, callback){
+            const query = `INSERT INTO comments (commentText, userId, challengeId) VALUES (?, ?, ?)`
+            const values = [comment.commentText, comment.userId, comment.challengeId]
+            
+            db.query(query, values, function(error, results){
+                if(error){
+                    // TODO: Look for commentUnique violation.
+                    callback(['databaseError'], null)
+                }else{
+                    callback([], results.insertId)
+                }
+            })
         }
-        else{
-            callback([], comments[0])
-        }
-    })
+    }
 }
 
-exports.getCommentsByChallengeId = function(challengeId, callback){
-    
-    const query = 'SELECT * FROM comments WHERE challengeId = ? ORDER BY challengeId DESC'
-    const values = [challengeId]
-
-    db.query(query, values, function(error, comments){
-        if(error){
-            callback(['databaseError'], null)
-        }
-        else{
-            callback([], comments)
-        }
-    })
-}
-
-exports.createComment = function(comment, callback){
-	
-	const query = `INSERT INTO comments (commentText, userId, challengeId) VALUES (?, ?, ?)`
-	const values = [comment.commentText, comment.userId, comment.challengeId]
-	
-	db.query(query, values, function(error, results){
-		if(error){
-			// TODO: Look for commentUnique violation.
-			callback(['databaseError'], null)
-		}else{
-			callback([], results.insertId)
-		}
-	})
-	
-}

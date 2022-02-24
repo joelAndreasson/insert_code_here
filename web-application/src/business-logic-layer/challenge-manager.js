@@ -1,57 +1,70 @@
-const challengeRepository = require('../data-access-layer/challenge-repository')
-const challengeValidator = require('../business-logic-layer/challenge-validator')
 
-exports.getTodaysDate = function(){ //Should maybe be moved elsewhere?
-	const today = new Date()
 
-	const yyyy = today.getFullYear()
+const ANSWERS_REGEX = /(?<=\[\[).*?(?=\]\])/g // HARDCODED AT MULTIPLE PLACES, should be global instead?
 
-	let mm = today.getMonth()
-	mm = mm < 10 ? "0" + mm : mm;
+module.exports = function({challengeRepository, challengeValidator}){
+	return {
+		getTodaysDate: function(){
+			const today = new Date()
 
-	let dd = today.getDay()
-	dd = dd < 10 ? "0" + dd : dd;
+			const yyyy = today.getFullYear()
 
-	return yyyy + "-" + mm + "-" + dd
-}
+			let mm = today.getMonth()
+			mm = mm < 10 ? "0" + mm : mm;
 
-exports.getResultsFromChallengeTextWithId = function(id, changedChallengeText, callback){
+			let dd = today.getDay()
+			dd = dd < 10 ? "0" + dd : dd;
 
-	challengeRepository.getChallengeById(id, function(errors, challenge){
-		//TODO: Error handling
+			return yyyy + "-" + mm + "-" + dd
+		},
 
-		const regex = /(?<=\[\[).*?(?=\]\])/g
+		getResultsFromChallengeTextWithId: function(id, changedChallengeText, callback){
+			challengeRepository.getChallengeById(id, function(errors, challenge){
+				if(errors.length > 0){
+					callback(errors, null, null, null)
+					return
+				}
+				else{
+					const enteredAnswers = changedChallengeText.match(ANSWERS_REGEX)
+					const solutionAnswers = challenge.solutionText.match(ANSWERS_REGEX)
+			
+					const validationErrors = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
+			
+					if(validationErrors.length > 0){
+						callback(validationErrors, null, null, challenge)
+						return
+					}
+					else{
+						let numOfRightAnswers = 0
+						let totalNumOfAnswers = solutionAnswers.length
+						for(i = 0; i < totalNumOfAnswers; i+=1){
+							numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+						}
+				
+						callback([], numOfRightAnswers, totalNumOfAnswers, null)
+					}
+				}
+			})
+		},
 
-		const enteredAnswers = changedChallengeText.match(regex)
-		const solutionAnswers = challenge.solutionText.match(regex)
+		getAllChallenges: function(callback){
+			challengeRepository.getAllChallenges(callback)
+		}, 
 
-		let numOfRightAnswers = 0
-		let totalNumOfAnswers = solutionAnswers.length
-		for(i = 0; i < totalNumOfAnswers; i+=1){
-			numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+		getChallengeById: function(id, callback){
+			challengeRepository.getChallengeById(id, callback)
+		},
+
+		createChallenge: function(challenge, callback){
+			const validationErrors = challengeValidator.getErrorsNewChallenge(challenge)
+	
+			if(0 < validationErrors.length){
+				callback(validationErrors, null)
+				return
+			}
+			
+			challengeRepository.createChallenge(challenge, callback)
 		}
-
-		callback([], numOfRightAnswers, totalNumOfAnswers)
-	})
-}
-
-
-exports.getAllChallenges = function(callback){
-	challengeRepository.getAllChallenges(callback)
-}
-
-exports.getChallengeById = function(id, callback){
-	challengeRepository.getChallengeById(id, callback)
-}
-
-exports.createChallenge = function(challenge, callback){
-	
-	const errors = challengeValidator.getErrorsNewChallenge(challenge)
-	
-	if(0 < errors.length){
-		callback(errors, null)
-		return
 	}
-	
-	challengeRepository.createChallenge(challenge, callback)
 }
+
