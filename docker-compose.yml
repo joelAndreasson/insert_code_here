@@ -1,13 +1,13 @@
 version: '3.8'
 services:
   redis:
-      build: ./redis
-      container_name: redis
-      image: redis
-      ports: 
-        - '6379:6379'
-      expose:
-        - 6379
+    build: ./redis
+    container_name: redis
+    image: redis
+    ports: 
+      - '6379:6379'
+    expose:
+      - 6379
   "web-application":
     build: "./web-application"
     ports:
@@ -31,13 +31,13 @@ services:
       - MYSQL_ROOT_PASSWORD=theRootPassword
       - MYSQL_DATABASE=webAppDatabase
   postgres:
-    build: "./postgres-database"
+    build: ./postgres_database
     ports:
       - "5432:5432"
-    container_name: "postgres-database"
-    image: postgres
+    container_name: postgres_database
+    image: insert_code_here_postgres_database
     environment:
-      - POSTGRES_DATABASE=postgresDatabase
+      - POSTGRES_DB=postgresDatabase
       - POSTGRES_PASSWORD=hejsan123
 
   

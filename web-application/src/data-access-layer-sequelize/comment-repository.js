@@ -1,39 +1,32 @@
-const { Sequelize, DataTypes } = require('sequelize')
 
-const sequelize = new Sequelize('postgres//:postgres:hejsan123@postgres:5432/postgresDatabase') // Put this is init-sequelize
 
-const comments = sequelize.define('comments', {
-    commentText: DataTypes.TEXT,
-    userId: DataTypes.INTEGER,
-    challengeId: DataTypes.INTEGER
-})
-
-comments.sync()
-
-module.exports = function({}){
+module.exports = function({initSequelize}){
     return {
         getCommentById: function(id, callback){
-            comments.findByPk(id)
+            initSequelize.comments.findByPk(id, {raw: true})
                 .then(comment => callback([], comment))
                 .catch(error => {
+                    console.log(error)
                     callback(['databaseError'], null)
                 })
         },
 
         getCommentsByChallengeId: function(challengeId, callback){
-            comments.findAll({where: {challengeId: challengeId}})
+            initSequelize.comments.findAll({where: {challengeId: challengeId}, raw: true})
                 .then(comments => callback([], comments))
-                .catch(error => callback(['databaseError'], null))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
         },
 
         createComment: function(comment, callback){
-            comments.create({
-                commentText: comment.commentText,
-                userId: comment.userId,
-                challengeId: comment.challengeId
-            })
+            initSequelize.comments.create(comment)
             .then(createdComment => callback([], createdComment.id))
-            .catch(error => callback(['databaseError'], null))
+            .catch(error => {
+                console.log(error)
+                    callback(['databaseError'], null)
+            })
         }
 
     }

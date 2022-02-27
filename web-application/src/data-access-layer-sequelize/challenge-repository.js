@@ -1,23 +1,32 @@
-const { Sequelize, DataTypes } = require('sequelize')
 
-const sequelize = new Sequelize('postgres//:postgres:hejsan123@postgres:5432/postgresDatabase') // Put this is init-sequelize
 
-const challenges = sequelize.define('challenges', {
-    title: DataTypes.TEXT,
-    challengeText: DataTypes.TEXT,
-    solutionText: DataTypes.TEXT,
-    progLanguage: DataTypes.TEXT,
-    difficulty: DataTypes.TEXT,
-    description: DataTypes.TEXT,
-    datePublished: DataTypes.DATE,
-    numOfPlays: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER
-})
+module.exports = function({initSequelize}){
+    return {
+        getAllChallenges: function(callback){
+            initSequelize.challenges.findAll({raw: true})
+                .then(challenges => callback([], challenges))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
+        },
 
-challenges.sync()
+        getChallengeById: function(id, callback){
+            initSequelize.challenges.findByPk(id, {raw: true})
+                .then(challenge => callback([], challenge))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
+        },
 
-module.exports = function({}){
-    return{
-        
+        createChallenge: function(challenge, callback){
+            initSequelize.challenges.create(challenge)
+            .then(createdChallenge => callback([], createdChallenge.id))
+            .catch(error => {
+                console.log(error)
+                    callback(['databaseError'], null)
+            })
+        }
     }
 }

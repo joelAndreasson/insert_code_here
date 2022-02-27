@@ -2,9 +2,14 @@ const awilix = require('awilix')
 
 const container = awilix.createContainer()
 
-container.register("accountRepository", awilix.asFunction(require('./data-access-layer/account-repository')))
-container.register("challengeRepository", awilix.asFunction(require('./data-access-layer/challenge-repository')))
-container.register("commentRepository", awilix.asFunction(require('./data-access-layer/comment-repository')))
+container.register("accountRepository", awilix.asFunction(require('./data-access-layer/account-repository'))) //MySQL database
+container.register("challengeRepository", awilix.asFunction(require('./data-access-layer/challenge-repository'))) //MySQL database
+container.register("commentRepository", awilix.asFunction(require('./data-access-layer/comment-repository'))) //MySQL database
+
+//container.register("accountRepository", awilix.asFunction(require('./data-access-layer-sequelize/account-repository'))) //PostgreSQL with Sequelize datbase
+//container.register("challengeRepository", awilix.asFunction(require('./data-access-layer-sequelize/challenge-repository'))) //PostgreSQL with Sequelize datbase
+//container.register("commentRepository", awilix.asFunction(require('./data-access-layer-sequelize/comment-repository'))) //PostgreSQL with Sequelize datbase
+container.register("initSequelize", awilix.asFunction(require('./data-access-layer-sequelize/init-sequelize'))) //PostgreSQL with Sequelize datbase
 
 container.register("accountManager", awilix.asFunction(require('./business-logic-layer/account-manager')))
 container.register("challengeManager", awilix.asFunction(require('./business-logic-layer/challenge-manager')))
