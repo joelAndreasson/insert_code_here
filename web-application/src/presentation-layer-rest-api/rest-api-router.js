@@ -42,6 +42,31 @@ module.exports = function({accountManager, challengeManager, commentManager}){
         })
     })
 
+    router.post("/challenges/create", function(request, response){ // "/challenges" instead of "/challenges/create" ?? but what if one wants to update, delete etc??
+
+        const challenge = {
+			title: request.body.title,
+			challengeText: request.body.challengeText,
+			solutionText: request.body.solutionText,
+			progLanguage: request.body.progLanguage,
+			difficulty: request.body.difficulty,
+			description: request.body.description,
+			datePublished: challengeManager.getTodaysDate(),
+			numOfPlays: 0,
+			userId: 1 // Should get the userId of the account that created this challenge
+		}
+
+        challengeManager.createChallenge(challenge, function(errors, id){
+            if(errors.length == 0){
+                response.setHeader("Location", "/challenges/"+id)
+                response.status(201).json(challenge)
+            }
+            else{
+                response.status(400).json(errors) // Might be 500 if databaseError ocurrs?
+            }
+        })
+    })
+
 
     return router
 }
