@@ -24,6 +24,8 @@ container.register("accountRouter", awilix.asFunction(require('./presentation-la
 container.register("challengeRouter", awilix.asFunction(require('./presentation-layer/routers/challenge-router')))
 container.register("commentRouter", awilix.asFunction(require('./presentation-layer/routers/comment-router')))
 
+container.register("restApiRouter", awilix.asFunction(require('./presentation-layer-rest-api/rest-api-router')))
+
 container.register("db", awilix.asFunction(require('./data-access-layer/db')))
 container.register("app", awilix.asFunction(require('./presentation-layer/app')))
 container.register("baseModel", awilix.asFunction(require('./presentation-layer/base-model')))
