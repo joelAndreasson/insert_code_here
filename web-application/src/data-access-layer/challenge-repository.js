@@ -1,5 +1,4 @@
 
-//const db = require('./db')
 
 module.exports = function({db}){
 	return{
@@ -9,6 +8,7 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
+					//console.log(error)
 					callback(['databaseError'], null)
 				}
 				else{
@@ -31,9 +31,29 @@ module.exports = function({db}){
 		},
 
 		createChallenge: function(challenge, callback){
-			const query = `INSERT INTO challenges (title, challengeText, solutionText, progLanguage, difficulty, description, datePublished, numOfPlays, userId) 
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-			const values = [challenge.title, challenge.challengeText, challenge.solutionText, challenge.progLanguage, challenge.difficulty, challenge.description, challenge.datePublished, challenge.numOfPlays, challenge.userId]
+			const query = `INSERT INTO challenges (
+					title, 
+					challengeText, 
+					solutionText, 
+					progLanguage, 
+					difficulty, 
+					description, 
+					datePublished, 
+					numOfPlays, 
+					userId) 
+					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+			const values = [
+				challenge.title, 
+				challenge.challengeText, 
+				challenge.solutionText, 
+				challenge.progLanguage, 
+				challenge.difficulty, 
+				challenge.description, 
+				challenge.datePublished, 
+				challenge.numOfPlays, 
+				challenge.userId
+			]
 			
 			db.query(query, values, function(error, results){
 				if(error){
