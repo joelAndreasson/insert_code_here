@@ -43,6 +43,10 @@ module.exports = function({accountRepository, accountValidator}){
 
 		getAccountById: function(accountId, callback){
 			accountRepository.getAccountById(accountId, callback)
+		},
+
+		editAccountBio: function(newBioText, accountId, callback){
+			accountRepository.editAccountBio(newBioText, accountId, callback)
 		}
 	}
 }

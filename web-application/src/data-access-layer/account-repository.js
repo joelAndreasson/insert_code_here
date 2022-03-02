@@ -67,6 +67,19 @@ module.exports = function({db}){
 					callback([], account[0])
 				}
 			})
+		},
+
+		editAccountBio: function(newBioText, accountId, callback){
+			const query = `UPDATE accounts SET bio = ? WHERE id = ?`
+			const values = [newBioText, accountId]
+
+			db.query(query, values, function(error, results){
+				if(error){
+					callback(['databaseError'], null)
+				}else {
+					callback([], results)
+				}
+			})
 		}
 	}
 }

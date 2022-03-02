@@ -47,7 +47,36 @@ module.exports = function({accountManager}){
 		})
 	})
 
+	router.get("/profileEditBio", function(request, response){
+		console.log("GET: editProfileBio")
+		accountManager.getAccountById(request.session.accountId, function(error, account){
+			if(error.length > 0){
+				// handle this error better by adding a internal server error page.
+				console.log("there was a database error when fetching account by id.")
+			}else {
+				const model = {
+					account: account
+				}
+				response.render("profile-edit-bio.hbs", model)
+			}
+		})
+	})
+
+	router.post("/profileEditBio", function(request,response){
+		const newBioText = request.body.bioText
+		const accountId = request.session.accountId
+		accountManager.editAccountBio(newBioText, accountId, function(error, results){
+			if(error.length > 0){
+				// handle this error better by adding a internal server error page.
+				console.log("there was a database error when editing the users bio")
+			}else {
+				response.redirect("/accounts/profile")
+			}
+		})
+	})
+
 	router.get('/:username', function(request, response){
+		console.log("GET: Username")
 		const username = request.params.username
 		
 		accountManager.getAccountByUsername(username, function(errors, account){
@@ -60,7 +89,7 @@ module.exports = function({accountManager}){
 		
 	})
 
-	router.post("/login", function(request, response){ // check if this could be improved and move things that should be in in another layer
+	router.post("/login", function(request, response){ // change to get?
 		const accountCredentials = {
 			username: request.body.username,
 			password: request.body.password
