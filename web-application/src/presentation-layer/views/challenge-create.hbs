@@ -23,10 +23,16 @@
             <label class="label">Language</label>
             <div class="control">
                 <select name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
-                    <option selected>Language</option>
-                    <option>C++</option>
-                    <option>Python</option>
-                    <option>Kotlin</option>
+                    <option selected>
+                        {{#if errors.length}} 
+                            {{challenge.progLanguage}}
+                        {{else}}
+                            Language
+                        {{/if}}
+                    </option>
+                    {{#each progLanguages}}
+                        <option>{{this}}</option>
+                    {{/each}}
                 </select>
             </div>
         </div>
@@ -60,10 +66,16 @@
         <div class="field">
             <div class="control">
                 <select name="difficulty">
-                    <option selected>Difficulty</option>
-                    <option>Easy</option>
-                    <option>Medium</option>
-                    <option>Hard</option>
+                    <option selected>
+                        {{#if errors.length}} 
+                            {{challenge.difficulty}}
+                        {{else}}
+                            Difficulty
+                        {{/if}}
+                    </option>
+                    {{#each difficulties}}
+                        <option>{{this}}</option>
+                    {{/each}}
                 </select>
             </div>
         </div>

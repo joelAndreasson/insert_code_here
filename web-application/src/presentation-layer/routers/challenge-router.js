@@ -1,10 +1,16 @@
 const express = require('express')
 
-module.exports = function({challengeManager, commentManager}){
+module.exports = function({challengeManager, commentManager, validationVariabels}){
 	const router = express.Router()
 
 	router.get("/create", function(request, response){
-		response.render("challenge-create.hbs")
+
+		const model = {
+			progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+			difficulties: validationVariabels.ALL_DIFFICULTIES
+		}
+
+		response.render("challenge-create.hbs", model)
 	})
 	
 	router.post('/create', function(request, response){
@@ -27,7 +33,9 @@ module.exports = function({challengeManager, commentManager}){
 			if(errors.length > 0){
 				const model = {
 					errors: errors,
-					challenge: challenge
+					challenge: challenge,
+					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+					difficulties: validationVariabels.ALL_DIFFICULTIES
 				}
 	
 				response.render('challenge-create.hbs', model)
