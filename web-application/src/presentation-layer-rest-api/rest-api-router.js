@@ -56,7 +56,7 @@ module.exports = function({accountManager, challengeManager, commentManager}){
 			userId: 1 // Should get the userId of the account that created this challenge
 		}
 
-        challengeManager.createChallenge(challenge, function(errors, id){
+        challengeManager.createChallenge(challenge, function(errors, id){ //Validate account that created the challenge
             if(errors.length == 0){
                 response.setHeader("Location", "/challenges/"+id)
                 response.status(201).json(challenge)
