@@ -39,6 +39,10 @@ module.exports = function({accountRepository, accountValidator}){
 					callback(validationErrors, account)
 				}
 			})
+		},
+
+		getAccountById: function(accountId, callback){
+			accountRepository.getAccountById(accountId, callback)
 		}
 	}
 }

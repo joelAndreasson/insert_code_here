@@ -31,6 +31,22 @@ module.exports = function({accountManager}){
 		})
 	})
 
+	router.get("/profile", function(request,response){
+		console.log("account id: " + request.session.accountId)
+		accountManager.getAccountById(request.session.accountId, function(error, account){
+			console.log("account: " + account)
+			if(error.length > 0){
+				console.log("there was a database error when fetching account by id.")
+				// handle this error better by adding a internal server error page.
+			}else{
+				const model = {
+					account: account
+				}
+				response.render("profile.hbs", model)
+			}
+		})
+	})
+
 	router.get('/:username', function(request, response){
 		const username = request.params.username
 		
@@ -60,6 +76,7 @@ module.exports = function({accountManager}){
 				response.render("accounts-sign-in.hbs", model)
 			}else{ // no errors, login
 				request.session.isLoggedIn = true
+				request.session.accountId = account.id
 				response.redirect("/")
 			}
 		})

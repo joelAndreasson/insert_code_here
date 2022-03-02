@@ -42,7 +42,21 @@ module.exports = function({initSequelize}){
                 console.log(error)
                 callback(['databaseError'], null)
             })
-        }
+        },
+
+        getAccountById: function(accountId, callback){
+			const query = `SELECT * FROM accounts WHERE id = ? LIMIT 1`
+			const values = [accountId]
+
+			db.query(query, values, function(error, account){
+				if(error){
+					// better error handling
+					callback(['databaseError'], null)
+				}else {
+					callback([], account)
+				}
+			})
+		}
 
     }
 }
