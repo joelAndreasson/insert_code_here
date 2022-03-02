@@ -44,18 +44,12 @@ module.exports = function({initSequelize}){
             })
         },
 
-        getAccountById: function(accountId, callback){
-			const query = `SELECT * FROM accounts WHERE id = ? LIMIT 1`
-			const values = [accountId]
+        getAccountById: function(accountId, callback){ //fill this function at later date
+			
+		},
 
-			db.query(query, values, function(error, account){
-				if(error){
-					// better error handling
-					callback(['databaseError'], null)
-				}else {
-					callback([], account)
-				}
-			})
+        editAccountBio: function(newBioText, accountId, callback){ // fill in at later date
+			
 		}
 
     }

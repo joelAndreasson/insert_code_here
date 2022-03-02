@@ -45,8 +45,8 @@ module.exports = function({accountRepository, accountValidator}){
 			accountRepository.getAccountById(accountId, callback)
 		},
 
-		editAccountBio: function(newBioText, accountId, callback){
-			accountRepository.editAccountBio(newBioText, accountId, callback)
+		updateAccountBio: function(newBioText, accountUsername, callback){
+			accountRepository.updateAccountBio(newBioText, accountUsername, callback)
 		}
 	}
 }

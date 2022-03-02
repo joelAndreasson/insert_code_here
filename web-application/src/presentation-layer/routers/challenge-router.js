@@ -18,7 +18,7 @@ module.exports = function({challengeManager, commentManager}){
 			description: request.body.description,
 			datePublished: challengeManager.getTodaysDate(),
 			numOfPlays: 0,
-			userId: 1 // Should get the userId of the account that created this challenge
+			accountUsername: "hej" // Should get the accountUsername of the account that created this challenge
 		}
 	
 		
