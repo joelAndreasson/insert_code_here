@@ -19,10 +19,15 @@ container.register("accountValidator", awilix.asFunction(require('./business-log
 container.register("challengeValidator", awilix.asFunction(require('./business-logic-layer/challenge-validator')))
 container.register("commentValidator", awilix.asFunction(require('./business-logic-layer/comment-validator')))
 
+container.register("validationVariabels", awilix.asFunction(require('./business-logic-layer/validation-variabels')))
+container.register("errorTranslator", awilix.asFunction(require('./presentation-layer/error-translator')))
+
 container.register("variousRouter", awilix.asFunction(require('./presentation-layer/routers/various-router')))
 container.register("accountRouter", awilix.asFunction(require('./presentation-layer/routers/account-router')))
 container.register("challengeRouter", awilix.asFunction(require('./presentation-layer/routers/challenge-router')))
 container.register("commentRouter", awilix.asFunction(require('./presentation-layer/routers/comment-router')))
+
+container.register("restApiRouter", awilix.asFunction(require('./presentation-layer-rest-api/rest-api-router')))
 
 container.register("db", awilix.asFunction(require('./data-access-layer/db')))
 container.register("app", awilix.asFunction(require('./presentation-layer/app')))

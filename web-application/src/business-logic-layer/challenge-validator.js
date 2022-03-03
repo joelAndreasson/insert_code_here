@@ -8,33 +8,33 @@ const MIN_AMOUNT_OF_BLANKS = 1
 const SOLUTIONS_REGEX = /(?<=\[\[).*?(?=\]\])/g // HARDCODED AT MULIPLE PLACES, should be global instead?
 const BLANKS_REGEX = /\[\[INSERT_CODE_HERE\]\]/g
 
-module.exports = function({}){
+module.exports = function({validationVariabels}){
     return{
         getErrorsNewChallenge: function(challenge){
             const errors = []
 
-            const blankAnswers = challenge.challengeText.match(BLANKS_REGEX)
-            const solutionAnswers = challenge.solutionText.match(SOLUTIONS_REGEX)
+            const blankAnswers = challenge.challengeText.match(validationVariabels.BLANKS_REGEX)
+            const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 
-            if(!blankAnswers || blankAnswers.length < MIN_AMOUNT_OF_BLANKS){
-                errors.push("There needs to be a minimum of " + MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets")
+            if(!blankAnswers || blankAnswers.length < validationVariabels.MIN_AMOUNT_OF_BLANKS){
+                errors.push("notEnoughBlanks")
             }
             if(!blankAnswers || !solutionAnswers || blankAnswers.length != solutionAnswers.length){
-                errors.push("The number of solutions needs to be the same as the number of [[INSERT_CODE_HERE]] brackets")
+                errors.push("solutionsNotMatchBlanks")
             }
             
 
-            if(challenge.title.length < MIN_TITLE_LENGTH){
-                errors.push("Title needs to be at least " + MIN_TITLE_LENGTH + " characters")
+            if(challenge.title.length < validationVariabels.MIN_TITLE_LENGTH){
+                errors.push("titleTooShort")
             }
-            if(!ALL_PROG_LANGUAGES.includes(challenge.progLanguage)){
-                errors.push("Select a valid programming language")
+            if(!validationVariabels.ALL_PROG_LANGUAGES.includes(challenge.progLanguage)){
+                errors.push("progLanguageNotValid")
             }
-            if(!ALL_DIFFICULTIES.includes(challenge.difficulty)){
-                errors.push("Select a valid difficulty")
+            if(!validationVariabels.ALL_DIFFICULTIES.includes(challenge.difficulty)){
+                errors.push("difficultyNotValid")
             }
-            if(challenge.description.length < MIN_DESCRIPTION_LENGTH){
-                errors.push("Description needs to be at least " + MIN_DESCRIPTION_LENGTH + " characters")
+            if(challenge.description.length < validationVariabels.MIN_DESCRIPTION_LENGTH){
+                errors.push("descriptionTooShort")
             }
 
             return errors
@@ -44,7 +44,7 @@ module.exports = function({}){
             const errors = []
 
             if(!enteredAnswers || enteredAnswers.length != solutionAnswers.length){
-                errors.push("The number of [[INSERT_CODE_HERE]] brackets needs to be the same as it was originally")
+                errors.push("numOfBlanksChanged")
             }
 
             return errors

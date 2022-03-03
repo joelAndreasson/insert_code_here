@@ -13,7 +13,7 @@ redisClient.on("error", function(err) {
     console.log("Error " + err);
 });
 
-module.exports = function({accountRouter, challengeRouter, variousRouter, commentRouter, baseModel}){
+module.exports = function({accountRouter, challengeRouter, variousRouter, commentRouter, baseModel, restApiRouter}){
 	app.use(express.urlencoded({
 		extended: false
 	}))
@@ -58,6 +58,7 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	app.use('/accounts', accountRouter)
 	app.use('/challenges', challengeRouter)
 	app.use('/challenges/:id/comments', commentRouter) 
+	app.use('/api', restApiRouter)
 
 	return app
 }

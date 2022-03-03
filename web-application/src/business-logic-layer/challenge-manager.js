@@ -2,7 +2,7 @@
 
 const ANSWERS_REGEX = /(?<=\[\[).*?(?=\]\])/g // HARDCODED AT MULTIPLE PLACES, should be global instead?
 
-module.exports = function({challengeRepository, challengeValidator}){
+module.exports = function({challengeRepository, challengeValidator, validationVariabels}){
 	return {
 		getTodaysDate: function(){
 			const today = new Date()
@@ -25,8 +25,8 @@ module.exports = function({challengeRepository, challengeValidator}){
 					return
 				}
 				else{
-					const enteredAnswers = changedChallengeText.match(ANSWERS_REGEX)
-					const solutionAnswers = challenge.solutionText.match(ANSWERS_REGEX)
+					const enteredAnswers = changedChallengeText.match(validationVariabels.SOLUTIONS_REGEX)
+					const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 			
 					const validationErrors = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
 			
