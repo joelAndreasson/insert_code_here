@@ -28,9 +28,9 @@ module.exports = function({validationVariabels}){
 			const errors = []
 	
 			if(account == null){
-				errors.push("loginCredentialsNotMatch")
+				errors.push("accountDoesNotExist")
 			}else if(!bcrypt.compareSync(loginCredentials.password, account.password)){
-				errors.push("loginCredentialsNotMatch")
+				errors.push("accountDoesNotExist")
 			}
 
 			return errors

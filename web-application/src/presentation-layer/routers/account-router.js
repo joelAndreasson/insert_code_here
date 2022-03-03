@@ -75,7 +75,7 @@ module.exports = function({accountManager}){
 			if(errors.length > 0){
 				const model = {
 					errors: errors,
-					accountInformation
+					accountInformation // ??? should it not be: "accountInformation: accountInformation" instead???
 				}
 				response.render("accounts-sign-up.hbs", model)
 			}else{
