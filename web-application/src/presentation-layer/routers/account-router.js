@@ -40,8 +40,13 @@ module.exports = function({accountManager, challengeManager}){
 				console.log("there was a database error when fetching account by id.")
 				// handle this error better by adding a internal server error page.
 			}else{
+				var isProfileOwner = false
+				if(request.session.accountUsername == account.username){
+					isProfileOwner = true
+				}
 				const model = {
-					account: account
+					account: account,
+					isProfileOwner: isProfileOwner
 				}
 				response.render("profile.hbs", model)
 			}

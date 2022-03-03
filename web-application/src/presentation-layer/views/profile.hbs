@@ -15,7 +15,9 @@
             {{/if}}
             </p>
         </div>
-        <a href="/accounts/{{account.username}}/updateBio">Edit</a> 
+        {{#if isProfileOwner}}
+            <a href="/accounts/{{account.username}}/updateBio">Edit</a>
+        {{/if}} 
     </div>
     <h2 class="is-size-4">Score: <span>255</span></h2>
     <div class="card">
