@@ -15,10 +15,6 @@ module.exports = function({}){
 		response.render("contact.hbs")
 	})
 
-	router.get("/profile", function(request,response){
-		response.render("profile.hbs") // add databse information 
-	})
-
 	return router
 }
 

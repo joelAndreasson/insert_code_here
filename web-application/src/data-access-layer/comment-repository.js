@@ -31,8 +31,8 @@ module.exports = function({db}){
         },
 
         createComment: function(comment, callback){
-            const query = `INSERT INTO comments (commentText, userId, challengeId) VALUES (?, ?, ?)`
-            const values = [comment.commentText, comment.userId, comment.challengeId]
+            const query = `INSERT INTO comments (commentText, accountUsername, challengeId) VALUES (?, ?, ?)`
+            const values = [comment.commentText, comment.accountUsername, comment.challengeId]
             
             db.query(query, values, function(error, results){
                 if(error){

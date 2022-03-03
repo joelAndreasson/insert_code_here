@@ -42,7 +42,15 @@ module.exports = function({initSequelize}){
                 console.log(error)
                 callback(['databaseError'], null)
             })
-        }
+        },
+
+        getAccountById: function(accountId, callback){ //fill this function at later date
+			
+		},
+
+        editAccountBio: function(newBioText, accountId, callback){ // fill in at later date
+			
+		}
 
     }
 }

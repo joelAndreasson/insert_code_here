@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function({accountManager}){
+module.exports = function({accountManager, challengeManager}){
 	const router = express.Router()
 
 	router.get("/sign-out", function(request, response){
@@ -17,7 +17,7 @@ module.exports = function({accountManager}){
 		response.render("accounts-sign-up.hbs")
 	})
 
-	router.get("/sign-in", function(request, response){
+	router.get("/sign-in", function(request, response){ // change to login later 
 		response.render("accounts-sign-in.hbs")
 	})
 
@@ -28,6 +28,62 @@ module.exports = function({accountManager}){
 				accounts: accounts
 			}
 			response.render("accounts-list-all.hbs", model)
+		})
+	})
+
+	router.get("/:accountUsername", function(request,response){
+		const accountUsername = request.params.accountUsername
+
+		accountManager.getAccountByUsername(accountUsername, function(error, account){
+			if(error.length > 0){
+				console.log("there was a database error when fetching account by id.")
+				// handle this error better by adding a internal server error page.
+			}else{
+				challengeManager.getChallengesByUsername(accountUsername, function(error, challenges){
+					if(error.length > 0){
+						// handle errors
+						console.log("there was an error when fetching challenges for users profile.")
+					}else {
+						var isProfileOwner = false
+						if(request.session.accountUsername == account.username){
+							isProfileOwner = true
+						}
+						const model = {
+							account: account,
+							isProfileOwner: isProfileOwner,
+							challenges: challenges
+						}
+						response.render("profile.hbs", model)
+					}
+				})
+			}
+		})
+	})
+
+	router.get("/:username/updateBio", function(request, response){
+		accountManager.getAccountByUsername(request.session.accountUsername, function(error, account){
+			if(error.length > 0){
+				// handle this error better by adding a internal server error page.
+				console.log("there was a database error when fetching account by id.")
+			}else {
+				const model = {
+					account: account
+				}
+				response.render("profile-edit-bio.hbs", model)
+			}
+		})
+	})
+
+	router.post("/:username/updateBio", function(request,response){
+		const newBioText = request.body.bioText
+		const accountUsername = request.params.username
+		accountManager.updateAccountBio(newBioText, accountUsername, function(error, results){
+			if(error.length > 0){
+				// handle this error better by adding a internal server error page.
+				console.log("there was a database error when editing the users bio")
+			}else {
+				response.redirect("/accounts/"+accountUsername)
+			}
 		})
 	})
 
@@ -44,15 +100,13 @@ module.exports = function({accountManager}){
 		
 	})
 
-	router.post("/login", function(request, response){ // check if this could be improved and move things that should be in in another layer
+	router.post("/login", function(request, response){ // change to get?
 		const accountCredentials = {
 			username: request.body.username,
 			password: request.body.password
 		}
 
 		accountManager.login(accountCredentials, function(errors, account){
-			console.log("error log: "+errors)
-			console.log("account log: "+account)
 			if(errors.length > 0){ // if there are errors
 				const model = {
 					errors: errors
@@ -60,6 +114,7 @@ module.exports = function({accountManager}){
 				response.render("accounts-sign-in.hbs", model)
 			}else{ // no errors, login
 				request.session.isLoggedIn = true
+				request.session.accountUsername = account.username
 				response.redirect("/")
 			}
 		})

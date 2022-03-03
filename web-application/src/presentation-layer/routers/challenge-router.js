@@ -24,9 +24,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			description: request.body.description,
 			datePublished: challengeManager.getTodaysDate(),
 			numOfPlays: 0,
-			userId: 1 // Should get the userId of the account that created this challenge
+			accountUsername: request.body.accountUsername // Should get the accountUsername of the account that created this challenge
 		}
-	
 		
 		challengeManager.createChallenge(challenge, function(errors, id){
 	
@@ -37,7 +36,6 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES
 				}
-	
 				response.render('challenge-create.hbs', model)
 			}
 			else{

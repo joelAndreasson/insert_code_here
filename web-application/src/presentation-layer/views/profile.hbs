@@ -1,43 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSERT_CODE_HERE</title>
-</head>
-<body>
-    
+{{#if account}}
     <div class="has-text-centered">
         <figure class="image is-inline-block">
             <img class="is-rounded" src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Love-game-logo-256x256.png"/>
         </figure>
     </div>
-    <h1 class="is-size-1 has-text-centered">Name</h1>
-    <p class="has-text-centered">
-        This is a bio that the user can use to write info about them selves.
-    </p>
-    <h2 class="is-size-4">Score: <span>255</span></h2>
-
-    <div class="card">
-        <div class="card-content">
-            <p class="subtitle">
-                Mattias
+    <h1 class="is-size-1 has-text-centered">{{account.username}}</h1>
+    <div class="hero">
+        <div class="has-background-white-ter hero-body">
+            <p class="has-text-centered">
+            {{#if account.bio}}
+                {{account.bio}}
+            {{else}}
+                This user has yet to introduce themselves.
+            {{/if}}
             </p>
-            <div class="content">
-                <div class="columns">
-                    <div class="column">
-                        <p>Code challenge number one!</p>                  
-                    </div>
-                    <div class="column has-text-right">
-                        <a href="/viewChallange">
-                            <button class="button is-primary" > 
-                                Play Challange
-                            </button>
-                        </a>
+        </div>
+        {{#if isProfileOwner}}
+            <a href="/accounts/{{account.username}}/updateBio">Edit</a>
+        {{/if}} 
+    </div>
+    <h2 class="is-size-4">Score: <span>255</span></h2>
+    {{#each challenges}}
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div class="columns">
+                        <div class="column is-one-fifth">
+                            <p><b>Played: </b>{{this.numOfPlays}}</p>
+                        </div>
+                        <div class="column">
+                            <b>{{this.title}}</b>                  
+                        </div>
+                        <div class="column has-text-right">
+                            <a href="../challenges/{{this.id}}/preview">
+                                <button class="button is-primary" > 
+                                    Play Challange
+                                </button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
-</html>
+    {{/each}}
+{{else}}
+    <h2>There is not profile matching this user.</h2>
+{{/if}}

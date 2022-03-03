@@ -33,12 +33,20 @@ module.exports = function({accountRepository, accountValidator}){
 		login: function(loginCredentials, callback){
 			accountRepository.getAccountByUsername(loginCredentials.username, function(errors,account){
 				if(errors.length > 0){
-					callback(['databaseError'], null)
+					callback(errors, null)
 				}else {
 					const validationErrors = accountValidator.getErrorsLogin(loginCredentials, account)
 					callback(validationErrors, account)
 				}
 			})
+		},
+
+		getAccountById: function(accountId, callback){
+			accountRepository.getAccountById(accountId, callback)
+		},
+
+		updateAccountBio: function(newBioText, accountUsername, callback){
+			accountRepository.updateAccountBio(newBioText, accountUsername, callback)
 		}
 	}
 }

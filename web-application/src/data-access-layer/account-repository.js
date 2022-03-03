@@ -53,6 +53,33 @@ module.exports = function({db}){
 					callback([], results)
 				}
 			})
+		},
+
+		getAccountById: function(accountId, callback){
+			const query = `SELECT * FROM accounts WHERE id = ? LIMIT 1`
+			const values = [accountId]
+
+			db.query(query, values, function(error, account){
+				if(error){
+					// better error handling
+					callback(['databaseError'], null)
+				}else {
+					callback([], account[0])
+				}
+			})
+		},
+
+		updateAccountBio: function(newBioText, accountUsername, callback){
+			const query = `UPDATE accounts SET bio = ? WHERE username = ?`
+			const values = [newBioText, accountUsername]
+
+			db.query(query, values, function(error, results){
+				if(error){
+					callback(['databaseError'], null)
+				}else {
+					callback([], results)
+				}
+			})
 		}
 	}
 }
