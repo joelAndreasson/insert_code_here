@@ -38,13 +38,17 @@ module.exports = function({challengeRepository, challengeValidator}){
 					}
 					else{
 						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errors, results){
-							let numOfRightAnswers = 0
-							let totalNumOfAnswers = solutionAnswers.length
-							for(i = 0; i < totalNumOfAnswers; i+=1){
-								numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
-							}
-					
-							callback([], numOfRightAnswers, totalNumOfAnswers, null)
+							if(errors.length > 0){
+								callback(errors, null)
+							}else {
+								let numOfRightAnswers = 0
+								let totalNumOfAnswers = solutionAnswers.length
+								for(i = 0; i < totalNumOfAnswers; i+=1){
+									numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+								}
+						
+								callback([], numOfRightAnswers, totalNumOfAnswers, null)
+								}
 						})
 					}
 				}
