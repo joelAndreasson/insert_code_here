@@ -19,6 +19,8 @@ module.exports = function({challengeRepository, challengeValidator}){
 		},
 
 		getResultsFromChallengeTextWithId: function(id, changedChallengeText, callback){
+			const increase = 1
+
 			challengeRepository.getChallengeById(id, function(errors, challenge){
 				if(errors.length > 0){
 					callback(errors, null, null, null)
@@ -35,7 +37,7 @@ module.exports = function({challengeRepository, challengeValidator}){
 						return
 					}
 					else{
-						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + 1), function(errors, results){
+						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errors, results){
 							let numOfRightAnswers = 0
 							let totalNumOfAnswers = solutionAnswers.length
 							for(i = 0; i < totalNumOfAnswers; i+=1){
