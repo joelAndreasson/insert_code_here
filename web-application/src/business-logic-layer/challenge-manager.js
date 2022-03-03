@@ -35,13 +35,15 @@ module.exports = function({challengeRepository, challengeValidator}){
 						return
 					}
 					else{
-						let numOfRightAnswers = 0
-						let totalNumOfAnswers = solutionAnswers.length
-						for(i = 0; i < totalNumOfAnswers; i+=1){
-							numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
-						}
-				
-						callback([], numOfRightAnswers, totalNumOfAnswers, null)
+						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + 1), function(errors, results){
+							let numOfRightAnswers = 0
+							let totalNumOfAnswers = solutionAnswers.length
+							for(i = 0; i < totalNumOfAnswers; i+=1){
+								numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+							}
+					
+							callback([], numOfRightAnswers, totalNumOfAnswers, null)
+						})
 					}
 				}
 			})
@@ -64,6 +66,14 @@ module.exports = function({challengeRepository, challengeValidator}){
 			}
 			
 			challengeRepository.createChallenge(challenge, callback)
+		},
+
+		getChallengesByUsername: function(accountUsername, callback){
+			challengeRepository.getChallengesByUsername(accountUsername, callback)
+		},
+
+		increaseNumOfPlaysByOne : function(challengeId, currentNumOfPlays, callback){
+			challengeRepository.increaseNumOfPlaysByOne(challengeId, (currentNumOfPlays + 1), callback)
 		}
 	}
 }

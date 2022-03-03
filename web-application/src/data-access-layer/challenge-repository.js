@@ -8,7 +8,6 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
-					//console.log(error)
 					callback(['databaseError'], null)
 				}
 				else{
@@ -40,7 +39,7 @@ module.exports = function({db}){
 					description, 
 					datePublished, 
 					numOfPlays, 
-					userId) 
+					accountUsername) 
 					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 			const values = [
@@ -52,7 +51,7 @@ module.exports = function({db}){
 				challenge.description, 
 				challenge.datePublished, 
 				challenge.numOfPlays, 
-				challenge.userId
+				challenge.accountUsername
 			]
 			
 			db.query(query, values, function(error, results){
@@ -61,6 +60,32 @@ module.exports = function({db}){
 					callback(['databaseError'], null)
 				}else{
 					callback([], results.insertId)
+				}
+			})
+		},
+
+		getChallengesByUsername: function(accountUsername, callback){
+			const query = `SELECT * FROM challenges WHERE accountUsername = ?`
+			const values = [accountUsername]
+
+			db.query(query, values, function(error, challenges){
+				if(error){
+					callback(['databaseError'], null)
+				}else {
+					callback([], challenges)
+				}
+			})
+		},
+
+		increaseNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
+			const query = `UPDATE challenges SET numOfPlays = ? WHERE id = ?`
+			const values = [newNumOfPlays, challengeId]
+
+			db.query(query, values, function(error, results){
+				if(error){
+					callback(['databaseError'], null)
+				}else {
+					callback([], results)
 				}
 			})
 		}

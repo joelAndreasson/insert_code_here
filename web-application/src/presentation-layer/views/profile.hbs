@@ -20,27 +20,29 @@
         {{/if}} 
     </div>
     <h2 class="is-size-4">Score: <span>255</span></h2>
-    <div class="card">
-        <div class="card-content">
-            <p class="subtitle">
-                Mattias
-            </p>
-            <div class="content">
-                <div class="columns">
-                    <div class="column">
-                        <p>Code challenge number one!</p>                  
-                    </div>
-                    <div class="column has-text-right">
-                        <a href="/viewChallange">
-                            <button class="button is-primary" > 
-                                Play Challange
-                            </button>
-                        </a>
+    {{#each challenges}}
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div class="columns">
+                        <div class="column is-one-fifth">
+                            <p><b>Played: </b>{{this.numOfPlays}}</p>
+                        </div>
+                        <div class="column">
+                            <b>{{this.title}}</b>                  
+                        </div>
+                        <div class="column has-text-right">
+                            <a href="../challenges/{{this.id}}/preview">
+                                <button class="button is-primary" > 
+                                    Play Challange
+                                </button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    {{/each}}
 {{else}}
     <h2>There is not profile matching this user.</h2>
 {{/if}}

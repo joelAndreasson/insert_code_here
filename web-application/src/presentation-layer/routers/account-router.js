@@ -32,29 +32,35 @@ module.exports = function({accountManager, challengeManager}){
 	})
 
 	router.get("/:accountUsername", function(request,response){
-		console.log("session username: " + request.session.accountUsername)
 		const accountUsername = request.params.accountUsername
+
 		accountManager.getAccountByUsername(accountUsername, function(error, account){
-			console.log("account object: " + account)
 			if(error.length > 0){
 				console.log("there was a database error when fetching account by id.")
 				// handle this error better by adding a internal server error page.
 			}else{
-				var isProfileOwner = false
-				if(request.session.accountUsername == account.username){
-					isProfileOwner = true
-				}
-				const model = {
-					account: account,
-					isProfileOwner: isProfileOwner
-				}
-				response.render("profile.hbs", model)
+				challengeManager.getChallengesByUsername(accountUsername, function(error, challenges){
+					if(error.length > 0){
+						// handle errors
+						console.log("there was an error when fetching challenges for users profile.")
+					}else {
+						var isProfileOwner = false
+						if(request.session.accountUsername == account.username){
+							isProfileOwner = true
+						}
+						const model = {
+							account: account,
+							isProfileOwner: isProfileOwner,
+							challenges: challenges
+						}
+						response.render("profile.hbs", model)
+					}
+				})
 			}
 		})
 	})
 
 	router.get("/:username/updateBio", function(request, response){
-		console.log("GET: editProfileBio")
 		accountManager.getAccountByUsername(request.session.accountUsername, function(error, account){
 			if(error.length > 0){
 				// handle this error better by adding a internal server error page.
@@ -82,7 +88,6 @@ module.exports = function({accountManager, challengeManager}){
 	})
 
 	router.get('/:username', function(request, response){
-		console.log("GET: Username")
 		const username = request.params.username
 		
 		accountManager.getAccountByUsername(username, function(errors, account){
@@ -102,8 +107,6 @@ module.exports = function({accountManager, challengeManager}){
 		}
 
 		accountManager.login(accountCredentials, function(errors, account){
-			console.log("error log: "+errors)
-			console.log("account object: "+account)
 			if(errors.length > 0){ // if there are errors
 				const model = {
 					errors: errors
