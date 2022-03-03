@@ -33,9 +33,10 @@ module.exports = function({initSequelize}){
         },
 
         createAccount: function(accountInformation, callback){
-            initSequelize.accounts.create({
+            initSequelize.accounts.create({ //Maybe only enter "accountInformation" model here directly?
                 username: accountInformation.username,
-                password: accountInformation.password
+                password: accountInformation.password,
+                bio: accountInformation.bio
             })
             .then(createdAccount => callback([], createdAccount.id))
             .catch(error => {
@@ -45,11 +46,22 @@ module.exports = function({initSequelize}){
         },
 
         getAccountById: function(accountId, callback){ //fill this function at later date
-			
+			initSequelize.accounts.findByPk(accountId, {raw: true})
+                .then(account => callback([], account))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
 		},
 
-        editAccountBio: function(newBioText, accountId, callback){ // fill in at later date
-			
+        updateAccountBio: function(newBioText, accountUsername, callback){ // fill in at later date
+            initSequelize.accounts.update({bio: newBioText}, {where: {username: accountUsername}})
+                .then(results => callback([], results)) //results not needed ???
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
+
 		}
 
     }

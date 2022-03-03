@@ -126,11 +126,11 @@ module.exports = function({accountManager, challengeManager}){
 			password: request.body.password,
 			password2: request.body.password2
 		}
-		accountManager.createAccount(accountInformation, function(errors,account){
+		accountManager.createAccount(accountInformation, function(errors, account){
 			if(errors.length > 0){
 				const model = {
 					errors: errors,
-					accountInformation // ??? should it not be: "accountInformation: accountInformation" instead???
+					accountInformation: accountInformation // ??? should it not be: "accountInformation: accountInformation" instead???
 				}
 				response.render("accounts-sign-up.hbs", model)
 			}else{
@@ -138,7 +138,7 @@ module.exports = function({accountManager, challengeManager}){
 					errors: errors,
 					account: account
 				}
-				response.render("profile.hbs", model) // change this at later date
+				response.render("profile.hbs", model) // change this at later date (maybe login the user with the account that they created and render their profile?)
 			}
 		})
 	})

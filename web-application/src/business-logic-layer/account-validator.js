@@ -20,6 +20,8 @@ module.exports = function({validationVariabels}){
 			if(accountInformation.password2 != accountInformation.password){
 				errors.push("passwordsNotMatch")
 			}
+
+			//TODO: Add a "passwordTooShort" validation
 			
 			return errors
 		},

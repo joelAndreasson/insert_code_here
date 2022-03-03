@@ -27,6 +27,15 @@ module.exports = function({initSequelize}){
                 console.log(error)
                     callback(['databaseError'], null)
             })
+        },
+
+        getChallengesByUsername: function(accountUsername, callback){
+            initSequelize.challenges.findOne({where: {accountUsername: accountUsername}, raw: true})
+                .then(challenges => callback([], challenges))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
         }
     }
 }

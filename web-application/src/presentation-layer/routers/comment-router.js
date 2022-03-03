@@ -18,7 +18,7 @@ module.exports = function({commentManager}){
 
         const comment = {
             commentText: request.body.commentText,
-            accountUsername: "hej", // Hardcoded dummy value, replace with actual accountUsername
+            accountUsername: request.session.accountUsername,
             challengeId: request.params.id
         }
 

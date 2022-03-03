@@ -89,7 +89,7 @@ module.exports = function({accountManager, challengeManager}){
                     description: request.body.description,
                     datePublished: challengeManager.getTodaysDate(),
                     numOfPlays: 0,
-                    userId: payload.accountId // Should get the userId of the account that created this challenge
+                    accountUsername: payload.accountUsername // Should get the userId of the account that created this challenge
                 }
         
                 challengeManager.createChallenge(challenge, function(errors, id){ //Validate account that created the challenge
@@ -141,7 +141,7 @@ module.exports = function({accountManager, challengeManager}){
 
                     const payload = {
                         isLoggedIn: true, 
-                        accountId: account.id
+                        accountUsername: account.username
                     }
         
                     jwt.sign(payload, secret, function(error, token){

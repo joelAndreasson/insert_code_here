@@ -27,7 +27,7 @@ CREATE TABLE comments (
     commentText VARCHAR(255),
     accountUsername VARCHAR(50) NOT NULL,
     challengeId INT UNSIGNED,
-    FOREIGN KEY(challengeId) REFERENCES challenges(id),
+    FOREIGN KEY(challengeId) REFERENCES challenges(id) ON DELETE CASCADE,
     FOREIGN KEY(accountUsername) REFERENCES accounts(username)
 );
 

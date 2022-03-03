@@ -77,7 +77,7 @@ module.exports = function({db}){
 				if(error){
 					callback(['databaseError'], null)
 				}else {
-					callback([], results)
+					callback([], results) // results unnecessary???
 				}
 			})
 		}
