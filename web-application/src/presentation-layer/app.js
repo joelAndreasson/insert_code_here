@@ -57,7 +57,7 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	app.use('/', variousRouter)
 	app.use('/accounts', accountRouter)
 	app.use('/challenges', challengeRouter)
-	app.use('/challenges/:id/comments', commentRouter) 
+	app.use('/challenges/:challengeId/comments', commentRouter) 
 	app.use('/api', restApiRouter)
 
 	return app

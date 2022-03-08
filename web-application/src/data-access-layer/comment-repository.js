@@ -2,7 +2,7 @@
 
 module.exports = function({db}){
     return{
-        getCommentById: function(id, callback){
+        getCommentById: function(id, callback){ // unnecessary????
             const query = 'SELECT * FROM comments WHERE id = ? LIMIT 1'
             const values = [id]
 

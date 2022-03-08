@@ -3,6 +3,10 @@ const jwt = require('jsonwebtoken')
 
 const secret = 'adhfjhbreoiwevbisdvcbrejksiuf' //global???
 
+const invalidClientError = {
+    error: "invalid_client"
+}
+
 module.exports = function({accountManager, challengeManager}){
 
     const router = express.Router()
@@ -20,89 +24,194 @@ module.exports = function({accountManager, challengeManager}){
     router.get("/challenges", function(request, response){
 
         const authHeader = request.header("Authorization")
-        const accessToken = authHeader.substring("Bearer ".length)
 
-        jwt.verify(accessToken, secret, function(error, payload){
-            if(error){
-                response.status(401).end()
-            }
-            else{
-                challengeManager.getAllChallenges(function(errors, challenges){     
-                    if(errors.length == 0){
-                        response.status(200).json(challenges)
-                    }
-                    else{
-                        response.status(500).json(errors)
-                    }
-                })
-            }
-        })
+        if(authHeader){
+            const accessToken = authHeader.substring("Bearer ".length)
+
+            jwt.verify(accessToken, secret, function(error, payload){
+                if(error){
+                    response.status(401).json(invalidClientError)
+                }
+                else{
+                    challengeManager.getAllChallenges(function(errors, challenges){     
+                        if(errors.length == 0){
+                            response.status(200).json(challenges)
+                        }
+                        else{
+                            response.status(500).json(errors)
+                        }
+                    })
+                }
+            })
+        }
+        else{
+            response.status(401).json(invalidClientError)
+        }
+        
         
     })
 
-    router.get("/challenges/:id", function(request, response){
+    router.get("/challenges/:challengeId", function(request, response){
 
         const authHeader = request.header("Authorization")
-        const accessToken = authHeader.substring("Bearer ".length)
 
-        jwt.verify(accessToken, secret, function(error, payload){
-            if(error){
-                response.status(401).end()
-            }
-            else{
-                const id = request.params.id
+        if(authHeader){
+            const accessToken = authHeader.substring("Bearer ".length)
 
-                challengeManager.getChallengeById(id, function(errors, challenge){
+            jwt.verify(accessToken, secret, function(error, payload){
+                if(error){
+                    response.status(401).json(invalidClientError)
+                }
+                else{
+                    const challengeId = request.params.challengeId
 
-                    if(challenge){
-                        response.status(200).json(challenge)
-                    }
-                    else if(errors.length > 0){
-                        response.status(500).json(errors)
-                    }
-                    else{
-                        response.status(404).end()
-                    }
-                })
-            }
-        })
+                    challengeManager.getChallengeById(challengeId, function(errors, challenge){ //Errors or error?
+
+                        if(challenge){
+                            response.status(200).json(challenge)
+                        }
+                        else if(errors.length > 0){
+                            response.status(500).json(errors)
+                        }
+                        else{
+                            response.status(404).end()
+                        }
+                    })
+                }
+            })
+        }
+        else{
+            response.status(401).json(invalidClientError)
+        }
+        
 
         
+    })
+
+    router.post("/challenges/:challengeId/delete", function(request, response){
+        const authHeader = request.header("Authorization")
+
+        if(authHeader){
+            const accessToken = authHeader.substring("Bearer ".length)
+
+            jwt.verify(accessToken, secret, function(error, payload){
+                if(error){
+                    response.status(401).json(invalidClientError)
+                }
+                else{
+    
+                    challengeId = request.params.challengeId
+    
+                    challengeManager.deleteChallengeById(challengeId, function(errors, results){
+                        if(results){
+                            response.status(204).end()
+                        }
+                        else if(errors.length > 0){
+                            response.status(500).json(errors)
+                        }
+                        else{
+                            response.status(404).end()
+                        }
+    
+                    })
+                }
+            })
+        }
+        else{
+            response.status(401).json(invalidClientError)
+        }
+        
+
+        
+    })
+
+    router.post("/challenges/:challengeId/update", function(request, response){
+        const authHeader = request.header("Authorization")
+
+        if(authHeader){
+            const accessToken = authHeader.substring("Bearer ".length)
+
+            jwt.verify(accessToken, secret, function(error, payload){
+                if(error){
+                    response.status(401).json(invalidClientError)
+                }
+                else{
+                    const challengeId = request.params.challengeId
+
+                    const updatedChallenge = {
+                        title: request.body.title,
+                        challengeText: request.body.challengeText,
+                        solutionText: request.body.solutionText,
+                        progLanguage: request.body.progLanguage,
+                        difficulty: request.body.difficulty,
+                        description: request.body.description
+                    }
+        
+                    challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors, results){ //results or challenge??
+                        if(errors == 0){
+                            response.status(200).json(results) // This should maybe redirect and to the challenge in question
+                        }
+                        else if(errors.includes("databaseError")){ //Hardcoded???
+                            response.status(500).json(errors)
+                        }
+                        else{
+                            response.status(400).json(errors)
+                        }
+                        
+                    })
+
+                }
+            })
+
+        }
+        else{
+            response.status(401).json(invalidClientError)
+        }
     })
 
     router.post("/challenges", function(request, response){
 
         const authHeader = request.header("Authorization")
-        const accessToken = authHeader.substring("Bearer ".length)
 
-        jwt.verify(accessToken, secret, function(error, payload){
-            if(error){
-                response.status(401).end()
-            }
-            else{
-                const challenge = {
-                    title: request.body.title,
-                    challengeText: request.body.challengeText,
-                    solutionText: request.body.solutionText,
-                    progLanguage: request.body.progLanguage,
-                    difficulty: request.body.difficulty,
-                    description: request.body.description,
-                    datePublished: challengeManager.getTodaysDate(),
-                    numOfPlays: 0,
-                    accountUsername: payload.accountUsername // Should get the userId of the account that created this challenge
+        if(authHeader){
+            const accessToken = authHeader.substring("Bearer ".length)
+
+            jwt.verify(accessToken, secret, function(error, payload){
+                if(error){
+                    response.status(401).json(invalidClientError)
                 }
+                else{
+                    const challenge = {
+                        title: request.body.title,
+                        challengeText: request.body.challengeText,
+                        solutionText: request.body.solutionText,
+                        progLanguage: request.body.progLanguage,
+                        difficulty: request.body.difficulty,
+                        description: request.body.description,
+                        datePublished: challengeManager.getTodaysDate(),
+                        numOfPlays: 0,
+                        accountUsername: payload.accountUsername // Should get the userId of the account that created this challenge
+                    }
+            
+                    challengeManager.createChallenge(challenge, function(errors, id){ //Validate account that created the challenge
+                        if(errors.length == 0){
+                            response.setHeader("Location", "/challenges/" + id)
+                            response.status(201).json(challenge)
+                        }
+                        else if(errors.includes("databaseError")){ //Hardcoded???
+                            response.status(500).json(errors)
+                        }
+                        else{
+                            response.status(400).json(errors)
+                        }
+                    })
+                }
+            })
+        }
+        else{
+            response.status(401).json(invalidClientError)
+        }
         
-                challengeManager.createChallenge(challenge, function(errors, id){ //Validate account that created the challenge
-                    if(errors.length == 0){
-                        response.setHeader("Location", "/challenges/" + id)
-                        response.status(201).json(challenge)
-                    }
-                    else{
-                        response.status(400).json(errors) // Might be 500 if databaseError ocurrs?
-                    }
-                })
-            }
-        })
         
     })
 
@@ -147,7 +256,7 @@ module.exports = function({accountManager, challengeManager}){
                     jwt.sign(payload, secret, function(error, token){
                         if(error){
                             console.log(error)
-                            response.status(401).json(error)
+                            response.status(401).json(invalidClientError)
                         }
                         else{
                             response.status(200).json({
@@ -165,6 +274,10 @@ module.exports = function({accountManager, challengeManager}){
         else{
             response.status(400).json({error: "unsupported_grant_type"})
         }
+    })
+
+    router.get("/coffee", function(request, response){ // MAKE SURE THIS DOES NOT MESS ANYTHING UP! :)
+        response.status(418).json("The server refuses to brew coffee because it is, permanently, a teapot.")
     })
 
 

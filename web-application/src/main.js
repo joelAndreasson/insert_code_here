@@ -9,7 +9,7 @@ container.register("commentRepository", awilix.asFunction(require('./data-access
 //container.register("accountRepository", awilix.asFunction(require('./data-access-layer-sequelize/account-repository'))) //Sequelize with PostgreSQL database
 //container.register("challengeRepository", awilix.asFunction(require('./data-access-layer-sequelize/challenge-repository'))) //Sequelize with PostgreSQL database
 //container.register("commentRepository", awilix.asFunction(require('./data-access-layer-sequelize/comment-repository'))) //Sequelize with PostgreSQL database
-container.register("initSequelize", awilix.asFunction(require('./data-access-layer-sequelize/init-sequelize'))) //Sequelize with PostgreSQL database
+container.register("initSequelize", awilix.asFunction(require('./data-access-layer-sequelize/init-sequelize'))) //Initialize sequelize
 
 container.register("accountManager", awilix.asFunction(require('./business-logic-layer/account-manager')))
 container.register("challengeManager", awilix.asFunction(require('./business-logic-layer/challenge-manager')))

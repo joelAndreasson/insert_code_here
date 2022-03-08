@@ -16,9 +16,9 @@ module.exports = function({db}){
 			})
 		},
 
-		getChallengeById: function(id, callback){
+		getChallengeById: function(challengeId, callback){
 			const query = `SELECT * FROM challenges WHERE id = ? LIMIT 1`
-			const values = [id]
+			const values = [challengeId]
 			
 			db.query(query, values, function(error, challenges){
 				if(error){
@@ -88,6 +88,53 @@ module.exports = function({db}){
 					callback([], results)
 				}
 			})
+		},
+
+		deleteChallengeById: function(challengeId, callback){
+			const query = `DELETE FROM challenges WHERE id = ?`
+			const values = [challengeId]
+
+			db.query(query, values, function(error, results){
+				if(error){
+					console.log(error)
+					callback(['databaseError'], null)
+				}
+				else{
+					callback([], results)
+				}
+			})
+		},
+
+		updateChallengeById: function(challengeId, updatedChallenge, callback){
+			const query = `UPDATE challenges SET 
+				title = ?, 
+				challengeText = ?,
+				solutionText = ?,
+				progLanguage = ?,
+				difficulty = ?,
+				description = ?
+				WHERE id = ?`
+			
+			const values = [
+				updatedChallenge.title, 
+				updatedChallenge.challengeText, 
+				updatedChallenge.solutionText, 
+				updatedChallenge.progLanguage,
+				updatedChallenge.difficulty,
+				updatedChallenge.description,
+				challengeId
+			]
+
+			db.query(query, values, function(error, results){ //Results or challenge?
+				if(error){
+					callback(['databaseError'], null)
+				}
+				else{
+					callback([], results)
+				}
+			})
 		}
+
+
 	}
 }

@@ -58,15 +58,15 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		})
 	})
 	
-	router.get("/:id/preview", function(request,response){ // id should mabye be challengeId instead?
+	router.get("/:challengeId/preview", function(request,response){
 	
-		const id = request.params.id // id should mabye be challengeId instead?
+		const challengeId = request.params.challengeId
 		
-		let allErrors = []
+		let allErrors = [] // This is maybe unnecessary because there is a posibility that there will be two databaseError:s
 	
-		challengeManager.getChallengeById(id, function(errors, challenge){
+		challengeManager.getChallengeById(challengeId, function(errors, challenge){
 			allErrors.push(...errors)
-			commentManager.getCommentsByChallengeId(id, function(errors, comments){
+			commentManager.getCommentsByChallengeId(challengeId, function(errors, comments){
 				allErrors.push(...errors)
 	
 				const model = {
@@ -79,10 +79,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		})
 	})
 	
-	router.get('/:id/play', function(request, response){
-		const id = request.params.id
+	router.get('/:challengeId/play', function(request, response){
+		const challengeId = request.params.challengeId
 	
-		challengeManager.getChallengeById(id, function(errors, challenge){
+		challengeManager.getChallengeById(challengeId, function(errors, challenge){
 	
 			const model = {
 				errors: errors,
@@ -93,11 +93,11 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		
 	})
 	
-	router.post('/:id/play', function(request, response){
-		const id = request.params.id
+	router.post('/:challengeId/play', function(request, response){
+		const challengeId = request.params.challengeId
 		const changedChallengeText = request.body.challengeText
 	
-		challengeManager.getResultsFromChallengeTextWithId(id, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
+		challengeManager.getResultsFromChallengeTextWithId(challengeId, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
 			
 			if(errors.length > 0){
 	
