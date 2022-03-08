@@ -39,4 +39,4 @@ services:
     environment:
       - POSTGRES_DB=postgresDatabase
       - POSTGRES_PASSWORD=hejsan123
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      #- POSTGRES_HOST_AUTH_METHOD=trust
