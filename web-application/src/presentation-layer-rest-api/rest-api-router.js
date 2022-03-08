@@ -18,6 +18,11 @@ module.exports = function({accountManager, challengeManager}){
 
     router.use(function(request, response, next) {
         console.log(request.method, request.url)
+
+        response.setHeader("Access-Control-Allow-Origin", "*")
+	    response.setHeader("Access-Control-Allow-Methods", "*")
+	    response.setHeader("Access-Control-Allow-Headers", "*")
+	    response.setHeader("Access-Control-Expose-Headers", "*")
         next()
     })
 
