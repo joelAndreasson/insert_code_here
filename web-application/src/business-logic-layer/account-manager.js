@@ -27,7 +27,13 @@ module.exports = function({accountRepository, accountValidator}){
 		},
 
 		getAccountByUsername: function(username, callback){
-			accountRepository.getAccountByUsername(username, callback)
+			accountRepository.getAccountByUsername(username, function(errors, account){
+				if(errors.length > 0){
+					callback(errors, null)
+				}else {
+					callback(errors, account)
+				}
+			})
 		},
 
 		login: function(loginCredentials, callback){

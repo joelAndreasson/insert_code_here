@@ -48,9 +48,9 @@
             {{#each comments}}
                 <div class="card">
                     <div class="card-content">
-                        <p class="subtitle">
-                            userId: {{userId}}
-                        </p>
+                        <a href="/accounts/{{accountUsername}}" class="subtitle">
+                            {{accountUsername}}
+                        </a>
                         <div class="content">
                             commentText: {{commentText}}
                         </div>

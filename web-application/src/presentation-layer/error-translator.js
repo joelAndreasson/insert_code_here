@@ -16,10 +16,10 @@ module.exports = function({validationVariabels}){
                 difficultyNotValid: "Select a valid difficulty",
                 descriptionTooShort: "Description needs to be at least " + validationVariabels.MIN_DESCRIPTION_LENGTH + " characters",
                 numOfBlanksChanged: "The number of [[INSERT_CODE_HERE]] brackets needs to be the same as it was originally",
-                commentTooShort: "Comment needs to be at least " + validationVariabels.MIN_COMMENT_LENGTH + " characters",
+                commentTooShort: "Comment needs to be at least " + validationVariabels.MIN_COMMENT_LENGTH + " characters"
             }
     
-            const translations = errorTranslations.map(error => errorTranslations[error])
+            const translations = errorCodes.map(error => errorTranslations[error])
             return translations
         }
     }

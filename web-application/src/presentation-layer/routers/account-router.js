@@ -1,12 +1,12 @@
 const express = require('express')
 
-module.exports = function({accountManager, challengeManager}){
+module.exports = function({accountManager, challengeManager, errorTranslator}){
 	const router = express.Router()
 
 	router.get("/sign-out", function(request, response){
 		request.session.destroy(function(error){
 			if(error){
-				// load internal server error page.
+				response.render("internal-server-error.hbs")
 			}else{
 				response.redirect("/")
 			}
@@ -17,32 +17,36 @@ module.exports = function({accountManager, challengeManager}){
 		response.render("accounts-sign-up.hbs")
 	})
 
-	router.get("/sign-in", function(request, response){ // change to login later 
+	router.get("/login", function(request, response){
 		response.render("accounts-sign-in.hbs")
 	})
 
 	router.get("/", function(request, response){
 		accountManager.getAllAccounts(function(errors, accounts){
-			const model = {
-				errors: errors,
-				accounts: accounts
+			if(errors.length > 0){
+				response.render("internal-server-error.hbs")
+			}else {
+				const model = {
+					errors: errors,
+					accounts: accounts
+				}
+				response.render("accounts-list-all.hbs", model)
 			}
-			response.render("accounts-list-all.hbs", model)
 		})
 	})
 
 	router.get("/:accountUsername", function(request,response){
 		const accountUsername = request.params.accountUsername
 
-		accountManager.getAccountByUsername(accountUsername, function(error, account){
-			if(error.length > 0){
-				console.log("there was a database error when fetching account by id.")
-				// handle this error better by adding a internal server error page.
+		accountManager.getAccountByUsername(accountUsername, function(errors, account){
+			if(errors.length > 0){
+				response.render("internal-server-error.hbs")
+			}else if(account == undefined){
+				response.render("page-not-found.hbs")
 			}else{
-				challengeManager.getChallengesByUsername(accountUsername, function(error, challenges){
-					if(error.length > 0){
-						// handle errors
-						console.log("there was an error when fetching challenges for users profile.")
+				challengeManager.getChallengesByUsername(accountUsername, function(errors, challenges){
+					if(errors.length > 0){
+						response.render("internal-server-error.hbs")
 					}else {
 						var isProfileOwner = false
 						if(request.session.accountUsername == account.username){
@@ -63,8 +67,9 @@ module.exports = function({accountManager, challengeManager}){
 	router.get("/:username/updateBio", function(request, response){
 		accountManager.getAccountByUsername(request.session.accountUsername, function(error, account){
 			if(error.length > 0){
-				// handle this error better by adding a internal server error page.
-				console.log("there was a database error when fetching account by id.")
+				response.render("internal-server-error.hbs")
+			}else if(account == undefined){
+				response.render("page-not-found.hbs")
 			}else {
 				const model = {
 					account: account
@@ -77,10 +82,13 @@ module.exports = function({accountManager, challengeManager}){
 	router.post("/:username/updateBio", function(request,response){
 		const newBioText = request.body.bioText
 		const accountUsername = request.params.username
-		accountManager.updateAccountBio(newBioText, accountUsername, function(error, results){
+		accountManager.updateAccountBio(newBioText, accountUsername, function(errors, results){
 			if(error.length > 0){
-				// handle this error better by adding a internal server error page.
-				console.log("there was a database error when editing the users bio")
+				const errorCodes = errorTranslator.translateErrorCodes(errors)
+				const model = {
+					errors: errorCodes
+				}
+				response.render("profile-edit-bio.hbs", model)
 			}else {
 				response.redirect("/accounts/"+accountUsername)
 			}
@@ -91,8 +99,9 @@ module.exports = function({accountManager, challengeManager}){
 		const username = request.params.username
 		
 		accountManager.getAccountByUsername(username, function(errors, account){
+			const errorCodes = errorTranslator.translateErrorCodes(errors)
 			const model = {
-				errors: errors,
+				errors: errorCodes,
 				account: account
 			}
 			response.render("accounts-show-one.hbs", model)
@@ -100,7 +109,7 @@ module.exports = function({accountManager, challengeManager}){
 		
 	})
 
-	router.post("/login", function(request, response){ // change to get?
+	router.post("/login", function(request, response){
 		const accountCredentials = {
 			username: request.body.username,
 			password: request.body.password
@@ -108,8 +117,9 @@ module.exports = function({accountManager, challengeManager}){
 
 		accountManager.login(accountCredentials, function(errors, account){
 			if(errors.length > 0){ // if there are errors
+				const errorCodes = errorTranslator.translateErrorCodes(errors)
 				const model = {
-					errors: errors
+					errors: errorCodes
 				}
 				response.render("accounts-sign-in.hbs", model)
 			}else{ // no errors, login
@@ -128,8 +138,9 @@ module.exports = function({accountManager, challengeManager}){
 		}
 		accountManager.createAccount(accountInformation, function(errors, account){
 			if(errors.length > 0){
+				const errorCodes = errorTranslator.translateErrorCodes(errors)
 				const model = {
-					errors: errors,
+					errors: errorCodes,
 					accountInformation: accountInformation // ??? should it not be: "accountInformation: accountInformation" instead???
 				}
 				response.render("accounts-sign-up.hbs", model)
