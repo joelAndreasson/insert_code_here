@@ -16,9 +16,8 @@ module.exports = function({accountRepository, accountValidator}){
 			// Validate the account.
 			const errors = accountValidator.getErrorsNewAccount(accountInformation)
 			
-			if(0 < errors.length){
+			if(errors.length > 0){
 				callback(errors, null)
-				return
 			}
 
 			// hash password

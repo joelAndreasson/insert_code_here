@@ -5,7 +5,7 @@ module.exports = function({validationVariabels}){
 	return{
 		getErrorsNewAccount: function(accountInformation){
 			const errors = []
-	
+			
 			// Validate username.
 			if(!accountInformation.hasOwnProperty("username")){
 				errors.push("usernameMissing")
@@ -15,11 +15,16 @@ module.exports = function({validationVariabels}){
 			if(validationVariabels.MAX_USERNAME_LENGTH < accountInformation.username.length){
 				errors.push("usernameTooLong")
 			}
+
+			// Validate password 
+			if(accountInformation.password < validationVariabels.MIN_PASSWORD_LENGTH){
+				errors.push("passwordToShort")
+			}else if(accountInformation.password > validationVariabels.MAX_PASSWORD_LENGTH){
+				errors.push("passwordToLong")
+			}
 			if(accountInformation.password2 != accountInformation.password){
 				errors.push("passwordsNotMatch")
 			}
-
-			//TODO: Add a "passwordTooShort" validation
 			
 			return errors
 		},
