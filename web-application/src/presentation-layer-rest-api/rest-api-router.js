@@ -126,8 +126,6 @@ module.exports = function({accountManager, challengeManager}){
             response.status(401).json(invalidClientError)
         }
         
-
-        
     })
 
     router.post("/challenges/:challengeId/update", function(request, response){
@@ -154,7 +152,7 @@ module.exports = function({accountManager, challengeManager}){
         
                     challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors, results){ //results or challenge??
                         if(errors == 0){
-                            response.status(200).json(results) // This should maybe redirect and to the challenge in question
+                            response.status(204).end()
                         }
                         else if(errors.includes("databaseError")){ //Hardcoded???
                             response.status(500).json(errors)
