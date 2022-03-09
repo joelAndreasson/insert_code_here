@@ -7,6 +7,10 @@ body{
 	min-height: 100%;
 }
 
+#banner {
+	min-width: 100%;
+}
+
 footer {
 	position: fixed;
 	left: 0;
