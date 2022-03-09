@@ -83,7 +83,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		const newBioText = request.body.bioText
 		const accountUsername = request.params.username
 		accountManager.updateAccountBio(newBioText, accountUsername, function(errors, results){
-			if(error.length > 0){
+			if(errors.length > 0){
 				const errorCodes = errorTranslator.translateErrorCodes(errors)
 				const model = {
 					errors: errorCodes
