@@ -13,13 +13,13 @@ module.exports = function({accountRepository, accountValidator}){
 		},
 
 		createAccount: function(accountInformation, callback){
+			
 			// Validate the account.
 			const errors = accountValidator.getErrorsNewAccount(accountInformation)
-			
 			if(errors.length > 0){
 				callback(errors, null)
+				return
 			}
-
 			// hash password
 			accountInformation.password = bcrypt.hashSync(accountInformation.password, salt);
 			accountRepository.createAccount(accountInformation, callback)	

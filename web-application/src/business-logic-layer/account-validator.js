@@ -5,7 +5,7 @@ module.exports = function({validationVariabels}){
 	return{
 		getErrorsNewAccount: function(accountInformation){
 			const errors = []
-			
+
 			// Validate username.
 			if(!accountInformation.hasOwnProperty("username")){
 				errors.push("usernameMissing")
@@ -17,9 +17,9 @@ module.exports = function({validationVariabels}){
 			}
 
 			// Validate password 
-			if(accountInformation.password < validationVariabels.MIN_PASSWORD_LENGTH){
+			if(accountInformation.password.length < validationVariabels.MIN_PASSWORD_LENGTH){
 				errors.push("passwordToShort")
-			}else if(accountInformation.password > validationVariabels.MAX_PASSWORD_LENGTH){
+			}else if(accountInformation.password.length > validationVariabels.MAX_PASSWORD_LENGTH){
 				errors.push("passwordToLong")
 			}
 			if(accountInformation.password2 != accountInformation.password){

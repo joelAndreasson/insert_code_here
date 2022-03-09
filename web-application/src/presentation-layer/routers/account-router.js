@@ -141,7 +141,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 				const errorCodes = errorTranslator.translateErrorCodes(errors)
 				const model = {
 					errors: errorCodes,
-					accountInformation: accountInformation // ??? should it not be: "accountInformation: accountInformation" instead???
+					accountInformation: accountInformation
 				}
 				response.render("accounts-sign-up.hbs", model)
 			}else{
