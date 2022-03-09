@@ -145,11 +145,9 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 				}
 				response.render("accounts-sign-up.hbs", model)
 			}else{
-				const model = {
-					errors: errors,
-					account: account
-				}
-				response.render("profile.hbs", model) // change this at later date (maybe login the user with the account that they created and render their profile?)
+				request.session.isLoggedIn = true
+				request.session.accountUsername = accountInformation.username
+				response.redirect("/accounts/" + accountInformation.username) // change this at later date (maybe login the user with the account that they created and render their profile?)
 			}
 		})
 	})
