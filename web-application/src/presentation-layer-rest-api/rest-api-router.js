@@ -253,7 +253,7 @@ module.exports = function({accountManager, challengeManager}){
 
                     const payload = {
                         isLoggedIn: true, 
-                        accountUsername: account.username
+                        accountUsername: account.username // Unnecessary??
                     }
         
                     jwt.sign(payload, secret, function(error, token){
