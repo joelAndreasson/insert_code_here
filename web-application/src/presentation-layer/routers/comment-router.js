@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function({commentManager}){
+module.exports = function({commentManager, errorTranslator}){
     const router = express.Router({ mergeParams: true })
 
     router.get("/create", function(request, response){

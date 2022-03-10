@@ -22,6 +22,19 @@ footer {
 	border-bottom: 2px solid gray;
 }
 
+#comments-scrollable{
+	height: 35vh;
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+#challenge-description{
+	height: 35vh;
+	display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+}
 
 .main {
 	display: flex;
