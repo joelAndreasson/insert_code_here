@@ -56,6 +56,35 @@ module.exports = function({accountManager, challengeManager}){
         })
     })
 
+    router.post("challenges/:challengeId/play", function(request, response){
+        const challengeId = request.params.challengeId
+        const changedChallengeText = request.body.changedChallengeText
+
+        challengeManager.getResultsFromChallengeTextWithId(
+            challengeId, 
+            changedChallengeText, 
+            function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
+
+                if(errors.length == 0){
+                    const model = {
+                        numOfRightAnswers: numOfRightAnswers,
+                        totalNumOfAnswers: totalNumOfAnswers
+                    }
+
+                    response.status(200).json(model)
+                }
+                else if(errors.includes("databaseError")){ //Hardcoded???
+                    response.status(500).json(errors)
+                }
+                else{
+                    response.status(400).json(errors)
+                }
+
+            }
+        )
+
+    })
+
     router.post("/challenges/:challengeId/delete", function(request, response){
         const authHeader = request.header("Authorization")
 
@@ -174,7 +203,7 @@ module.exports = function({accountManager, challengeManager}){
                         description: request.body.description,
                         datePublished: challengeManager.getTodaysDate(),
                         numOfPlays: 0,
-                        accountUsername: payload.accountUsername // Should get the userId of the account that created this challenge
+                        accountUsername: request.body.accountUsername // Should get the username from the body
                     }
             
                     challengeManager.createChallenge(challenge, function(errors, id){ //Validate account that created the challenge

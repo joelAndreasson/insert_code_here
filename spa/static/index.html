@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INSERT_CODE_HERE</title>
     <link rel="stylesheet"  href="styles.css"> <!-- NOT WORKING! These should be in a folder, not directly in the static folder -->
-    <link rel="stylesheet" href="bulma.min.css"> <!--  -||-  -->
+    <link rel="stylesheet" href="bulma.min.css"> <!--  These should be in a folder, not directly in the static folder  -->
     <script src="navigation.js"></script> <!-- NOT WORKING! -->
 
-    
+<!--
     <style>
         .page{
             display: none;
@@ -24,7 +24,7 @@
     
 
     <script>
-
+        /*
         // --- navigation.js ---
 
         const API_URL = "http://localhost:3000/api/"
@@ -42,6 +42,7 @@
             })
 
             const pageLinks = document.querySelectorAll('.page-link')
+            console.log(pageLinks)
 
             for(const pageLink of pageLinks){
                 pageLink.addEventListener('click', function(event){
@@ -124,10 +125,10 @@
         }
 
 
-
+        */
     </script>
 
-
+-->
 
 
 </head>
@@ -190,6 +191,26 @@
 
         <section id="challenges-page" class="page">
             CHALLENGES PAGE
+
+            <ul id="all-challenges">
+
+            </ul>
+        </section>
+
+        <section id="challenge-page" class="page">
+            <h1 id="challenge-title"></h1>
+            <p id="challenge-solutionText"></p>
+            <p id="challenge-description"></p>
+            <p id="challenge-datePublished"></p>
+            <p id="challenge-accountUsername"></p>
+            <p id="challenge-numOfPlays"></p>
+            <p id="challenge-difficulty"></p>
+            <p id="challenge-progLanguage"></p>
+
+            <form id="challenge-play-form" class="is-half" method="post">
+                <textarea id="challenge-challengeText"></textarea>
+                <button class="button is-success" type="submit" value="Submit">Submit</button>
+            </form>
         </section>
 
         <section id="about-page" class="page">
@@ -206,6 +227,13 @@
 
         <section id="login-page" class="page">
             LOGIN PAGE
+        </section>
+
+        <section id="results-page" class="page">
+            RESULTS PAGE
+            <p id="challenge-numOfRightAnswers"></p>
+            <p>Of</p>
+            <p id="challenge-totalNumOfAnswers"></p>
         </section>
 
     </main>

@@ -24,7 +24,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			description: request.body.description,
 			datePublished: challengeManager.getTodaysDate(),
 			numOfPlays: 0,
-			accountUsername: request.body.accountUsername // Should get the accountUsername of the account that created this challenge
+			accountUsername: request.body.accountUsername
 		}
 		
 		challengeManager.createChallenge(challenge, function(errors, id){
@@ -97,28 +97,32 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		const challengeId = request.params.challengeId
 		const changedChallengeText = request.body.challengeText
 	
-		challengeManager.getResultsFromChallengeTextWithId(challengeId, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
+		challengeManager.getResultsFromChallengeTextWithId(
+			challengeId, 
+			changedChallengeText, 
+			function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
 			
-			if(errors.length > 0){
-	
-				challenge.challengeText = changedChallengeText
-	
-				const model = {
-					errors: errors,
-					challenge: challenge
+				if(errors.length > 0){
+		
+					challenge.challengeText = changedChallengeText
+		
+					const model = {
+						errors: errors,
+						challenge: challenge
+					}
+		
+					response.render('challenge-play.hbs', model)
 				}
-	
-				response.render('challenge-play.hbs', model)
-			}
-			else{
-				const model = {
-					numOfRightAnswers: numOfRightAnswers,
-					totalNumOfAnswers: totalNumOfAnswers
+				else{
+					const model = {
+						numOfRightAnswers: numOfRightAnswers,
+						totalNumOfAnswers: totalNumOfAnswers
+					}
+				
+					response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
 				}
-			
-				response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
 			}
-		})
+		)
 	})
 
 	return router

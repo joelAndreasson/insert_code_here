@@ -48,7 +48,7 @@ services:
     volumes:
       - ./spa/nginx.conf:/etc/nginx/nginx.conf
       - ./spa/static/index.html:/data/www/index.html
-      - ./spa/static/navigation.js:/data/www/navigation.js
-      - ./spa/static/bulma.min.css:/data/www/bulma.min.css
-      - ./spa/static/styles.css:/data/www/styles.css
+      - ./spa/static/js/navigation.js:/data/www/navigation.js
+      - ./spa/static/css/bulma.min.css:/data/www/bulma.min.css
+      - ./spa/static/css/styles.css:/data/www/styles.css
     
