@@ -6,7 +6,3 @@ async function loadChallengesPage(){
 
     const challenges = await response.json()
 }
-
-function testConsoleLog(){
-    console.log("Hej från challenges.js :)")
-}

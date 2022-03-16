@@ -5,132 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INSERT_CODE_HERE</title>
-    <link rel="stylesheet"  href="styles.css"> <!-- NOT WORKING! These should be in a folder, not directly in the static folder -->
-    <link rel="stylesheet" href="bulma.min.css"> <!--  These should be in a folder, not directly in the static folder  -->
-    <script src="navigation.js"></script> <!-- NOT WORKING! -->
-
-<!--
-    <style>
-        .page{
-            display: none;
-        }
-
-        .page.current-page{
-            display: block;
-        }
-    </style>
-
-    
-    
-
-    <script>
-        /*
-        // --- navigation.js ---
-
-        const API_URL = "http://localhost:3000/api/"
-
-        let ACCESS_TOKEN = ""
-
-        document.addEventListener('DOMContentLoaded', function(){
-
-            const navbarBurger = document.getElementById('navbarBurger')
-            const navbarMenu = document.getElementById('navbarMenu')
-
-            navbarBurger.addEventListener('click', function(){
-                navbarBurger.classList.toggle('is-active')
-                navbarMenu.classList.toggle('is-active')
-            })
-
-            const pageLinks = document.querySelectorAll('.page-link')
-            console.log(pageLinks)
-
-            for(const pageLink of pageLinks){
-                pageLink.addEventListener('click', function(event){
-                    event.preventDefault()
-
-                    const url = pageLink.getAttribute('href')
-
-                    history.pushState(null, "", url)
-
-                    hideCurrentPage()
-                    showPage(url)
-                })                
-            }
-
-            showPage(location.pathname)
-
-            
-        })
-
-        window.addEventListener('popstate', function(){
-            hideCurrentPage()
-            showPage(location.pathname)
-        })
-
-        function hideCurrentPage(){
-            document.querySelector('.current-page').classList.remove('current-page')
-        }
-
-        function showPage(url){
-            let nextPageId
-
-            switch (url) {
-                case '/':
-                    nextPageId = 'home-page'
-                    break
-
-                case '/about':
-                    nextPageId = 'about-page'
-                    break
-
-                case '/contact':
-                    nextPageId = 'contact-page'
-                    break
-
-                case '/challenges':
-                    nextPageId = 'challenges-page'
-                    break
-
-                case '/sign-up':
-                    nextPageId = 'sign-up-page'
-                    break
-
-                case '/login':
-                    nextPageId = 'login-page'
-                    break
-            
-                default:
-                    if(url.startsWith("/challenges/")){
-                        const [empty, humans, id] = url.split("/")
-                        nextPageId = 'challenge-page'
-                        //loadChallengePage(id)
-                    }
-                    else{
-                        nextPageId = 'not-found-page'
-                    }
-                    break
-            }
-
-            document.getElementById(nextPageId).classList.add('current-page')
-        }
-
-        // --- navigation.js END ---
-
-        // --- challenges.js ---
-
-        async function loadChallengesPage(){
-            const response = await fetch(API_URL+challenges)
-
-            const challenges = await response.json()
-        }
-
-
-        */
-    </script>
-
--->
-
-
+    <link rel="stylesheet"  href="styles.css">
+    <link rel="stylesheet" href="bulma.min.css">
+    <script src="navigation.js"></script> 
 </head>
 <body class="content">
     
@@ -157,6 +34,7 @@
             <div class="navbar-start">
                 <a href="/" class="navbar-item page-link">Home</a>
                 <a href="/challenges" class="navbar-item page-link">Challenges</a>
+                <a id="create-challenge-button" href="/challenges/create" class="navbar-item page-link is-hidden">Create Challenge</a>
 
                 <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">
@@ -173,8 +51,9 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a href="/sign-up" class="button is-primary page-link">Sign up</a>
-                        <a href="/login" class="button is-light page-link">Login</a>
+                        <a id="login-button" href="/sign-up" class="button is-primary page-link">Sign up</a>
+                        <a id="sign-up-button" href="/login" class="button is-light page-link">Login</a>
+                        <a id="logout-button" href="/logout" class="button is-danger is-hidden">Logout</a>
                     </div>
                 </div>
             </div>
@@ -209,8 +88,12 @@
 
             <form id="challenge-play-form" class="is-half" method="post">
                 <textarea id="challenge-challengeText"></textarea>
-                <button class="button is-success" type="submit" value="Submit">Submit</button>
+                <button class="button is-success" type="submit" value="submit">Submit</button>
             </form>
+        </section>
+
+        <section id="create-challenge-page" class="page">
+            CREATE CHALLENGE
         </section>
 
         <section id="about-page" class="page">
@@ -227,6 +110,21 @@
 
         <section id="login-page" class="page">
             LOGIN PAGE
+
+            <form id="login-form" action="/tokens" method="POST">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="username-input" class="input" type="text" placeholder="Username" name="username">
+                    </div>
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="password-input" class="input" type="password" placeholder="Password" name="password">
+                    </div>
+                    <input type="submit" class="button is-success" value="Sign in">
+                </div>
+            </form>
+
         </section>
 
         <section id="results-page" class="page">

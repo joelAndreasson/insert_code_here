@@ -7,6 +7,8 @@ const invalidClientError = {
     error: "invalid_client"
 }
 
+const databaseError = "databaseError"
+
 module.exports = function({accountManager, challengeManager}){
 
     const router = express.Router()
@@ -20,9 +22,14 @@ module.exports = function({accountManager, challengeManager}){
         console.log(request.method, request.url)
 
         response.setHeader("Access-Control-Allow-Origin", "*")
-	    response.setHeader("Access-Control-Allow-Methods", "*")
 	    response.setHeader("Access-Control-Allow-Headers", "*")
+        response.setHeader("Access-Control-Allow-Methods", "*")
 	    response.setHeader("Access-Control-Expose-Headers", "*")
+
+        if(request.method == "OPTIONS"){
+            return response.status(200).end()
+        }
+
         next()
     })
 
@@ -56,7 +63,7 @@ module.exports = function({accountManager, challengeManager}){
         })
     })
 
-    router.post("challenges/:challengeId/play", function(request, response){
+    router.post("/challenges/:challengeId/play", function(request, response){
         const challengeId = request.params.challengeId
         const changedChallengeText = request.body.changedChallengeText
 
@@ -73,7 +80,7 @@ module.exports = function({accountManager, challengeManager}){
 
                     response.status(200).json(model)
                 }
-                else if(errors.includes("databaseError")){ //Hardcoded???
+                else if(errors.includes(databaseError)){ //Hardcoded???
                     response.status(500).json(errors)
                 }
                 else{
@@ -91,13 +98,13 @@ module.exports = function({accountManager, challengeManager}){
         if(authHeader){
             const accessToken = authHeader.substring("Bearer ".length)
 
-            jwt.verify(accessToken, secret, function(error, payload){
+            jwt.verify(accessToken, secret, function(error, payload){ // Make callback function?
                 if(error){
                     response.status(401).json(invalidClientError)
                 }
                 else{
     
-                    challengeId = request.params.challengeId
+                    const challengeId = request.params.challengeId
 
                     challengeManager.getChallengeById(challengeId, function(errors, challenge){
 
@@ -157,11 +164,11 @@ module.exports = function({accountManager, challengeManager}){
                                 description: request.body.description
                             }
                 
-                            challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors, results){ //results or challenge??
+                            challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors, results){
                                 if(errors == 0){
                                     response.status(204).end()
                                 }
-                                else if(errors.includes("databaseError")){ //Hardcoded???
+                                else if(errors.includes(databaseError)){ //Hardcoded???
                                     response.status(500).json(errors)
                                 }
                                 else{
@@ -211,7 +218,7 @@ module.exports = function({accountManager, challengeManager}){
                             response.setHeader("Location", "/challenges/" + id)
                             response.status(201).json(challenge)
                         }
-                        else if(errors.includes("databaseError")){ //Hardcoded???
+                        else if(errors.includes(databaseError)){ //Hardcoded???
                             response.status(500).json(errors)
                         }
                         else{
@@ -286,7 +293,7 @@ module.exports = function({accountManager, challengeManager}){
         }
     })
 
-    router.get("/coffee", function(request, response){ // MAKE SURE THIS DOES NOT MESS ANYTHING UP! :)
+    router.get("/coffee", function(request, response){
         response.status(418).json("The server refuses to brew coffee because it is, permanently, a teapot.")
     })
 
