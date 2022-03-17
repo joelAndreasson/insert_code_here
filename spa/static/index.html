@@ -77,6 +77,7 @@
         </section>
 
         <section id="challenge-page" class="page">
+
             <h1 id="challenge-title"></h1>
             <p id="challenge-solutionText"></p>
             <p id="challenge-description"></p>
@@ -90,10 +91,171 @@
                 <textarea id="challenge-challengeText"></textarea>
                 <button class="button is-success" type="submit" value="submit">Submit</button>
             </form>
+
+            <div id="challenge-options" class="field is-grouped is-hidden">
+                <div class="control">
+                    <button id="update-challenge-button" class="button is-info">Update</button>
+                </div>
+                <div class="control">
+                    <button id="delete-challenge-button" class="button is-danger">Delete</button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="delete-challenge-page" class="page">
+            DELETE CHALLENGE?
+
+            <div id="delete-options" class="field is-grouped">
+                <div class="control">
+                    <button id="cancel-delete" class="button">Cancel</button>
+                </div>
+                
+                <div class="control">
+                    <button id="confirm-delete" class="button is-danger">Delete</button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="update-challenge-page" class="page">
+            UPDATE CHALLENGE
+            
+            <form id="update-challenge-form" class="is-half" method="post">
+                <!-- Challange title -->
+                <div class="field">
+                    <label class="label">Challange Title</label>
+                    <div class="control">
+                        <input id="new-title" class="input" type="text" placeholder="Challange Title" name="title">
+                    </div>
+                </div>
+                <!-- Language -->
+                <div class="field">
+                    <label class="label">Language</label>
+                    <div class="control">
+                        <select id="prog-language-selector-update" name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
+                            <option selected>Language</option>
+                            <!-- iterate through list of progLanguages -->
+                        </select>
+                    </div>
+                </div>
+        
+                <!-- Challange Text -->
+                <div class="field">
+                    <label class="label">Challenge Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="new-challenge-text" name="challengeText" placeholder="Challenge Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Solution Text -->
+                <div class="field">
+                    <label class="label">Solution Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="new-solution-text" name="solutionText" placeholder="Solution Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Description -->
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <input id="new-description" class="input" type="text" placeholder="Description" name="description">
+                    </div>
+                </div>
+                <!-- Difficulty -->
+                <div class="field">
+                    <div class="control">
+                        <select id="difficulty-selector-update" name="difficulty">
+                            <option selected>Difficulty</option>
+                            <!-- iterate through list of difficulties -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Submit buttons -->
+                <div id="update-options" class="field is-grouped">
+                    <div class="control">
+                        <button id="cancel-update" class="button">Cancel</button>
+                    </div>
+                    
+                    <div class="control">
+                        <button id="confirm-update" class="button is-info" type="submit"">Update</button>
+                    </div>
+                </div>
+            </form>
+
+            
         </section>
 
         <section id="create-challenge-page" class="page">
             CREATE CHALLENGE
+
+            <form id="create-challenge-form" class="is-half" action="/challenges/create" method="post">
+                <!-- Challange title -->
+                <div class="field">
+                    <label class="label">Challange Title</label>
+                    <div class="control">
+                        <input id="title-input" class="input" type="text" placeholder="Challange Title" name="title">
+                    </div>
+                </div>
+                <!-- Language -->
+                <div class="field">
+                    <label class="label">Language</label>
+                    <div class="control">
+                        <select id="prog-language-selector" name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
+                            <option selected>Language</option>
+                            <!-- iterate through list of progLanguages -->
+                        </select>
+                    </div>
+                </div>
+        
+                <!-- Challange Text -->
+                <div class="field">
+                    <label class="label">Challenge Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="challenge-text-input" name="challengeText" placeholder="Challenge Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Solution Text -->
+                <div class="field">
+                    <label class="label">Solution Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="solution-text-input" name="solutionText" placeholder="Solution Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Description -->
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <input id="description-input" class="input" type="text" placeholder="Description" name="description">
+                    </div>
+                </div>
+                <!-- Difficulty -->
+                <div class="field">
+                    <div class="control">
+                        <select id="difficulty-selector" name="difficulty">
+                            <option selected>Difficulty</option>
+                            <!-- iterate through list of difficulties -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Submit buttons -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-success" type="submit" value="Create">Create</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
         </section>
 
         <section id="about-page" class="page">
@@ -106,6 +268,25 @@
 
         <section id="sign-up-page" class="page">
             SIGN UP PAGE
+
+            <form id="sign-up-form" action="/accounts" method="POST">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-username" class="input" type="text" placeholder="Username" name="username">
+                    </div>
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-password" class="input" type="password" placeholder="Password" name="password">
+                    </div>
+                    <label class="label">Confirm Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-password2" class="input" type="password" placeholder="Confirm Password" name="password2">
+                    </div>
+                    <input type="submit" class="button is-success" value="Sign up">
+                </div>
+            </form>
+
         </section>
 
         <section id="login-page" class="page">
@@ -115,13 +296,13 @@
                 <div class="field">
                     <label class="label">Username</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input id="username-input" class="input" type="text" placeholder="Username" name="username">
+                        <input id="login-username" class="input" type="text" placeholder="Username" name="username">
                     </div>
                     <label class="label">Password</label>
                     <div class="control has-icons-left has-icons-right">
-                        <input id="password-input" class="input" type="password" placeholder="Password" name="password">
+                        <input id="login-password" class="input" type="password" placeholder="Password" name="password">
                     </div>
-                    <input type="submit" class="button is-success" value="Sign in">
+                    <input type="submit" class="button is-success" value="Login">
                 </div>
             </form>
 

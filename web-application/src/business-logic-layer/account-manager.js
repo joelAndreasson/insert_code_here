@@ -1,6 +1,6 @@
 
 const bcrypt = require('bcrypt')
-const { response } = require('express')
+const { response } = require('express') // UNNECESSARY??
 
 // brcypt variables
 const saltRounds = 10 // globals?

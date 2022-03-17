@@ -9,7 +9,7 @@ const invalidClientError = {
 
 const databaseError = "databaseError"
 
-module.exports = function({accountManager, challengeManager}){
+module.exports = function({accountManager, challengeManager, validationVariabels}){
 
     const router = express.Router()
 
@@ -242,10 +242,18 @@ module.exports = function({accountManager, challengeManager}){
 			password2: request.body.password2
 		}
 
-        accountManager.createAccount(accountInformation, function(errors, account){
+        accountManager.createAccount(accountInformation, function(errors, results){
             if(errors.length == 0){
+                const account = {
+                    username: accountInformation.username,
+                    password: accountInformation.password2
+                }
+
                 response.setHeader("Location", "/accounts/" + account.username)
-                response.status(201).json(accountInformation) // Returns hashed password, it probably should not
+                response.status(201).json(account)
+            }
+            else if(errors.includes(databaseError)){
+                response.status(500).json(errors)
             }
             else{
                 response.status(400).json(errors)
@@ -263,7 +271,7 @@ module.exports = function({accountManager, challengeManager}){
                 password: request.body.password
             }
 
-            accountManager.login(accountCredentials, function(errors, account){
+            accountManager.login(accountCredentials, function(errors, account){ //databaseError ??
                 if(errors.length == 0){
 
                     const payload = {
@@ -297,6 +305,13 @@ module.exports = function({accountManager, challengeManager}){
         response.status(418).json("The server refuses to brew coffee because it is, permanently, a teapot.")
     })
 
+    router.get("/progLanguages", function(request, response){
+        response.status(200).json(validationVariabels.ALL_PROG_LANGUAGES) //IS THIS OK WITH ONLY 200 RESPONSE??
+    })
+
+    router.get("/difficulties", function(request, response){
+        response.status(200).json(validationVariabels.ALL_DIFFICULTIES) //IS THIS OK WITH ONLY 200 RESPONSE??
+    })
 
     return router
 }
