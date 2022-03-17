@@ -23,7 +23,7 @@
                 <div class="field">
                     <label class="label">Language</label>
                     <div class="control">
-                        <select name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
+                        <select id="language-selector" name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
                             <option selected>
                                 {{#if errors.length}} 
                                     {{challenge.progLanguage}}
@@ -37,12 +37,11 @@
                         </select>
                     </div>
                 </div>
-
                 <!-- Challange Text -->
                 <div class="field">
                     <label class="label">Challenge Text</label>
-                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
-                        <textarea class="textarea" name="challengeText" placeholder="Challenge Text">{{challenge.challengeText}}</textarea>
+                    <div class="control">
+                        <textarea id="challenge-text" class="textarea" name="challengeText" placeholder="Challenge Text">{{challenge.challengeText}}</textarea>
                     </div>
                 </div>
 
@@ -50,7 +49,7 @@
                 <!-- Solution Text -->
                 <div class="field">
                     <label class="label">Solution Text</label>
-                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                    <div class="control">
                         <textarea class="textarea" name="solutionText" placeholder="Solution Text">{{challenge.solutionText}}</textarea>
                     </div>
                 </div>
@@ -127,3 +126,6 @@
         </div>
     </div>
 </div>
+
+<!-- Codemirror Inititalizer has to be below the div containing the codemirror window -->
+<script src="/js/create-challenge-code.js"></script>

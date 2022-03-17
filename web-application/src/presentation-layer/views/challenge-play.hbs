@@ -9,18 +9,23 @@
 {{#if challenge}}
     <div class="content">
         <form class="is-half" action="/challenges/{{challenge.id}}/play" method="post">
-            <h1>{{challenge.title}}</h1>
-            <p>challengeText: {{challenge.challengeText}}</p>
-            <textarea name="challengeText">{{challenge.challengeText}}</textarea>
-            <p>solutionText: {{challenge.solutionText}}</p>
-            <p>description: {{challenge.description}}</p>
-            <p>datePublished: {{challenge.datePublished}}</p>
-            <p>accountUsername: {{challenge.accountUsername}}</p>
-            <p>numOfPlays: {{challenge.numOfPlays}}</p>
-            <p>difficulty: {{challenge.difficulty}}</p>
-            <p>progLanguage: {{challenge.progLanguage}}</p>
-
-            <button class="button is-success" type="submit" value="Submit">Submit</button>
+            <h1 class="has-text-centered">{{challenge.title}}</h1>
+            <div class="column is-three-fifths is-offset-one-fifth">
+                <p class="is-size-5 has-text-centered">{{challenge.description}}</p>
+                <textarea class="textarea" name="challengeText">{{challenge.challengeText}}</textarea>
+            </div>
+            <div class="section">
+                <div class="column box is-one-quarter">
+                    <p>datePublished: {{challenge.datePublished}}</p>
+                    <p>accountUsername: {{challenge.accountUsername}}</p>
+                    <p>numOfPlays: {{challenge.numOfPlays}}</p>
+                    <p>difficulty: {{challenge.difficulty}}</p>
+                    <p>progLanguage: {{challenge.progLanguage}}</p>
+                </div>
+            </div>
+            <div class="has-text-centered">
+                <button class="button is-success" type="submit" value="Submit">Submit</button>
+            </div>
         </form>
     </div>
     
