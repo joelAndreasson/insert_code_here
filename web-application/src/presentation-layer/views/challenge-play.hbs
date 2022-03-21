@@ -9,10 +9,11 @@
 {{#if challenge}}
     <div class="content">
         <form class="is-half" action="/challenges/{{challenge.id}}/play" method="post">
+            <input id="language-field" type="hidden" value="{{challenge.progLanguage}}">
             <h1 class="has-text-centered">{{challenge.title}}</h1>
             <div class="column is-three-fifths is-offset-one-fifth">
                 <p class="is-size-5 has-text-centered">{{challenge.description}}</p>
-                <textarea class="textarea" name="challengeText">{{challenge.challengeText}}</textarea>
+                <textarea id="play-challenge-textarea" class="textarea" name="challengeText">{{challenge.challengeText}}</textarea>
             </div>
             <div class="section">
                 <div class="column box is-one-quarter">
@@ -32,5 +33,9 @@
 {{else}}
     <p>This challenge does not exist</p>
 {{/if}}
+
+<!-- Codemirror Inititalizer has to be below the div containing the codemirror window -->
+<script src="/js/codemirror-languages.js"></script>
+<script src="/js/play-challenge-code.js"></script>
 
 

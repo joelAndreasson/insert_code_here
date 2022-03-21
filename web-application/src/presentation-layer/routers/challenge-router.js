@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function({challengeManager, commentManager, validationVariabels}){
+module.exports = function({challengeManager, commentManager, validationVariabels, errorTranslator}){
 	const router = express.Router()
 
 	router.get("/create", function(request, response){
@@ -127,7 +127,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			else{
 				const model = {
 					numOfRightAnswers: numOfRightAnswers,
-					totalNumOfAnswers: totalNumOfAnswers
+					totalNumOfAnswers: totalNumOfAnswers,
+					challengeId: id
 				}
 			
 				response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
