@@ -9,86 +9,124 @@
             {{/each}}
         </ul>
     {{/if}}
-
-    <form class="is-half" action="/challenges/create" method="post">
-        <!-- Challange name -->
-        <div class="field">
-            <label class="label">Challange Title</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="Challange Title" name="title" value="{{challenge.title}}">
-            </div>
-        </div>
-        <!-- Language -->
-        <div class="field">
-            <label class="label">Language</label>
-            <div class="control">
-                <select name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
-                    <option selected>
-                        {{#if errors.length}} 
-                            {{challenge.progLanguage}}
-                        {{else}}
-                            Language
-                        {{/if}}
-                    </option>
-                    {{#each progLanguages}}
-                        <option>{{this}}</option>
-                    {{/each}}
-                </select>
-            </div>
-        </div>
-
-        <!-- Challange Text -->
-        <div class="field">
-            <label class="label">Challenge Text</label>
-            <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
-                <textarea name="challengeText" placeholder="Challenge Text">{{challenge.challengeText}}</textarea>
-            </div>
-        </div>
-
-
-        <!-- Solution Text -->
-        <div class="field">
-            <label class="label">Solution Text</label>
-            <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
-                <textarea name="solutionText" placeholder="Solution Text">{{challenge.solutionText}}</textarea>
-            </div>
-        </div>
+    <div class="columns">
+        <div class="column is-half">
+            <form class="is-half" action="/challenges/create" method="post">
+                <!-- Challange name -->
+                <div class="field">
+                    <label class="label">Challange Title</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Challange Title" name="title" value="{{challenge.title}}">
+                    </div>
+                </div>
+                <!-- Language -->
+                <div class="field">
+                    <label class="label">Language</label>
+                    <div class="control">
+                        <select id="language-selector" name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
+                            <option selected>
+                                {{#if errors.length}} 
+                                    {{challenge.progLanguage}}
+                                {{else}}
+                                    Language
+                                {{/if}}
+                            </option>
+                            {{#each progLanguages}}
+                                <option>{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <!-- Challange Text -->
+                <div class="field">
+                    <label class="label">Challenge Text</label>
+                    <div class="control">
+                        <textarea id="challenge-text" class="textarea" name="challengeText" placeholder="Challenge Text">{{challenge.challengeText}}</textarea>
+                    </div>
+                </div>
 
 
-        <!-- Description -->
-        <div class="field">
-            <label class="label">Description</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="Description" name="description" value="{{challenge.description}}">
-            </div>
+                <!-- Solution Text -->
+                <div class="field">
+                    <label class="label">Solution Text</label>
+                    <div class="control">
+                        <textarea class="textarea" name="solutionText" placeholder="Solution Text">{{challenge.solutionText}}</textarea>
+                    </div>
+                </div>
+
+
+                <!-- Description -->
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Description" name="description" value="{{challenge.description}}">
+                    </div>
+                </div>
+                <!-- Difficulty -->
+                <div class="field">
+                    <div class="control">
+                        <select name="difficulty">
+                            <option selected>
+                                {{#if errors.length}} 
+                                    {{challenge.difficulty}}
+                                {{else}}
+                                    Difficulty
+                                {{/if}}
+                            </option>
+                            {{#each difficulties}}
+                                <option>{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <!-- (hidden) users username -->
+                <input type="hidden" value="{{accountUsername}}" name="accountUsername">
+                <!-- Submit buttons -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-success" type="submit" value="Create">Create</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger">Cancel</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <!-- Difficulty -->
-        <div class="field">
-            <div class="control">
-                <select name="difficulty">
-                    <option selected>
-                        {{#if errors.length}} 
-                            {{challenge.difficulty}}
-                        {{else}}
-                            Difficulty
-                        {{/if}}
-                    </option>
-                    {{#each difficulties}}
-                        <option>{{this}}</option>
-                    {{/each}}
-                </select>
-            </div>
+        <!-- tutorial -->
+        <div class="column is-half box">
+            <h1 class="has-text-centered is-underlined">
+                Tutorial
+            </h1>
+            <p class=" is-size-6">
+               Welcome to <b>INSERT_CODE_HERE's</b> challenge editor! <br>
+               In this tutorial you will <b>quickly</b> learn how to create your own challenge!
+            </p>
+            <p class="is-size-6">
+                <b>1. A Good title never hurts.</b> <br> make sure to give your challenge a good name so that others can find and understand what the challenge is about.
+            </p>
+            <p class="is-size-6">
+                <b>2. Make sure you speak their language.</b> <br> Select the language you want and make sure it is the correct one or there will be angry challenge takers...
+            </p>
+            <p class="is-size-6">
+                <b>3. Write that code!</b> <br> When writing your code you have complete freedom in doing soo. The places you want users to enter code into add <b>[[INSERT_CODE_HERE]]</b> and
+                our editor will recognize it as a so called blank that challenge taker must fill in. You can add as many blanks as you want. The sky is the limit!  
+            </p>
+            <p class="is-size-6">
+                <b>4. Questions needs answers! </b> <br> Now the code is done and it's time to add answers to all the blanks you created in the previous step. Adding an answer is 
+                as simple as can be, just add [[]] to the text field and enter your answer into it. Like this; [[ANSWER]]. Remember that your answers must come in the same order as your
+                blanks in the code.  
+            </p>
+            <p class="is-size-6">
+                <b>5. Describe!</b> <br> Give your challenge a description. Maybe it's a tutorial, challenge tips or just your life story. You do you!
+            </p>
+            <p class="is-size-6">
+                <b>6. Select difficulty, it's not hard... or is it?!</b> <br> Try to estimate difficulty for this challenge.
+                A correctly estimated difficulty will help challenge takers find your challenges.
+            </p>
         </div>
-        <!-- (hidden) users username -->
-        <input type="hidden" value="{{accountUsername}}" name="accountUsername">
-        <!-- Submit buttons -->
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-success" type="submit" value="Create">Create</button>
-            </div>
-            <div class="control">
-                <button class="button is-danger">Cancel</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
+
+<!-- Codemirror Inititalizer has to be below the div containing the codemirror window -->
+<script src="/js/codemirror-languages.js"></script>
+<script src="/js/create-challenge-code.js"></script>

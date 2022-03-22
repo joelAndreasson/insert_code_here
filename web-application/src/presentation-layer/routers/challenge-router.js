@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = function({challengeManager, commentManager, validationVariabels}){
+module.exports = function({challengeManager, commentManager, validationVariabels, errorTranslator}){
 	const router = express.Router()
 
 	router.get("/create", function(request, response){
@@ -24,14 +24,15 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			description: request.body.description,
 			datePublished: challengeManager.getTodaysDate(),
 			numOfPlays: 0,
-			accountUsername: request.body.accountUsername // Should get the accountUsername of the account that created this challenge
+			accountUsername: request.body.accountUsername
 		}
 		
 		challengeManager.createChallenge(challenge, function(errors, id){
-	
+			
 			if(errors.length > 0){
+				const errorCodes = errorTranslator.translateErrorCodes(errors)
 				const model = {
-					errors: errors,
+					errors: errorCodes,
 					challenge: challenge,
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES
@@ -50,11 +51,14 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	router.get("/", function(request, response){
 	
 		challengeManager.getAllChallenges(function(errors, challenges){
-			const model = {
-				errors: errors,
-				challenges: challenges
+			if(errors.length > 0){
+				response.render("internal-server-error.hbs")
+			}else {
+				const model = {
+					challenges: challenges
+				}
+				response.render("challenge-list.hbs", model)
 			}
-			response.render("challenge-list.hbs", model)
 		})
 	})
 	
@@ -66,15 +70,20 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	
 		challengeManager.getChallengeById(id, function(errors, challenge){
 			allErrors.push(...errors)
+			if(challenge == undefined){
+				response.render("page-not-found.hbs")
+			}
 			commentManager.getCommentsByChallengeId(id, function(errors, comments){
 				allErrors.push(...errors)
-	
-				const model = {
-					errors: allErrors,
-					challenge: challenge,
-					comments: comments
+				if(allErrors.length > 0){
+					response.render("internal-server-error.hbs")
+				}else {
+					const model = {
+						challenge: challenge,
+						comments: comments
+					}
+					response.render("challenge-preview.hbs", model)
 				}
-				response.render("challenge-preview.hbs", model)
 			})
 		})
 	})
@@ -83,12 +92,16 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		const id = request.params.id
 	
 		challengeManager.getChallengeById(id, function(errors, challenge){
-	
-			const model = {
-				errors: errors,
-				challenge: challenge
+			if(errors.length > 0){
+				response.render("internal-server-error.hbs")
+			}else if(challenge == undefined){
+				response.render("page-not-found.hbs")
+			}else {
+				const model = {
+					challenge: challenge
+				}
+				response.render("challenge-play.hbs", model)
 			}
-			response.render("challenge-play.hbs", model)
 		})
 		
 	})
@@ -102,9 +115,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			if(errors.length > 0){
 	
 				challenge.challengeText = changedChallengeText
-	
+				
+				const errorCodes = errorTranslator.translateErrorCodes(errors)
 				const model = {
-					errors: errors,
+					errors: errorCodes,
 					challenge: challenge
 				}
 	
@@ -113,7 +127,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			else{
 				const model = {
 					numOfRightAnswers: numOfRightAnswers,
-					totalNumOfAnswers: totalNumOfAnswers
+					totalNumOfAnswers: totalNumOfAnswers,
+					challengeId: id
 				}
 			
 				response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?

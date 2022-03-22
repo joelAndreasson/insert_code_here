@@ -1,7 +1,3 @@
-
-
-const ANSWERS_REGEX = /(?<=\[\[).*?(?=\]\])/g // HARDCODED AT MULTIPLE PLACES, should be global instead?
-
 module.exports = function({challengeRepository, challengeValidator, validationVariabels}){
 	return {
 		getTodaysDate: function(){

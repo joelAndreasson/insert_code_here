@@ -21,6 +21,7 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, accounts){
 				if(error){
+					console.log(error.code)
 					callback(['databaseError'], null)
 				}else{
 					callback([], accounts[0])

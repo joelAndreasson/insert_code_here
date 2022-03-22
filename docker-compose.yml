@@ -32,9 +32,9 @@ services:
       - MYSQL_DATABASE=webAppDatabase
   postgres:
     build: ./postgres_database
+    container_name: postgres_database
     ports:
       - "5432:5432"
-    container_name: postgres_database
     image: insert_code_here_postgres_database
     environment:
       - POSTGRES_DB=postgresDatabase
