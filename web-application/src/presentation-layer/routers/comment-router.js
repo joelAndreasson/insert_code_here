@@ -4,7 +4,7 @@ module.exports = function({commentManager, errorTranslator}){
     const router = express.Router({ mergeParams: true })
 
     router.get("/create", function(request, response){
-        const challengeId = request.params.id
+        const challengeId = request.params.challengeId
         
         const model = {
             challengeId: challengeId
@@ -18,7 +18,7 @@ module.exports = function({commentManager, errorTranslator}){
         const comment = {
             commentText: request.body.commentText,
             accountUsername: request.session.accountUsername,
-            challengeId: request.params.id
+            challengeId: request.params.challengeId
         }
 
         commentManager.createComment(comment, function(errors, id){ // what is id for? 

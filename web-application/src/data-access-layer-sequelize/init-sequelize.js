@@ -36,7 +36,7 @@ const comments = sequelize.define('comments', {
 })
 
 challenges.hasMany(comments, {foreignKey: 'challengeId'})
-comments.belongsTo(challenges)
+comments.belongsTo(challenges) //ON DELETE CASCADE???
 
 accounts.hasMany(challenges, {foreignKey: 'accountUsername', sourceKey: 'username'})
 challenges.belongsTo(accounts, {foreignKey: 'accountUsername', sourceKey: 'username'})

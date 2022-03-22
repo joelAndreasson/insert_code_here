@@ -1,0 +1,7 @@
+.page, .is-hidden{
+    display: none;
+}
+
+.page.current-page{
+    display: block;
+}

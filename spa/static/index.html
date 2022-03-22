@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSERT_CODE_HERE</title>
+    <link rel="stylesheet"  href="styles.css">
+    <link rel="stylesheet" href="bulma.min.css">
+    <script src="navigation.js"></script> 
+</head>
+<body class="content">
+    
+    <header>
+        <h1>INSERT_CODE_HERE</h1>
+    </header>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+
+            <a href="/" class="navbar-item page-link">
+                INSERT_CODE_HERE
+            </a>
+
+            <a id="navbarBurger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarMenu" class="navbar-menu">
+
+            <div class="navbar-start">
+                <a href="/" class="navbar-item page-link">Home</a>
+                <a href="/challenges" class="navbar-item page-link">Challenges</a>
+                <a id="create-challenge-button" href="/challenges/create" class="navbar-item page-link is-hidden">Create Challenge</a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        More
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="/about" class="navbar-item page-link">About</a>
+                        <a href="/contact" class="navbar-item page-link">Contact</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a id="login-button" href="/sign-up" class="button is-primary page-link">Sign up</a>
+                        <a id="sign-up-button" href="/login" class="button is-light page-link">Login</a>
+                        <a id="logout-button" href="/logout" class="button is-danger is-hidden">Logout</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <main>
+
+        <section id="home-page" class="page">
+            HOME PAGE
+        </section>
+
+        <section id="challenges-page" class="page">
+            CHALLENGES PAGE
+
+            <ul id="all-challenges">
+
+            </ul>
+        </section>
+
+        <section id="challenge-page" class="page">
+
+            <h1 id="challenge-title"></h1>
+            <p id="challenge-solutionText"></p>
+            <p id="challenge-description"></p>
+            <p id="challenge-datePublished"></p>
+            <p id="challenge-accountUsername"></p>
+            <p id="challenge-numOfPlays"></p>
+            <p id="challenge-difficulty"></p>
+            <p id="challenge-progLanguage"></p>
+
+            <form id="challenge-play-form" class="is-half" method="post">
+                <textarea id="challenge-challengeText"></textarea>
+                <button class="button is-success" type="submit" value="submit">Submit</button>
+            </form>
+
+            <div id="challenge-options" class="field is-grouped is-hidden">
+                <div class="control">
+                    <button id="update-challenge-button" class="button is-info">Update</button>
+                </div>
+                <div class="control">
+                    <button id="delete-challenge-button" class="button is-danger">Delete</button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="delete-challenge-page" class="page">
+            DELETE CHALLENGE?
+
+            <div id="delete-options" class="field is-grouped">
+                <div class="control">
+                    <button id="cancel-delete" class="button">Cancel</button>
+                </div>
+                
+                <div class="control">
+                    <button id="confirm-delete" class="button is-danger">Delete</button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="update-challenge-page" class="page">
+            UPDATE CHALLENGE
+            
+            <form id="update-challenge-form" class="is-half" method="post">
+                <!-- Challange title -->
+                <div class="field">
+                    <label class="label">Challange Title</label>
+                    <div class="control">
+                        <input id="new-title" class="input" type="text" placeholder="Challange Title" name="title">
+                    </div>
+                </div>
+                <!-- Language -->
+                <div class="field">
+                    <label class="label">Language</label>
+                    <div class="control">
+                        <select id="prog-language-selector-update" name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
+                            <option selected>Language</option>
+                            <!-- iterate through list of progLanguages -->
+                        </select>
+                    </div>
+                </div>
+        
+                <!-- Challange Text -->
+                <div class="field">
+                    <label class="label">Challenge Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="new-challenge-text" name="challengeText" placeholder="Challenge Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Solution Text -->
+                <div class="field">
+                    <label class="label">Solution Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="new-solution-text" name="solutionText" placeholder="Solution Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Description -->
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <input id="new-description" class="input" type="text" placeholder="Description" name="description">
+                    </div>
+                </div>
+                <!-- Difficulty -->
+                <div class="field">
+                    <div class="control">
+                        <select id="difficulty-selector-update" name="difficulty">
+                            <option selected>Difficulty</option>
+                            <!-- iterate through list of difficulties -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Submit buttons -->
+                <div id="update-options" class="field is-grouped">
+                    <div class="control">
+                        <button id="cancel-update" class="button">Cancel</button>
+                    </div>
+                    
+                    <div class="control">
+                        <button id="confirm-update" class="button is-info" type="submit"">Update</button>
+                    </div>
+                </div>
+            </form>
+
+            
+        </section>
+
+        <section id="create-challenge-page" class="page">
+            CREATE CHALLENGE
+
+            <form id="create-challenge-form" class="is-half" action="/challenges/create" method="post">
+                <!-- Challange title -->
+                <div class="field">
+                    <label class="label">Challange Title</label>
+                    <div class="control">
+                        <input id="title-input" class="input" type="text" placeholder="Challange Title" name="title">
+                    </div>
+                </div>
+                <!-- Language -->
+                <div class="field">
+                    <label class="label">Language</label>
+                    <div class="control">
+                        <select id="prog-language-selector" name="progLanguage"> <!-- Options should not be hardcoded maybe? Stor in db? -->
+                            <option selected>Language</option>
+                            <!-- iterate through list of progLanguages -->
+                        </select>
+                    </div>
+                </div>
+        
+                <!-- Challange Text -->
+                <div class="field">
+                    <label class="label">Challenge Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="challenge-text-input" name="challengeText" placeholder="Challenge Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Solution Text -->
+                <div class="field">
+                    <label class="label">Solution Text</label>
+                    <div class="control"> <!-- the input tag below should be replaced with codemirror thingy -->
+                        <textarea id="solution-text-input" name="solutionText" placeholder="Solution Text"></textarea>
+                    </div>
+                </div>
+        
+        
+                <!-- Description -->
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <input id="description-input" class="input" type="text" placeholder="Description" name="description">
+                    </div>
+                </div>
+                <!-- Difficulty -->
+                <div class="field">
+                    <div class="control">
+                        <select id="difficulty-selector" name="difficulty">
+                            <option selected>Difficulty</option>
+                            <!-- iterate through list of difficulties -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Submit buttons -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-success" type="submit" value="Create">Create</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
+        </section>
+
+        <section id="about-page" class="page">
+            ABOUT PAGE
+        </section>
+
+        <section id="contact-page" class="page">
+            CONTACT PAGE
+        </section>
+
+        <section id="sign-up-page" class="page">
+            SIGN UP PAGE
+
+            <form id="sign-up-form" action="/accounts" method="POST">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-username" class="input" type="text" placeholder="Username" name="username">
+                    </div>
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-password" class="input" type="password" placeholder="Password" name="password">
+                    </div>
+                    <label class="label">Confirm Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-password2" class="input" type="password" placeholder="Confirm Password" name="password2">
+                    </div>
+                    <input type="submit" class="button is-success" value="Sign up">
+                </div>
+            </form>
+
+        </section>
+
+        <section id="login-page" class="page">
+            LOGIN PAGE
+
+            <form id="login-form" action="/tokens" method="POST">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="login-username" class="input" type="text" placeholder="Username" name="username">
+                    </div>
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="login-password" class="input" type="password" placeholder="Password" name="password">
+                    </div>
+                    <input type="submit" class="button is-success" value="Login">
+                </div>
+            </form>
+
+        </section>
+
+        <section id="results-page" class="page">
+            RESULTS PAGE
+            <p id="challenge-numOfRightAnswers"></p>
+            <p>Of</p>
+            <p id="challenge-totalNumOfAnswers"></p>
+        </section>
+
+    </main>
+
+    <footer>
+
+    </footer>
+    
+
+</body>
+</html>

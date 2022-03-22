@@ -14,10 +14,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			return yyyy + "-" + mm + "-" + dd
 		},
 
-		getResultsFromChallengeTextWithId: function(id, changedChallengeText, callback){
+		getResultsFromChallengeTextWithId: function(challengeId, changedChallengeText, callback){
 			const increase = 1
 
-			challengeRepository.getChallengeById(id, function(errors, challenge){
+			challengeRepository.getChallengeById(challengeId, function(errors, challenge){
 				if(errors.length > 0){
 					callback(errors, null, null, null)
 					return
@@ -55,8 +55,8 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.getAllChallenges(callback)
 		}, 
 
-		getChallengeById: function(id, callback){
-			challengeRepository.getChallengeById(id, callback)
+		getChallengeById: function(challengeId, callback){
+			challengeRepository.getChallengeById(challengeId, callback)
 		},
 
 		createChallenge: function(challenge, callback){
@@ -76,6 +76,21 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 
 		increaseNumOfPlaysByOne : function(challengeId, currentNumOfPlays, callback){
 			challengeRepository.increaseNumOfPlaysByOne(challengeId, (currentNumOfPlays + 1), callback)
+		},
+
+		deleteChallengeById: function(challengeId, callback){
+			challengeRepository.deleteChallengeById(challengeId, callback)
+		},
+
+		updateChallengeById: function(challengeId, updatedChallenge, callback){
+			const validationErrors = challengeValidator.getErrorsNewChallenge(updatedChallenge)
+
+			if(0 < validationErrors.length){
+				callback(validationErrors, null)
+				return
+			}
+
+			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
 		}
 	}
 }

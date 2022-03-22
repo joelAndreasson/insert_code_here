@@ -62,18 +62,20 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		})
 	})
 	
-	router.get("/:id/preview", function(request,response){ // id should mabye be challengeId instead?
+	router.get("/:challengeId/preview", function(request,response){
 	
-		const id = request.params.id // id should mabye be challengeId instead?
+		const challengeId = request.params.challengeId
 		
-		let allErrors = []
+		let allErrors = [] // This is maybe unnecessary because there is a posibility that there will be two databaseError:s
 	
-		challengeManager.getChallengeById(id, function(errors, challenge){
+		challengeManager.getChallengeById(challengeId, function(errors, challenge){
 			allErrors.push(...errors)
+
 			if(challenge == undefined){
 				response.render("page-not-found.hbs")
 			}
 			commentManager.getCommentsByChallengeId(id, function(errors, comments){
+        
 				allErrors.push(...errors)
 				if(allErrors.length > 0){
 					response.render("internal-server-error.hbs")
@@ -88,13 +90,13 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		})
 	})
 	
-	router.get('/:id/play', function(request, response){
-		const id = request.params.id
+	router.get('/:challengeId/play', function(request, response){
+		const challengeId = request.params.challengeId
 	
-		challengeManager.getChallengeById(id, function(errors, challenge){
+		challengeManager.getChallengeById(challengeId, function(errors, challenge){
 			if(errors.length > 0){
 				response.render("internal-server-error.hbs")
-			}else if(challenge == undefined){
+			}else if(challenge == undefined){ // can just be if(challenge) 
 				response.render("page-not-found.hbs")
 			}else {
 				const model = {
@@ -106,17 +108,20 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		
 	})
 	
-	router.post('/:id/play', function(request, response){
-		const id = request.params.id
+	router.post('/:challengeId/play', function(request, response){
+		const challengeId = request.params.challengeId
 		const changedChallengeText = request.body.challengeText
 	
-		challengeManager.getResultsFromChallengeTextWithId(id, changedChallengeText, function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
+		challengeManager.getResultsFromChallengeTextWithId(
+			challengeId, 
+			changedChallengeText, 
+			function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
 			
 			if(errors.length > 0){
 	
 				challenge.challengeText = changedChallengeText
 				
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+				const errorCodes = errorTranslator.translateErrorCodes(errors) // errorcodes should be reversed. errorcodes before translation and errors after.
 				const model = {
 					errors: errorCodes,
 					challenge: challenge
@@ -130,10 +135,9 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 					totalNumOfAnswers: totalNumOfAnswers,
 					challengeId: id
 				}
-			
-				response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
+        response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
 			}
-		})
+		)
 	})
 
 	return router
