@@ -99,7 +99,7 @@ module.exports = function({db}){
 					console.log(error)
 					callback(['databaseError'], null)
 				}
-				else{
+				else {
 					callback([], results)
 				}
 			})
@@ -129,8 +129,21 @@ module.exports = function({db}){
 				if(error){
 					callback(['databaseError'], null)
 				}
-				else{
+				else {
 					callback([], results)
+				}
+			})
+		},
+
+		getTopThreePlayedChallenge: function(callback){
+			const query = `SELECT * FROM challenges ORDER BY numOfPlays DESC LIMIT 3`
+			
+			db.query(query, function(error, challenges){
+				if(error){	
+					console.log("errors: " + error)
+					callback(['databaseError'], null)
+				}else {
+					callback([], challenges)
 				}
 			})
 		}

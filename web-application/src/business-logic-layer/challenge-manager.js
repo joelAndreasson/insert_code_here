@@ -91,6 +91,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			}
 
 			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
+		},
+
+		getTopThreePlayedChallenge: function(callback){
+			challengeRepository.getTopThreePlayedChallenge(callback)
 		}
 	}
 }
