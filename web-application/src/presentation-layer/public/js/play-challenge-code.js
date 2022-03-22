@@ -10,6 +10,15 @@ document.addEventListener('DOMContentLoaded', function(){
             case "Python":
                 return configPython
                 break;
+            case "C++":
+                return configCPlusPlus
+                break;
+            case "SQL":
+                return configSql
+                break;
+            case "Swift":
+                return configSwift
+                break;
             default:
                 return configJavascript
         }

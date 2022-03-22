@@ -15,4 +15,25 @@ var configJavascript = {
     value: '// write code here',
     mode: 'javascript'
 }
+
+var configCPlusPlus = {
+    lineNumbers: true,
+    tabSize: 2,
+    value: '// write code here',
+    mode: 'text/x-c++src'
+}
+
+var configSql = {
+    lineNumbers: true,
+    tabSize: 2,
+    value: '// write code here',
+    mode: 'text/x-sql'
+}
+
+var configSwift = {
+    lineNumbers: true,
+    tabSize: 2,
+    value: '// write code here',
+    mode: 'text/x-swift'
+}
 //---------------------------------------------------
