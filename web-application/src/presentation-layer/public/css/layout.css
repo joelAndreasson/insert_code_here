@@ -3,8 +3,12 @@ html{
 }
 
 body{
-	background-color: rgb(225, 225, 225);
+	background-color: rgb(240, 240, 240);
 	min-height: 100%;
+}
+
+#banner {
+	min-width: 100%;
 }
 
 footer {
@@ -18,6 +22,19 @@ footer {
 	border-bottom: 2px solid gray;
 }
 
+#comments-scrollable{
+	height: 35vh;
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+#challenge-description{
+	height: 35vh;
+	display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+}
 
 .main {
 	display: flex;
@@ -25,10 +42,18 @@ footer {
 	flex-direction: column;
   }
 
-#entire-page{
-	max-width: 800px;
-	margin: 0 auto;
-}
+  @media(max-width: 1300px){
+	#entire-page{
+		max-width: 800px;
+		margin: 0 auto;
+	}
+  }
+  @media(min-width: 1301px){
+	#entire-page{
+		max-width: 1600px;
+		margin: 0 auto;
+	}
+  }
 
 main{
 	padding: 8px;

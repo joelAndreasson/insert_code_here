@@ -6,7 +6,7 @@ module.exports = function({initSequelize}){
             initSequelize.accounts.findAll({raw: true})
                 .then(accounts => callback([], accounts))
                 .catch(error => {
-                    console.log(error)
+                    console.log(error) // remove console.logs later 
                     callback(['databaseError'], null)
                 })
         },

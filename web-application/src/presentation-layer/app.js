@@ -17,6 +17,8 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	app.use(express.urlencoded({
 		extended: false
 	}))
+
+	app.use('/static', express.static("public"))
 	
 	app.use(session({
 		store: new RedisStore({ client: redisClient,  ttl: 60 * 60 * 1  }),

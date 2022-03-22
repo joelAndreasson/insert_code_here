@@ -4,8 +4,10 @@ module.exports = function({}){
     const variables = {
         MIN_USERNAME_LENGTH: 3,
         MAX_USERNAME_LENGTH: 10,
+        MIN_PASSWORD_LENGTH: 3,
+        MAX_PASSWORD_LENGTH: 25,
         MIN_TITLE_LENGTH: 3,
-        ALL_PROG_LANGUAGES: ["Python", "Kotlin", "C++", "JavaScript"], // This is also used to iterate over in the "challenge-create.hbs" file and in the SPA
+        ALL_PROG_LANGUAGES: ["Python", "Kotlin", "C++", "JavaScript","SQL","Swift"], // This is also used to iterate over in the "challenge-create.hbs" file and in the SPA
         ALL_DIFFICULTIES: ["Easy", "Medium", "Hard"], // This is also used to iterate over in the "challenge-create.hbs" file and in the SPA
         MIN_DESCRIPTION_LENGTH: 5,
         MIN_AMOUNT_OF_BLANKS: 1,

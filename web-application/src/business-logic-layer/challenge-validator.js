@@ -1,13 +1,3 @@
-
-const MIN_TITLE_LENGTH = 3
-const ALL_PROG_LANGUAGES = ["Python", "Kotlin", "C++"] // Hardcoded languages, if one wish to change these, they need to change it at mulitple places
-const ALL_DIFFICULTIES = ["Easy", "Medium", "Hard"] // Hardcoded difficulties, if one wish to change these, they need to change it at mulitple places
-const MIN_DESCRIPTION_LENGTH = 5
-const MIN_AMOUNT_OF_BLANKS = 1
-
-const SOLUTIONS_REGEX = /(?<=\[\[).*?(?=\]\])/g // HARDCODED AT MULIPLE PLACES, should be global instead?
-const BLANKS_REGEX = /\[\[INSERT_CODE_HERE\]\]/g
-
 module.exports = function({validationVariabels}){
     return{
         getErrorsNewChallenge: function(challenge){
