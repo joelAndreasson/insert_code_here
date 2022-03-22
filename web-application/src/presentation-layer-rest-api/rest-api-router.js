@@ -49,7 +49,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
     
         const challengeId = request.params.challengeId
 
-        challengeManager.getChallengeById(challengeId, function(errors, challenge){ //Errors or error?
+        challengeManager.getChallengeById(challengeId, function(errors, challenge){
 
             if(challenge){
                 response.status(200).json(challenge)
@@ -80,7 +80,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
                     response.status(200).json(model)
                 }
-                else if(errors.includes(databaseError)){ //Hardcoded???
+                else if(errors.includes(databaseError)){
                     response.status(500).json(errors)
                 }
                 else{
@@ -98,7 +98,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
         if(authHeader){
             const accessToken = authHeader.substring("Bearer ".length)
 
-            jwt.verify(accessToken, secret, function(error, payload){ // Make callback function?
+            jwt.verify(accessToken, secret, function(error, payload){
                 if(error){
                     response.status(401).json(invalidClientError)
                 }
@@ -168,7 +168,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                                 if(errors == 0){
                                     response.status(204).end()
                                 }
-                                else if(errors.includes(databaseError)){ //Hardcoded???
+                                else if(errors.includes(databaseError)){
                                     response.status(500).json(errors)
                                 }
                                 else{
@@ -210,15 +210,15 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                         description: request.body.description,
                         datePublished: challengeManager.getTodaysDate(),
                         numOfPlays: 0,
-                        accountUsername: request.body.accountUsername // Should get the username from the body
+                        accountUsername: request.body.accountUsername
                     }
             
-                    challengeManager.createChallenge(challenge, function(errors, id){ //Validate account that created the challenge
+                    challengeManager.createChallenge(challenge, function(errors, challengeId){
                         if(errors.length == 0){
-                            response.setHeader("Location", "/challenges/" + id)
-                            response.status(201).json(challenge)
+                            response.setHeader("Location", "/challenges/" + challengeId)
+                            response.status(201).json(challengeId)
                         }
-                        else if(errors.includes(databaseError)){ //Hardcoded???
+                        else if(errors.includes(databaseError)){
                             response.status(500).json(errors)
                         }
                         else{
@@ -262,7 +262,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
     }) 
 
     router.post("/tokens", function(request, response){
-        const grant_type = request.body.grant_type // Should have the value "password", otherwise bad request
+        const grant_type = request.body.grant_type
 
         if(grant_type == "password"){
 
@@ -271,7 +271,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                 password: request.body.password
             }
 
-            accountManager.login(accountCredentials, function(errors, account){ //databaseError ??
+            accountManager.login(accountCredentials, function(errors, account){
                 if(errors.length == 0){
 
                     const payload = {
@@ -289,6 +289,9 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                             })
                         }                        
                     })
+                }
+                else if(errors.includes(databaseError)){
+                    response.status(500).json(errors)
                 }
                 else{
                     response.status(401).json(errors)
@@ -311,6 +314,10 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
     router.get("/difficulties", function(request, response){
         response.status(200).json(validationVariabels.ALL_DIFFICULTIES) //IS THIS OK WITH ONLY 200 RESPONSE??
+    })
+
+    router.get("/validationVariables", function(request, response){
+        response.status(200).json(validationVariabels) //IS THIS OK WITH ONLY 200 RESPONSE??
     })
 
     return router
