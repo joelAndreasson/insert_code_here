@@ -10,17 +10,15 @@
     </ul>
 {{/if}}
 
-<form action="/challenges/{{challengeId}}/comments/create" method="post">
+<div class="columns">
+    <div class="column is-half">
+        <form action="/challenges/{{challengeId}}/comments/create" method="post">
+            <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
 
-    
-    <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
-
-    <div class="control">
-        <button class="button is-success" type="submit" value="Create">Create</button>
+            <div class="control">
+                <button class="button is-success" type="submit" value="Create">Create</button>
+            </div>
+        </form>
     </div>
+</div>
 
-</form>
-
-<script>
-    
-</script>

@@ -140,14 +140,24 @@ module.exports = function({db}){
 			
 			db.query(query, function(error, challenges){
 				if(error){	
-					console.log("errors: " + error)
 					callback(['databaseError'], null)
 				}else {
 					callback([], challenges)
 				}
 			})
+		},
+
+		deleteChallengeById: function(challengeId, callback){
+			const query = `DELETE FROM challenges WHERE id = ?`
+			const values = [challengeId]
+
+			db.query(query, values, function(error, results){
+				if(error){
+					callback(['databaseError'], null)
+				}else {
+					callback([], results)
+				}
+			})
 		}
-
-
 	}
 }

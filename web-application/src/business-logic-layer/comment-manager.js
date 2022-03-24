@@ -19,6 +19,24 @@ module.exports = function({commentRepository, commentValidator}){
 			}
 
 			commentRepository.createComment(comment, callback)
+		},
+
+		getCommentsByUsername: function(username, callback){
+			commentRepository.getCommentsByUsername(username, callback)
+		},
+
+		deleteCommentById: function(commentId, callback){
+			commentRepository.deleteCommentById(commentId, callback)
+		}, 
+
+		updateCommentById: function(commentId, newCommentText, callback){
+			const errors = commentValidator.getErrorsUpdateComment(newCommentText)
+	
+			if(0 < errors.length){
+				callback(errors, null)
+				return
+			}
+			commentRepository.updateCommentById(commentId, newCommentText, callback)
 		}
 	}
 }

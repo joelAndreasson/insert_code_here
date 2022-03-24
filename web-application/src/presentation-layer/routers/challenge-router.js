@@ -141,6 +141,81 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		)
 	})
 
+	router.get('/:challengeId/delete', function(request, response){
+		const challengeId = request.params.challengeId
+		const model = {
+			challengeId: challengeId
+		}
+		response.render('challenge-delete.hbs', model)
+	})
+
+	router.post('/:challengeId/delete', function(request, response){
+		const challengeId = request.params.challengeId
+		
+		challengeManager.deleteChallengeById(challengeId, function(errors, results){
+			if(errors.length > 0){
+				response.render("internal-server-error.hbs")
+			}else {
+				const username = request.session.accountUsername
+				response.redirect('/accounts/' + username)
+			}
+		})
+	})
+
+	router.get('/:challengeId/update', function(request, response){
+		const challengeId = request.params.challengeId
+		challengeManager.getChallengeById(challengeId, function(errors, challenge){
+			if(errors.length > 0){
+				response.render('internal-server-error.hbs')
+			} else {
+				const model = {
+					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+					difficulties: validationVariabels.ALL_DIFFICULTIES,
+					challenge: challenge
+				}
+				response.render('challenge-update.hbs', model)
+			}
+		})
+	})
+
+	router.post('/:challengeId/update', function(request, response){
+		const challengeId = request.params.challengeId
+		const sessionUsername = request.session.accountUsername
+		
+		const updatedChallenge = {
+			id: request.params.challengeId,
+			title: request.body.title,
+			challengeText: request.body.challengeText,
+			solutionText: request.body.solutionText,
+			progLanguage: request.body.progLanguage,
+			difficulty: request.body.difficulty,
+			description: request.body.description,
+			accountUsername: request.body.accountUsername
+		}
+
+		if(sessionUsername != updatedChallenge.accountUsername){
+			const isLoggedIn = false
+			const model = {
+				isLoggedIn: isLoggedIn
+			}
+			response.render('challenge-update.hbs', model)
+		}
+
+		challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors){
+			if(errors.length > 0){
+				const model = {
+					errors: errors,
+					challenge: updatedChallenge,
+					challengeId: challengeId,
+					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+					difficulties: validationVariabels.ALL_DIFFICULTIES
+				}
+				response.render('challenge-update.hbs', model)
+			}else {
+				response.redirect('/challenges/'+challengeId+'/preview')
+			}
+		})
+	})
 
 	return router
 }

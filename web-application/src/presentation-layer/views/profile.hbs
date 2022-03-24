@@ -12,7 +12,11 @@
         </div>
         {{#if isProfileOwner}}
             <a href="/accounts/{{account.username}}/updateBio">Edit</a>
+            <a href="/comments/{{account.username}}/list">Manage Comments</a>
         {{/if}} 
+    </div>
+    <div>
+                
     </div>
     {{#each challenges}}
         <div class="card">
@@ -32,6 +36,10 @@
                                 </button>
                             </a>
                         </div>
+                        {{#if ../isProfileOwner}}
+                            <a href="/challenges/{{this.id}}/delete">Delete</a>
+                            <a href="/challenges/{{this.id}}/update">Update</a>
+                        {{/if}}
                     </div>
                 </div>
             </div>

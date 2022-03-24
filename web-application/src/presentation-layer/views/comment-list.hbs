@@ -1,0 +1,15 @@
+{{#if comment.length}}
+    <p class="has-text-centered">You have not written any comments.</p>
+{{else}}
+    {{#each comments}}
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    {{this.commentText}}
+                </div>
+                <a href="/comments/{{this.id}}/delete">Delete</a>
+                <a href="/comments/{{this.id}}/update">Update</a>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}
