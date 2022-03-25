@@ -1,25 +1,27 @@
-<h1>Update comment</h1>
 
-{{#if errors.length}}
-    <p>Oh no, something went wrong:</p>
-    <ul>
-        {{#each errors}}
-        <li>{{this}}</li>
-        {{/each}}
-    </ul>
+
+{{#if isOwner}}
+    <h1>Update comment</h1>
+
+    {{#if errors.length}}
+        <p>Oh no, something went wrong:</p>
+        <ul>
+            {{#each errors}}
+            <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    {{/if}}
+
+    <form action="/challenges/{{comment.challengeId}}/comments/{{comment.id}}/update" method="post">
+
+        
+        <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
+
+        <div class="control">
+            <button class="button is-success" type="submit" value="Create">Update</button>
+        </div>
+
+    </form>
+{{else}}
+<h1>You dont have rights to this comment.</h1>
 {{/if}}
-
-<form action="/comments/{{comment.id}}/update" method="post">
-
-    
-    <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
-
-    <div class="control">
-        <button class="button is-success" type="submit" value="Create">Update</button>
-    </div>
-
-</form>
-
-<script>
-    
-</script>

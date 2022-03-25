@@ -60,7 +60,6 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	app.use('/accounts', accountRouter)
 	app.use('/challenges', challengeRouter)
 	app.use('/challenges/:challengeId/comments', commentRouter)
-	app.use('/comments', commentRouter)  
 	app.use('/api', restApiRouter)
 
 	return app

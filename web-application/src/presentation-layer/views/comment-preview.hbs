@@ -1,0 +1,17 @@
+
+<div class="column is-half is-offset-one-quarter has-text-centered">
+    <div class="card">
+        <div class="card-content">
+            <div class="content">
+                {{comment.commentText}}
+            </div>
+            {{#if isOwner}}
+                <a href="/challenges/{{comment.challengeId}}/comments/{{comment.id}}/delete">Delete</a>
+                <a href="/challenges/{{comment.challengeId}}/comments/{{comment.id}}/update">Update</a>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+
+
