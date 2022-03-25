@@ -1,6 +1,6 @@
 
 module.exports = function({validationVariabels}){
-    const validation = validationVariabels.variables
+    //const validation = validationVariabels.variables
     return {
         translateErrorCodes: function(errorCodes){
             const errorTranslations = {
@@ -18,7 +18,8 @@ module.exports = function({validationVariabels}){
                 numOfBlanksChanged: "The number of [[INSERT_CODE_HERE]] brackets needs to be the same as it was originally",
                 commentTooShort: "Comment needs to be at least " + validationVariabels.MIN_COMMENT_LENGTH + " characters",
                 passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
-                passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters"
+                passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
+                usernameTaken: "Username already taken"
             }
     
             const translations = errorCodes.map(error => errorTranslations[error])

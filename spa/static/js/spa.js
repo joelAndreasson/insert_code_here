@@ -1,8 +1,6 @@
-//import * as challenges from './challenges'
-//challenges.testConsoleLog()
 
 
-// --- navigation.js ---
+// ---------- Navigation ----------
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -23,20 +21,17 @@ document.addEventListener('DOMContentLoaded', function(){
     showPage(location.pathname)
 
     //Challenge play form
-    const challengePlayForm = document.getElementById('challenge-play-form')
+    const challengePlayForm = document.getElementById('challenge-play-form') // CURRENTLY ALWAYS TAKES YOU TO RESULTS PAGE, EVEN IF SUBMIT IS NOT VALID
     challengePlayForm.addEventListener('submit', function(event){
         event.preventDefault()
 
         const url = challengePlayForm.getAttribute('action')
-        history.pushState(null, "", url)
 
-        const [empty, challenges, challengeId, state] = url.split("/") //Should it say state?
+        const [empty, challenges, challengeId, state] = url.split("/")
 
         const changedChallengeText = document.getElementById('challenge-challengeText').value
 
-        loadResultsPage(challengeId, changedChallengeText)
-        hideCurrentPage()
-        showPage(url)
+        loadResultsPage(url, challengeId, changedChallengeText)
         
     })
 
@@ -55,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function(){
         event.preventDefault()
 
         const username = document.getElementById('sign-up-username').value
-        const password = document.getElementById('sign-up-password').value //NOT WORKING
-        const password2 = document.getElementById('sign-up-password2').value //NOT WORKING
+        const password = document.getElementById('sign-up-password').value 
+        const password2 = document.getElementById('sign-up-password2').value 
 
         console.log(username, password, password2)
 
@@ -67,33 +62,41 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('logout-button').addEventListener('click', function(event){
         event.preventDefault()
         logout()
-    }); //SEMI COLON NECESSARY!
+    }); 
 
-    (async function(){ //USE THIS OR CALLBACKS??
+    (async function(){ //Should use validationVariables.progLanguages
         const progLanguageSelector = document.getElementById('prog-language-selector')
         const progLanguageSelectorUpdate = document.getElementById('prog-language-selector-update')
-        const allProgLanguages = await getAllProgLanguages()
+        const variabels = await getValidationVariables()
+        const allProgLanguages = variabels.ALL_PROG_LANGUAGES
     
         for(const progLanguage of allProgLanguages){
             const option = document.createElement('option')
             option.innerText = progLanguage
             progLanguageSelector.appendChild(option)
-            progLanguageSelectorUpdate.appendChild(option)
-        }
-    })(); //SEMI COLON NECESSARY!
 
-    (async function(){ //USE THIS OR CALLBACKS??
+            const optionUpdate = document.createElement('option')
+            optionUpdate.innerText = progLanguage
+            progLanguageSelectorUpdate.appendChild(optionUpdate)
+        }
+    })(); 
+
+    (async function(){ //Should use validationVariables.difficulties
         const allDifficultiesSelector = document.getElementById('difficulty-selector')
         const allDifficultiesSelectorUpdate = document.getElementById('difficulty-selector-update')
-        const allDifficulties = await getAllDifficulties()
+        const variabels = await getValidationVariables()
+        const allDifficulties = variabels.ALL_DIFFICULTIES
 
         for(const difficulty of allDifficulties){
             const option = document.createElement('option')
             option.innerText = difficulty
             allDifficultiesSelector.appendChild(option)
-            allDifficultiesSelectorUpdate.appendChild(option)
+
+            const optionUpdate = document.createElement('option')
+            optionUpdate.innerText = difficulty
+            allDifficultiesSelectorUpdate.appendChild(optionUpdate)
         }
-    })(); //SEMI COLON NECESSARY!
+    })(); 
 
     document.getElementById('create-challenge-form').addEventListener('submit', function(event){
         event.preventDefault()
@@ -118,8 +121,6 @@ document.addEventListener('DOMContentLoaded', function(){
         createChallenge(challenge)
     })
 
-    
-    
 })
 
 window.addEventListener('popstate', function(){
@@ -128,6 +129,7 @@ window.addEventListener('popstate', function(){
 })
 
 function hideCurrentPage(){
+    hideErrors()
     document.querySelector('.current-page').classList.remove('current-page')
 }
 
@@ -174,14 +176,14 @@ function showPage(url){
             break
 
         case '/challenges/create':
-            nextPageId = "create-challenge-page"
+            nextPageId = 'create-challenge-page'
             break
     
         default:
             if(url.startsWith("/challenges/")){
                 const [empty, challenges, challengeId, state] = url.split("/") //Should it be state?
                 
-                switch(state){ //Switch or if-statment?
+                switch(state){
                     case 'results':
                         nextPageId = "results-page"
                         break
@@ -210,22 +212,12 @@ function showPage(url){
     document.getElementById(nextPageId).classList.add('current-page')
 }
 
-// --- navigation.js END ---
+// ---------- Navigation END ----------
 
-// --- challenges.js ---
+
+
+// ---------- Challenges ----------
 const API_URL = "http://localhost:3000/api/"
-
-async function getAllProgLanguages(){
-    const response = await fetch(API_URL + "progLanguages")
-    const allProgLanguages = await response.json()
-    return allProgLanguages
-}
-
-async function getAllDifficulties(){
-    const response = await fetch(API_URL + "difficulties")
-    const allDifficulties = await response.json()
-    return allDifficulties
-}
 
 async function createChallenge(challenge){
     const response = await fetch(API_URL + "challenges", {
@@ -239,28 +231,35 @@ async function createChallenge(challenge){
 
     switch(response.status){
         case 201:
-            const createdChallenge = await response.json()
+            hideErrors()
+            const challengeId = await response.json()
+            console.log(challengeId)
             hideCurrentPage()
-            showPage('challenges/' + createdChallenge.id) // NOT WORKING // Hardcoded ???
+            showPage('/challenges/' + challengeId) // NOT WORKING // Hardcoded ???
             break
 
         case 401:
-            //Handle error
+            const authErrors = await response.json()
+            translateAndShowErrors(authErrors)
             break
 
         case 400:
-            //Handle error
+            const requestErrors = await response.json()
+            translateAndShowErrors(requestErrors)
             break
 
         case 500:
-            //Handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         default:
-            //Handle error
+            translateAndShowErrors(['defaultError'])
+            break
 
     }
 }
+
 
 
 
@@ -274,28 +273,39 @@ async function deleteChallengeById(challengeId){
 
     switch(response.status){
         case 204:
+            hideErrors()
+
+            const url = ('/challenges')
+            history.pushState(null, "", url)
+
             hideCurrentPage()
-            showPage('/challenges') // Hardcoded ???
+            showPage('/challenges')
             break
 
         case 401:
-            //Handle error
+            const authErrors = await response.json()
+            translateAndShowErrors(authErrors)
             break
 
         case 404:
-            //Handle error
+            hideCurrentPage()
+            showPage('/not-found')
             break
 
         case 500:
-            //handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         default:
-            //handle error
+            translateAndShowErrors(['defaultError'])
             break
             
     }
 }
+
+
+
 
 async function updateChallengeById(challengeId, updatedChallenge){
     const response = await fetch(API_URL + "challenges/" + challengeId + "/update", {
@@ -309,27 +319,37 @@ async function updateChallengeById(challengeId, updatedChallenge){
 
     switch(response.status){
         case 204:
+            hideErrors()
+
+            const url = ('/challenges/' + challengeId)
+            history.pushState(null, "", url)
+
             hideCurrentPage()
-            showPage('/challenges/' + challengeId) // Hardcoded ???
+            showPage('/challenges/' + challengeId)
             break
 
         case 401:
-            //Handle error
+            const authErrors = await response.json()
+            translateAndShowErrors(authErrors)
             break
 
         case 400:
-            //Handle error
+            const requestErrors = await response.json()
+            translateAndShowErrors(requestErrors)
             break
 
         case 500:
-            //handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         default:
-            //handle error
+            translateAndShowErrors(['defaultError'])
             break
     }
 }
+
+
 
 
 async function loadChallengesPage(){
@@ -337,6 +357,7 @@ async function loadChallengesPage(){
 
     switch(response.status){
         case 200:
+            hideErrors()
             const challenges = await response.json()
 
             const allChallengesUl = document.getElementById('all-challenges')
@@ -359,17 +380,19 @@ async function loadChallengesPage(){
             break
 
         case 500:
-            //handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         default:
-            //Handle error
+            translateAndShowErrors(['defaultError'])
             break
 
-    }
-
-    
+    }    
 }
+
+
+
 
 function loadDeleteChallengePageById(challengeId){
     const oldDeleteButton = document.getElementById("confirm-delete");
@@ -385,6 +408,9 @@ function loadDeleteChallengePageById(challengeId){
     const newCancelButton = oldCancelButton.cloneNode(true);
     newCancelButton.addEventListener('click', function(event){
         event.preventDefault()
+
+        const url = ('/challenges/' + challengeId)
+        history.pushState(null, "", url)
         
         hideCurrentPage()
         showPage('/challenges/' + challengeId)
@@ -392,9 +418,12 @@ function loadDeleteChallengePageById(challengeId){
     oldCancelButton.parentNode.replaceChild(newCancelButton, oldCancelButton);
 }
 
+
+
+
 function loadUpdateChallengePageById(challengeId, oldChallenge){
-    const oldUpdateButton = document.getElementById("confirm-update");
-    const newUpdateButton = oldUpdateButton.cloneNode(true);
+    const oldUpdateButton = document.getElementById("confirm-update")
+    const newUpdateButton = oldUpdateButton.cloneNode(true)
 
     const newTitleInput = document.getElementById('new-title')
     const newProgLanguageSelector = document.getElementById('prog-language-selector-update')
@@ -440,25 +469,31 @@ function loadUpdateChallengePageById(challengeId, oldChallenge){
     newCancelButton.addEventListener('click', function(event){
         event.preventDefault()
         
+        const url = ('/challenges/' + challengeId)
+        history.pushState(null, "", url)
+
         hideCurrentPage()
         showPage('/challenges/' + challengeId)
     })
     oldCancelButton.parentNode.replaceChild(newCancelButton, oldCancelButton);
 }
 
+
+
+
 async function loadChallengePageById(challengeId){
     const response = await fetch(API_URL + "challenges/" + challengeId)
 
     switch(response.status){
         case 200:
+            hideErrors()
             const challenge = await response.json()
 
             const challengeOptions = document.getElementById('challenge-options')
             challengeOptions.classList.add('is-hidden')
 
             document.getElementById('challenge-title').innerText = challenge.title
-            document.getElementById('challenge-challengeText').innerText = challenge.challengeText
-            document.getElementById('challenge-solutionText').innerText = challenge.solutionText
+            document.getElementById('challenge-challengeText').value = challenge.challengeText
             document.getElementById('challenge-description').innerText = challenge.description
             document.getElementById('challenge-datePublished').innerText = challenge.datePublished
             document.getElementById('challenge-accountUsername').innerText = challenge.accountUsername
@@ -466,7 +501,7 @@ async function loadChallengePageById(challengeId){
             document.getElementById('challenge-difficulty').innerText = challenge.difficulty
             document.getElementById('challenge-progLanguage').innerText = challenge.progLanguage
 
-            document.getElementById('challenge-play-form').action = "/challenges/" + challengeId + "/results" //results or play? nothing?
+            document.getElementById('challenge-play-form').action = "/challenges/" + challengeId + "/results"
 
             if(challenge.accountUsername == ACCOUNT_USERNAME){
                 challengeOptions.classList.toggle('is-hidden')
@@ -479,8 +514,11 @@ async function loadChallengePageById(challengeId){
 
                     loadDeleteChallengePageById(challengeId)
 
+                    const url = ('/challenges/' + challengeId + '/delete')
+                    history.pushState(null, "", url)
+
                     hideCurrentPage()
-                    showPage('/challenges/' + challengeId + '/delete')
+                    showPage(url)
                 })
                 oldDeleteButton.parentNode.replaceChild(newDeleteButton, oldDeleteButton);
 
@@ -490,9 +528,12 @@ async function loadChallengePageById(challengeId){
                     event.preventDefault()
 
                     loadUpdateChallengePageById(challengeId, challenge)
+
+                    const url = ('/challenges/' + challengeId + '/update')
+                    history.pushState(null, "", url)
                     
                     hideCurrentPage()
-                    showPage('/challenges/' + challengeId + '/update')
+                    showPage(url)
                 })
                 oldUpdateButton.parentNode.replaceChild(newUpdateButton, oldUpdateButton);
 
@@ -501,61 +542,74 @@ async function loadChallengePageById(challengeId){
             break
         
         case 500:
-            //Handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         case 404:
-            //handle error
+            hideCurrentPage()
+            showPage('/not-found')
             break
 
         default:
-            //Handle error
+            translateAndShowErrors(['defaultError'])
             break
     }
 
     
 }
 
-async function loadResultsPage(challengeId, changedChallengeText){
+async function loadResultsPage(url, challengeId, changedChallengeText){
 
     const model = {
         changedChallengeText: changedChallengeText
     }
-    //CHECK STATUS CODES AND ACT ACCORDINGLY!
+
     const response = await fetch(API_URL + "challenges/" + challengeId + "/play", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(model)
-    })
+    })    
 
     switch(response.status){
         case 200:
+            hideErrors()
+
+            history.pushState(null, "", url)
+
+            hideCurrentPage()
+            showPage(url)
             const responseBody = await response.json()
             document.getElementById('challenge-numOfRightAnswers').innerText = responseBody.numOfRightAnswers
             document.getElementById('challenge-totalNumOfAnswers').innerText = responseBody.totalNumOfAnswers
             break
         
         case 500:
-            //Handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         case 400:
-            //Handle error
+            const requestErrors = await response.json()
+            translateAndShowErrors(requestErrors)
             break
         
         default:
-            //handle error
+            translateAndShowErrors(['defaultError'])
             break
     }
 
     
 }
 
-// --- challenges.js END ---
+// ---------- Challenges END ----------
 
-// --- accounts.js ---
+
+
+// ---------- Accounts ----------
+
 let ACCESS_TOKEN = ""
 let ACCOUNT_USERNAME = ""
 
@@ -576,10 +630,9 @@ async function login(username, password){
         body: new URLSearchParams(model)
     })
 
-    //CHECK STATUS CODES AND ACT ACCORDINGLY!
-
     switch(response.status){
         case 200:
+            hideErrors()
             const responseBody = await response.json()
 
             ACCESS_TOKEN = responseBody.access_token
@@ -595,15 +648,22 @@ async function login(username, password){
             break
         
         case 401:
-            //Handle error
+            const authErrors = await response.json()
+            translateAndShowErrors(authErrors)
             break
 
         case 400:
-            //handle error
+            const requestErrors = await response.json()
+            translateAndShowErrors(requestErrors)
+            break
+
+        case 500:
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         default:
-            //handle error
+            translateAndShowErrors(['defaultError'])
             break
     }
 
@@ -616,7 +676,6 @@ function logout(){
     document.getElementById('sign-up-button').classList.toggle('is-hidden')
     document.getElementById('logout-button').classList.toggle('is-hidden')    
     document.getElementById('create-challenge-button').classList.toggle('is-hidden')
-
 }
 
 async function signUp(username, password, password2){
@@ -636,20 +695,83 @@ async function signUp(username, password, password2){
 
     switch(response.status){
         case 201:
+            hideErrors()
             const account = await response.json()
             login(account.username, account.password)
             break
         
         case 500:
-            //handle error
+            const serverErrors = await response.json()
+            translateAndShowErrors(serverErrors)
             break
 
         case 400:
-            //handle error
+            const requestErrors = await response.json()
+            translateAndShowErrors(requestErrors)
             break
         
         default:
-            //handle error
+            translateAndShowErrors(['defaultError'])
             break
     }
 }
+
+// ---------- Accounts END ----------
+
+
+
+// ---------- Validation ----------
+
+const validationVariabels = getValidationVariables()
+
+async function getValidationVariables(){
+    const response = await fetch(API_URL + "validationVariables")
+    const variabels = await response.json()
+    return variabels
+}
+
+function translateErrorCodes(errorCodes){
+    const errorTranslations = {
+        databaseError: "Internal server error, please try again later...", //What should this say?
+        usernameMissing: "Please enter a username",
+        usernameTooShort: "The username has to be a minimum of" + validationVariabels.MIN_USERNAME_LENGTH + " characters",
+        passwordsNotMatch: "Passwords does not match",
+        accountDoesNotExist: "Username or password did not match any account, please try again",
+        notEnoughBlanks: "There needs to be a minimum of " + validationVariabels.MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets",
+        solutionsNotMatchBlanks: "The number of solutions needs to be the same as the number of [[INSERT_CODE_HERE]] brackets",
+        titleTooShort: "Title needs to be at least " + validationVariabels.MIN_TITLE_LENGTH + " characters",
+        progLanguageNotValid: "Select a valid programming language",
+        difficultyNotValid: "Select a valid difficulty",
+        descriptionTooShort: "Description needs to be at least " + validationVariabels.MIN_DESCRIPTION_LENGTH + " characters",
+        numOfBlanksChanged: "The number of [[INSERT_CODE_HERE]] brackets needs to be the same as it was originally",
+        passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
+        passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
+        usernameTaken: "Username already taken",
+        defaultError: "Oops, something went wrong, please try again later..."
+    }
+
+    const translations = errorCodes.map(error => errorTranslations[error])
+    return translations
+}
+
+function translateAndShowErrors(errorCodes){
+    const translatedErrors = translateErrorCodes(errorCodes)
+    const errorsListUl = document.getElementById('errors-list')
+    errorsListUl.innerText = ""
+
+    for(const error of translatedErrors){
+
+        const li = document.createElement('li')
+        li.innerText = error.toString()
+        
+        errorsListUl.appendChild(li)
+    }
+
+    document.getElementById('errors-div').classList.remove('is-hidden')
+}
+
+function hideErrors(){
+    document.getElementById('errors-div').classList.add('is-hidden')
+}
+
+// ---------- Validation END----------

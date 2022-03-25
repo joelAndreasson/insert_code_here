@@ -40,8 +40,15 @@ module.exports = function({initSequelize}){
             })
             .then(createdAccount => callback([], createdAccount.id))
             .catch(error => {
-                console.log(error)
-                callback(['databaseError'], null)
+                if(error.name == "SequelizeUniqueConstraintError"){
+                    console.log(error)
+                    callback(['usernameTaken'], null)
+                }
+                else{
+                    console.log(error)
+                    callback(['databaseError'], null)
+                }
+                
             })
         },
 

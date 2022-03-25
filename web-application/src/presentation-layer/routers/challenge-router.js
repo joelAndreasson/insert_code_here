@@ -27,7 +27,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			accountUsername: request.body.accountUsername
 		}
 		
-		challengeManager.createChallenge(challenge, function(errors, id){
+		challengeManager.createChallenge(challenge, function(errors, challengeId){
 			
 			if(errors.length > 0){
 				const errorCodes = errorTranslator.translateErrorCodes(errors)
@@ -40,7 +40,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 				response.render('challenge-create.hbs', model)
 			}
 			else{
-				response.redirect('/challenges/' + id + '/preview')
+				response.redirect('/challenges/' + challengeId + '/preview')
 			}
 	
 			
@@ -74,7 +74,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			if(challenge == undefined){
 				response.render("page-not-found.hbs")
 			}
-			commentManager.getCommentsByChallengeId(id, function(errors, comments){
+			commentManager.getCommentsByChallengeId(challengeId, function(errors, comments){
         
 				allErrors.push(...errors)
 				if(allErrors.length > 0){
@@ -117,25 +117,27 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			changedChallengeText, 
 			function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
 			
-			if(errors.length > 0){
-	
-				challenge.challengeText = changedChallengeText
-				
-				const errorCodes = errorTranslator.translateErrorCodes(errors) // errorcodes should be reversed. errorcodes before translation and errors after.
-				const model = {
-					errors: errorCodes,
-					challenge: challenge
+				if(errors.length > 0){
+		
+					challenge.challengeText = changedChallengeText
+					
+					const errorCodes = errorTranslator.translateErrorCodes(errors) // errorcodes should be reversed. errorcodes before translation and errors after.
+					console.log(errorCodes)
+					const model = {
+						errors: errorCodes,
+						challenge: challenge
+					}
+		
+					response.render('challenge-play.hbs', model)
 				}
-	
-				response.render('challenge-play.hbs', model)
-			}
-			else{
-				const model = {
-					numOfRightAnswers: numOfRightAnswers,
-					totalNumOfAnswers: totalNumOfAnswers,
-					challengeId: id
+				else{
+					const model = {
+						numOfRightAnswers: numOfRightAnswers,
+						totalNumOfAnswers: totalNumOfAnswers,
+						challengeId: challengeId
+					}
+					response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
 				}
-        response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
 			}
 		)
 	})

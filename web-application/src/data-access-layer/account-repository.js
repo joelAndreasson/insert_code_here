@@ -48,8 +48,13 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, results){
 				if(error){
-					// TODO: Look for usernameUnique violation.
-					callback(['databaseError'], null)
+					console.log(error.code) // TODO: Remove
+					if(error.code == "ER_DUP_ENTRY"){
+						callback(['usernameTaken'], null)
+					}
+					else{
+						callback(['databaseError'], null)
+					}
 				}else{
 					callback([], results)
 				}
