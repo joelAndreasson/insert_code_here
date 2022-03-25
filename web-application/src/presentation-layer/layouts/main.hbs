@@ -3,16 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>The Community</title>
+	<title>INSERT_CODE_HERE</title>
 	<link rel="stylesheet" href="/css/bulma.min.css">
 	<link rel="stylesheet" href="/css/layout.css">
+
+	<link rel="stylesheet"
+   		href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+	</link>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/javascript/javascript.min.js"> </script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/swift/swift.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+
 </head>
 <body>
 	
 	<div id="entire-page">
 		
 		<header class="is-size-1 has-text-centered">
-			The Community
+			<img id="banner" class="image" src="/images/insert_code_here_banner_2.svg" >
 		</header>
 		
 		<nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
@@ -30,13 +41,22 @@
 				<div class="navbar-start">
 					<a class="navbar-item" href="/">Home</a>
 					<a class="navbar-item" href="/accounts">Accounts</a>
+					<a class="navbar-item" href="/challenges/">View Challenges</a>
+					{{#if isLoggedIn}}
+						<a class="navbar-item" href="/challenges/create">Create Challenge</a>
+						<a class="navbar-item" href="/accounts/{{accountUsername}}">Profile</a>
+					{{/if}}
 				</div>
 				
 				<div class="navbar-end">
 					<div class="navbar-item">
 						<div class="buttons">
-							<a class="button is-primary" href="/accounts/sign-up">Sign up</a>
-							<a class="button is-dark" href="/accounts/sign-in">Sign in</a>
+							{{#if isLoggedIn}}
+								<a class="button is-danger" href="/accounts/sign-out">sign out</a>
+							{{else}}
+								<a class="button is-primary" href="/accounts/sign-up">Sign up</a>
+								<a class="button is-dark" href="/accounts/login">Login</a>
+							{{/if}}
 						</div>
 					</div>
 				</div>
@@ -44,11 +64,11 @@
 			</div>
 		</nav>
 		
-		<main>{{{body}}}</main>
+		<main class="content">{{{body}}}</main> <!-- Added class "content" here in order to utilize Bulma framework -->
 		
-		<footer class="footer">
+		<footer>
 			<div class="content has-text-centered">
-				Copyright © Peter Larsson-Green 2021 |
+				Copyright © Group 7 2022 |
 				<a href="/about">About</a> |
 				<a href="/contact">Contact</a>
 			</div>

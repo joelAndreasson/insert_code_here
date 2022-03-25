@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSERT_CODE_HERE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="bulma.min.css">
+    <script src="spa.js"></script>
+</head>
+
+<body class="content">
+
+    <header>
+        <h1>INSERT_CODE_HERE</h1>
+    </header>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+
+            <a href="/" class="navbar-item page-link">
+                INSERT_CODE_HERE
+            </a>
+
+            <a id="navbarBurger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarMenu" class="navbar-menu">
+
+            <div class="navbar-start">
+                <a href="/" class="navbar-item page-link">Home</a>
+                <a href="/challenges" class="navbar-item page-link">Challenges</a>
+                <a id="create-challenge-button" href="/challenges/create" class="navbar-item page-link is-hidden">Create
+                    Challenge</a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        More
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="/about" class="navbar-item page-link">About</a>
+                        <a href="/contact" class="navbar-item page-link">Contact</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a id="login-button" href="/sign-up" class="button is-primary page-link">Sign up</a>
+                        <a id="sign-up-button" href="/login" class="button is-light page-link">Login</a>
+                        <a id="logout-button" href="/logout" class="button is-danger is-hidden">Logout</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </nav>
+
+    <main class="padding">
+
+        <section id="home-page" class="page">
+            <h2 class="has-text-centered">HOME</h2>
+
+            <p class="has-text-centered">
+                We here at INSERT_CODE_HERE love to code. Other than coding we love to solve puzzles. We took both
+                these passions, combined them, and here we are!
+                If you are in the mood to challenge yourself or just want to become better att coding, there is a
+                challenge for you. Enjoy!
+            </p>
+        </section>
+
+        <section id="challenges-page" class="page">
+            <h2>CHALLENGES</h2>
+
+            <ul id="all-challenges"></ul>
+        </section>
+
+        <section id="challenge-page" class="page">
+
+            <div class="content">
+                <form id="challenge-play-form" class="is-half" method="post">
+
+                    <h1 id="challenge-title" class="has-text-centered"></h1>
+
+                    <div id="challenge-options" class="is-hidden level">
+                        <div class="level-item has-text-centered">
+                            <button id="update-challenge-button" class="button is-info">Update</button>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <button id="delete-challenge-button" class="button is-danger">Delete</button>
+                        </div>
+                    </div>
+
+                    <div class="column is-three-fifths is-offset-one-fifth">
+                        <p id="challenge-description" class="is-size-5 has-text-centered"></p>
+                        <textarea id="challenge-challengeText" class="textarea" name="challengeText"></textarea>
+                    </div>
+                    <div class="section">
+                        <div class="column box is-one-quarter">
+                            <p>
+                            <div><strong>Date Published:</strong></div>
+                            <div id="challenge-datePublished"></div>
+                            </p>
+
+                            <p>
+                            <div><strong>Created By:</strong></div>
+                            <div id="challenge-accountUsername"></div>
+                            </p>
+
+                            <p>
+                            <div><strong>Number of plays:</strong></div>
+                            <div id="challenge-numOfPlays"></div>
+                            </p>
+
+                            <p>
+                            <div><strong>Difficulty:</strong></div>
+                            <div id="challenge-difficulty"></div>
+                            </p>
+
+                            <p>
+                            <div><strong>Language:</strong></div>
+                            <div id="challenge-progLanguage"></div>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="has-text-centered">
+                        <button class="button is-success" type="submit" value="Submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+
+        <section id="delete-challenge-page" class="page">
+            <h2>DELETE CHALLENGE?</h2>
+            <p>Are you sure you want to delete this challenge?</p>
+
+            <div id="delete-options" class="field is-grouped">
+                <div class="control">
+                    <button id="cancel-delete" class="button">Cancel</button>
+                </div>
+
+                <div class="control">
+                    <button id="confirm-delete" class="button is-danger">Delete</button>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="update-challenge-page" class="page">
+            <h2>UPDATE CHALLENGE</h2>
+
+            <div class="content column is-three-fifths is-offset-one-fifth">
+
+                <form id="update-challenge-form" class="is-half" method="post">
+                    <!-- Challange title -->
+                    <div class="field">
+                        <label class="label">Challange Title</label>
+                        <div class="control">
+                            <input id="new-title" class="input" type="text" placeholder="Challange Title" name="title">
+                        </div>
+                    </div>
+                    <!-- Language -->
+                    <div class="field">
+                        <label class="label">Language</label>
+                        <div class="control">
+                            <select id="prog-language-selector-update" name="progLanguage">
+                                <!-- Options should not be hardcoded maybe? Stor in db? -->
+                                <option selected>Language</option>
+                                <!-- iterate through list of progLanguages -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Challange Text -->
+                    <div class="field">
+                        <label class="label">Challenge Text</label>
+                        <div class="control">
+                            <!-- the input tag below should be replaced with codemirror thingy -->
+                            <textarea id="new-challenge-text" class="textarea" name="challengeText"
+                                placeholder="Challenge Text"></textarea>
+                        </div>
+                    </div>
+
+
+                    <!-- Solution Text -->
+                    <div class="field">
+                        <label class="label">Solution Text</label>
+                        <div class="control">
+                            <!-- the input tag below should be replaced with codemirror thingy -->
+                            <textarea id="new-solution-text" class="textarea" name="solutionText"
+                                placeholder="Solution Text"></textarea>
+                        </div>
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="field">
+                        <label class="label">Description</label>
+                        <div class="control">
+                            <input id="new-description" class="input" type="text" placeholder="Description"
+                                name="description">
+                        </div>
+                    </div>
+                    <!-- Difficulty -->
+                    <div class="field">
+                        <div class="control">
+                            <select id="difficulty-selector-update" name="difficulty">
+                                <option selected>Difficulty</option>
+                                <!-- iterate through list of difficulties -->
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Submit buttons -->
+                    <div id="update-options" class="field is-grouped">
+                        <div class="control">
+                            <button id="cancel-update" class="button">Cancel</button>
+                        </div>
+
+                        <div class="control">
+                            <button id="confirm-update" class="button is-info" type="submit"">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                
+            </section>
+
+            <section id="create-challenge-page" class="page">
+                <h2>CREATE CHALLENGE</h2>
+
+                <div class="content column is-three-fifths is-offset-one-fifth">
+                    <form id="create-challenge-form" class="is-half" action="/challenges/create"
+                        method="post">
+                        <!-- Challange title -->
+                        <div class="field">
+                            <label class="label">Challange Title</label>
+                            <div class="control">
+                                <input id="title-input" class="input" type="text"
+                                    placeholder="Challange Title" name="title">
+                            </div>
+                        </div>
+                        <!-- Language -->
+                        <div class="field">
+                            <label class="label">Language</label>
+                            <div class="control">
+                                <select id="prog-language-selector" name="progLanguage">
+                                    <!-- Options should not be hardcoded maybe? Stor in db? -->
+                                    <option selected>Language</option>
+                                    <!-- iterate through list of progLanguages -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Challange Text -->
+                        <div class="field">
+                            <label class="label">Challenge Text</label>
+                            <div class="control">
+                                <!-- the input tag below should be replaced with codemirror thingy -->
+                                <textarea id="challenge-text-input" class="textarea"
+                                    name="challengeText" placeholder="Challenge Text"></textarea>
+                            </div>
+                        </div>
+
+
+                        <!-- Solution Text -->
+                        <div class="field">
+                            <label class="label">Solution Text</label>
+                            <div class="control">
+                                <!-- the input tag below should be replaced with codemirror thingy -->
+                                <textarea id="solution-text-input" class="textarea" name="solutionText"
+                                    placeholder="Solution Text"></textarea>
+                            </div>
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control">
+                                <input id="description-input" class="input" type="text"
+                                    placeholder="Description" name="description">
+                            </div>
+                        </div>
+                        <!-- Difficulty -->
+                        <div class="field">
+                            <div class="control">
+                                <select id="difficulty-selector" name="difficulty">
+                                    <option selected>Difficulty</option>
+                                    <!-- iterate through list of difficulties -->
+                                </select>
+                            </div>
+                        </div>
+                        <!-- Submit buttons -->
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-success" type="submit"
+                                    value="Create">Create</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!-- tutorial -->
+                <div class="column is-half box">
+                    <h1 class="has-text-centered is-underlined">
+                        Tutorial
+                    </h1>
+                    <p class=" is-size-6">
+                        Welcome to <b>INSERT_CODE_HERE's</b> challenge editor! <br>
+                        In this tutorial you will <b>quickly</b> learn how to create your own
+                        challenge!
+                    </p>
+                    <p class="is-size-6">
+                        <b>1. A Good title never hurts.</b> <br> make sure to give your challenge a
+                        good name so that others can find and understand what the challenge is
+                        about.
+                    </p>
+                    <p class="is-size-6">
+                        <b>2. Make sure you speak their language.</b> <br> Select the language you
+                        want and make sure it is the correct one or there will be angry challenge
+                        takers...
+                    </p>
+                    <p class="is-size-6">
+                        <b>3. Write that code!</b> <br> When writing your code you have complete
+                        freedom in doing soo. The places you want users to enter code into add
+                        <b>[[INSERT_CODE_HERE]]</b> and
+                        our editor will recognize it as a so called blank that challenge taker must
+                        fill in. You can add as many blanks as you want. The sky is the limit!
+                    </p>
+                    <p class="is-size-6">
+                        <b>4. Questions needs answers! </b> <br> Now the code is done and it's time
+                        to add answers to all the blanks you created in the previous step. Adding an
+                        answer is
+                        as simple as can be, just add [[]] to the text field and enter your answer
+                        into it. Like this; [[ANSWER]]. Remember that your answers must come in the
+                        same order as your
+                        blanks in the code.
+                    </p>
+                    <p class="is-size-6">
+                        <b>5. Describe!</b> <br> Give your challenge a description. Maybe it's a
+                        tutorial, challenge tips or just your life story. You do you!
+                    </p>
+                    <p class="is-size-6">
+                        <b>6. Select difficulty, it's not hard... or is it?!</b> <br> Try to
+                        estimate difficulty for this challenge.
+                        A correctly estimated difficulty will help challenge takers find your
+                        challenges.
+                    </p>
+                </div>
+
+        </section>
+
+        <section id="about-page" class="page">
+            <h2>ABOUT</h2>
+            <div class="section">
+                <div class="column box is-one-quarter">
+                    Text here...
+                </div>
+            </div>
+
+        </section>
+
+        <section id="contact-page" class="page">
+            <h2>CONTACT</h2>
+            <div class="section">
+                <div class="column box is-one-quarter">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tr>
+                                <td>Joel Andreasson</td>
+                                <td>anjo19cj@student.ju.se</td>
+                                <td>+46705694746</td>
+                            </tr>
+                            <tr>
+                                <td>Mattias Spångberg</td>
+                                <td>MATTIAS EMAIL</td>
+                                <td>MATTIAS PHONE</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="sign-up-page" class="page">
+            <h2>SIGN UP</h2>
+
+            <form id="sign-up-form" action="/accounts" method="POST">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-username" class="input" type="text" placeholder="Username" name="username">
+                    </div>
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-password" class="input" type="password" placeholder="Password"
+                            name="password">
+                    </div>
+                    <label class="label">Confirm Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="sign-up-password2" class="input" type="password" placeholder="Confirm Password"
+                            name="password2">
+                    </div>
+                    <input type="submit" class="button is-success" value="Sign up">
+                </div>
+            </form>
+
+        </section>
+
+        <section id="login-page" class="page">
+            <h2>LOGIN</h2>
+
+            <form id="login-form" action="/tokens" method="POST">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="login-username" class="input" type="text" placeholder="Username" name="username">
+                    </div>
+                    <label class="label">Password</label>
+                    <div class="control has-icons-left has-icons-right">
+                        <input id="login-password" class="input" type="password" placeholder="Password" name="password">
+                    </div>
+                    <input type="submit" class="button is-success" value="Login">
+                </div>
+            </form>
+
+        </section>
+
+        <section id="results-page" class="page">
+
+            <div class="section has-text-centered">
+                <h1>Thanks for playing!</h1>
+                <h3 class="inline">Score: </h3>
+                <h3 class="inline" id="challenge-numOfRightAnswers"></h3>
+                <h3 class="inline"> / </h3>
+                <h3 class="inline" id="challenge-totalNumOfAnswers"></h3>
+            </div>
+            <div class="section has-text-centered">
+                <a class="button is-success page-link" href="/challenges">Play another challenge</a>
+            </div>
+
+            <!-- <p id="challenge-numOfRightAnswers"></p>
+                <p>Of</p>
+                <p id="challenge-totalNumOfAnswers"></p> -->
+        </section>
+
+        <section id="not-found-page" class="page">
+            <h2>404 NOT FOUND</h2>
+        </section>
+
+        <div id="errors-div" class="is-hidden">
+            <p>Oh no, something went wrong:</p>
+            <ul id="errors-list"></ul>
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+{{#if errors.length}}
+    <p>Oops, something went wrong:</p>
+    <ul>
+        {{#each errors}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    
+{{else}}
+
+    {{#if challenge}}
+
+        <div class="section">
+            <h1 class="has-text-centered is-size-2">{{challenge.title}}</h1>
+            <div class="has-text-centered">
+                <a href="/challenges/{{challenge.id}}/play">
+                    <button class="button is-primary is-large is-rounded">
+                        Play Challange
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="columns">
+            <!-- description -->
+            <div class="column is-one-third">
+                <div class="box">
+                    <h3 class="has-text-centered">
+                    Description
+                    </h3>
+                    <div id="challenge-description">
+                        <p class="has-text-centered">
+                            {{challenge.description}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- comments -->
+            <div class="column is-two-thirds">
+                <div class="box">
+                    <div class="has-text-centered">
+                    <a href="/challenges/{{challenge.id}}/comments/create">
+                        <button class="button is-primary is-large is-rounded">
+                            Add Comment
+                        </button>
+                    </a>
+                    </div>
+                    <div id="comments-scrollable">
+                        {{#if comments.length}}
+
+                        <div class="border-bottom"></div>
+                        
+                        {{#each comments}}
+                            <div class="card">
+                                <div class="card-content">
+                                    <a href="/accounts/{{accountUsername}}" class="subtitle">
+                                        {{accountUsername}}
+                                    </a>
+                                    <div class="content">
+                                        {{commentText}}
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="/challenges/{{this.challengeId}}/comments/{{this.id}}/preview">View comment</a>
+                        {{/each}}
+                        {{else}}
+                            <p class="has-text-centered">No comments exist on this challenge yet.</p>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{else}}
+        <p>This challenge does not exist.</p>
+    {{/if}}
+{{/if}}

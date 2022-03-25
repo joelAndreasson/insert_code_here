@@ -3,14 +3,57 @@ html{
 }
 
 body{
-	background-color: rgb(225, 225, 225);
+	background-color: rgb(240, 240, 240);
 	min-height: 100%;
 }
 
-#entire-page{
-	max-width: 800px;
-	margin: 0 auto;
+#banner {
+	min-width: 100%;
 }
+
+footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+  }
+
+.border-bottom{
+	border-bottom: 2px solid gray;
+}
+
+#comments-scrollable{
+	height: 35vh;
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+#challenge-description{
+	height: 35vh;
+	display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+}
+
+.main {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+  }
+
+  @media(max-width: 1300px){
+	#entire-page{
+		max-width: 800px;
+		margin: 0 auto;
+	}
+  }
+  @media(min-width: 1301px){
+	#entire-page{
+		max-width: 1600px;
+		margin: 0 auto;
+	}
+  }
 
 main{
 	padding: 8px;

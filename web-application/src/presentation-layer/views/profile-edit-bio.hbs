@@ -1,0 +1,15 @@
+<div class="columns">
+    <div class="column">
+        <form action="/accounts/{{account.username}}/updateBio" method="post">
+            <textarea name="bioText" cols="100" rows="20"></textarea>
+            <input type="submit" class="button is-success">
+        </form>
+        <ul>
+            {{#each errors}}
+                <li>
+                    {{this}}
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

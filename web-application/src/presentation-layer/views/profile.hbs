@@ -1,0 +1,49 @@
+{{#if account}}
+    <h1 class="is-size-1 has-text-centered">{{account.username}}</h1>
+    <div class="hero">
+        <div class="box hero-body">
+            <p class="has-text-centered">
+            {{#if account.bio}}
+                {{account.bio}}
+            {{else}}
+                This user has yet to introduce themselves.
+            {{/if}}
+            </p>
+        </div>
+        {{#if isProfileOwner}}
+            <a href="/accounts/{{account.username}}/updateBio">Edit</a>
+        {{/if}} 
+    </div>
+    <div>
+                
+    </div>
+    {{#each challenges}}
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <div class="columns">
+                        <div class="column is-one-fifth">
+                            <p><b>Played: </b>{{this.numOfPlays}}</p>
+                        </div>
+                        <div class="column">
+                            <b>{{this.title}}</b>                  
+                        </div>
+                        <div class="column has-text-right">
+                            <a href="../challenges/{{this.id}}/preview">
+                                <button class="button is-primary" > 
+                                    Play Challange
+                                </button>
+                            </a>
+                        </div>
+                        {{#if ../isProfileOwner}}
+                            <a href="/challenges/{{this.id}}/delete">Delete</a>
+                            <a href="/challenges/{{this.id}}/update">Update</a>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <h2>There is not profile matching this user.</h2>
+{{/if}}

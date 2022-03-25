@@ -1,0 +1,15 @@
+.page, .is-hidden{
+    display: none;
+}
+
+.page.current-page{
+    display: block;
+}
+
+.inline{
+    display: inline;
+}
+
+.padding{
+    padding: 4vw;
+}
