@@ -308,16 +308,8 @@ module.exports = function({accountManager, challengeManager, validationVariabels
         response.status(418).json("The server refuses to brew coffee because it is, permanently, a teapot.")
     })
 
-    router.get("/progLanguages", function(request, response){
-        response.status(200).json(validationVariabels.ALL_PROG_LANGUAGES) //IS THIS OK WITH ONLY 200 RESPONSE??
-    })
-
-    router.get("/difficulties", function(request, response){
-        response.status(200).json(validationVariabels.ALL_DIFFICULTIES) //IS THIS OK WITH ONLY 200 RESPONSE??
-    })
-
     router.get("/validationVariables", function(request, response){
-        response.status(200).json(validationVariabels) //IS THIS OK WITH ONLY 200 RESPONSE??
+        response.status(200).json(validationVariabels)
     })
 
     return router

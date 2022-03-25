@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function(){
         event.preventDefault()
 
         const username = document.getElementById('sign-up-username').value
-        const password = document.getElementById('sign-up-password').value //NOT WORKING
-        const password2 = document.getElementById('sign-up-password2').value //NOT WORKING
+        const password = document.getElementById('sign-up-password').value 
+        const password2 = document.getElementById('sign-up-password2').value 
 
         console.log(username, password, password2)
 
@@ -62,14 +62,13 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('logout-button').addEventListener('click', function(event){
         event.preventDefault()
         logout()
-    }); //SEMI COLON NECESSARY!
+    }); 
 
-    (async function(){ //USE THIS OR CALLBACKS??
+    (async function(){ //Should use validationVariables.progLanguages
         const progLanguageSelector = document.getElementById('prog-language-selector')
         const progLanguageSelectorUpdate = document.getElementById('prog-language-selector-update')
-        const allProgLanguages = await getAllProgLanguages()
-
-        console.log(allProgLanguages)
+        const variabels = await getValidationVariables()
+        const allProgLanguages = variabels.ALL_PROG_LANGUAGES
     
         for(const progLanguage of allProgLanguages){
             const option = document.createElement('option')
@@ -80,12 +79,13 @@ document.addEventListener('DOMContentLoaded', function(){
             optionUpdate.innerText = progLanguage
             progLanguageSelectorUpdate.appendChild(optionUpdate)
         }
-    })(); //SEMI COLON NECESSARY!
+    })(); 
 
-    (async function(){ //USE THIS OR CALLBACKS??
+    (async function(){ //Should use validationVariables.difficulties
         const allDifficultiesSelector = document.getElementById('difficulty-selector')
         const allDifficultiesSelectorUpdate = document.getElementById('difficulty-selector-update')
-        const allDifficulties = await getAllDifficulties()
+        const variabels = await getValidationVariables()
+        const allDifficulties = variabels.ALL_DIFFICULTIES
 
         for(const difficulty of allDifficulties){
             const option = document.createElement('option')
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function(){
             optionUpdate.innerText = difficulty
             allDifficultiesSelectorUpdate.appendChild(optionUpdate)
         }
-    })(); //SEMI COLON NECESSARY!
+    })(); 
 
     document.getElementById('create-challenge-form').addEventListener('submit', function(event){
         event.preventDefault()
@@ -149,8 +149,6 @@ function makePageLinkListener(element){
 function showPage(url){
     let nextPageId
 
-    console.log(url)
-
     switch (url) {
         case '/':
             nextPageId = 'home-page'
@@ -178,7 +176,7 @@ function showPage(url){
             break
 
         case '/challenges/create':
-            nextPageId = "create-challenge-page"
+            nextPageId = 'create-challenge-page'
             break
     
         default:
@@ -211,7 +209,6 @@ function showPage(url){
             break
     }
 
-    console.log(nextPageId)
     document.getElementById(nextPageId).classList.add('current-page')
 }
 
@@ -221,22 +218,6 @@ function showPage(url){
 
 // ---------- Challenges ----------
 const API_URL = "http://localhost:3000/api/"
-
-async function getAllProgLanguages(){
-    const response = await fetch(API_URL + "progLanguages")
-    const allProgLanguages = await response.json()
-    return allProgLanguages
-}
-
-async function getAllDifficulties(){
-    const response = await fetch(API_URL + "difficulties")
-    const allDifficulties = await response.json()
-    return allDifficulties
-}
-
-
-
-
 
 async function createChallenge(challenge){
     const response = await fetch(API_URL + "challenges", {
@@ -344,7 +325,7 @@ async function updateChallengeById(challengeId, updatedChallenge){
             history.pushState(null, "", url)
 
             hideCurrentPage()
-            showPage('/challenges/' + challengeId) // Hardcoded ???
+            showPage('/challenges/' + challengeId)
             break
 
         case 401:
