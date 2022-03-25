@@ -11,38 +11,40 @@
 
     {{#if challenges.length}}
 
-        <table class="table is-striped is-hoverable is-fullwidth">
-            <thead>
-                <tr>
-                    <td>Made by</td>
-                    <td>Title</td>
-                    <td>Language</td>
-                    <td>Published</td>
-                    <td>Difficulty</td>
-                    <td>Plays</td>
-                    <td></td>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each challenges}}
-                <tr>
-                    <td><a href="/accounts/{{accountUsername}}">{{accountUsername}}</a></td>
-                    <td>{{title}}</td>
-                    <td>{{progLanguage}}</td>
-                    <td>{{datePublished}}</td>
-                    <td>{{difficulty}}</td>
-                    <td>{{numOfPlays}}</td>
-                    <td>
-                        <a href="/challenges/{{id}}/preview">
-                            <button class="button is-primary">
-                                Preview Challange
-                            </button>
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="table is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <td>Made by</td>
+                        <td>Title</td>
+                        <td>Language</td>
+                        <td>Published</td>
+                        <td>Difficulty</td>
+                        <td>Plays</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each challenges}}
+                    <tr>
+                        <td><a href="/accounts/{{accountUsername}}">{{accountUsername}}</a></td>
+                        <td>{{title}}</td>
+                        <td>{{progLanguage}}</td>
+                        <td>{{datePublished}}</td>
+                        <td>{{difficulty}}</td>
+                        <td>{{numOfPlays}}</td>
+                        <td class="has-text-centered">
+                            <a href="/challenges/{{id}}/preview">
+                                <button class="button is-primary">
+                                    Preview Challange
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     {{else}}
         <p>No challenges exist yet.</p>
     {{/if}}
