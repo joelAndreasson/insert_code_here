@@ -14,7 +14,9 @@
             <a href="/accounts/{{account.username}}/updateBio">Edit</a>
         {{/if}} 
     </div>
-    <h2 class="is-size-4">Score: <span>255</span></h2>
+    <div>
+                
+    </div>
     {{#each challenges}}
         <div class="card">
             <div class="card-content">
@@ -33,6 +35,10 @@
                                 </button>
                             </a>
                         </div>
+                        {{#if ../isProfileOwner}}
+                            <a href="/challenges/{{this.id}}/delete">Delete</a>
+                            <a href="/challenges/{{this.id}}/update">Update</a>
+                        {{/if}}
                     </div>
                 </div>
             </div>

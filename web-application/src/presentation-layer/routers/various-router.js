@@ -1,10 +1,19 @@
 const express = require('express')
 
-module.exports = function({}){
+module.exports = function({challengeManager}){
 	const router = express.Router()
 
 	router.get("/", function(request, response){
-		response.render("home.hbs")
+		challengeManager.getTopThreePlayedChallenge(function(errors, challenges){
+			if(errors.length > 0){
+				response.render("internal-server-error.hbs")
+			}else {
+				const model = {
+					challenges: challenges
+				}
+				response.render("home.hbs", model)
+			}
+		})
 	})
 
 	router.get("/about", function(request, response){

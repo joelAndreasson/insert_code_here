@@ -91,6 +91,20 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			}
 
 			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
+		},
+
+		getTopThreePlayedChallenge: function(callback){
+			challengeRepository.getTopThreePlayedChallenge(callback)
+		},
+
+		deleteChallengeById: function(challengeId, callback){
+			challengeRepository.deleteChallengeById(challengeId, function(errors, results){
+				if(errors.length > 0){
+					callback(errors, null)
+				}else {
+					callback([], results)
+				} 
+			})
 		}
 	}
 }
