@@ -95,20 +95,6 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		})
 	})
 
-	/*router.get('/:username', function(request, response){ // why do we have this?! 
-		const username = request.params.username
-		
-		accountManager.getAccountByUsername(username, function(errors, account){
-			const errorCodes = errorTranslator.translateErrorCodes(errors)
-			const model = {
-				errors: errorCodes,
-				account: account
-			}
-			response.render("accounts-show-one.hbs", model)
-		})
-		
-	})*/
-
 	router.post("/login", function(request, response){
 		const accountCredentials = {
 			username: request.body.username,
