@@ -2,14 +2,24 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 	return {
 		getTodaysDate: function(){
 			const today = new Date()
+			
+			var dd = String(today.getDate()).padStart(2, '0')
+			var mm = String(today.getMonth() + 1).padStart(2, '0')
+			var yyyy = today.getFullYear()
 
-			const yyyy = today.getFullYear()
 
-			let mm = today.getMonth()
+			/*console.log(today)
+			const yyyy = today.getUTCFullYear()
+			console.log(yyyy)
+			let mm = today.getUTCMonth()
+			console.log(mm)
 			mm = mm < 10 ? "0" + mm : mm;
 
-			let dd = today.getDay()
+			let dd = today.getUTCDay()
+			console.log(dd)
 			dd = dd < 10 ? "0" + dd : dd;
+
+			console.log(yyyy + "-" + mm + "-" + dd)*/
 
 			return yyyy + "-" + mm + "-" + dd
 		},
