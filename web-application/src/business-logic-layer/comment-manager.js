@@ -11,10 +11,10 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		createComment: function(comment, callback){
-			const errors = commentValidator.getErrorsNewComment(comment)
+			const validationErrors = commentValidator.getErrorsComment(comment)
 	
-			if(0 < errors.length){
-				callback(errors, null)
+			if(0 < validationErrors.length){
+				callback(validationErrors, null)
 				return
 			}
 
@@ -30,10 +30,10 @@ module.exports = function({commentRepository, commentValidator}){
 		}, 
 
 		updateCommentById: function(commentId, newCommentText, callback){
-			const errors = commentValidator.getErrorsUpdateComment(newCommentText)
+			const validationErrors = commentValidator.getErrorsComment(newCommentText)
 	
-			if(0 < errors.length){
-				callback(errors, null)
+			if(0 < validationErrors.length){
+				callback(validationErrors, null)
 				return
 			}
 			commentRepository.updateCommentById(commentId, newCommentText, callback)

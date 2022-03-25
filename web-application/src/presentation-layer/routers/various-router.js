@@ -4,8 +4,8 @@ module.exports = function({challengeManager}){
 	const router = express.Router()
 
 	router.get("/", function(request, response){
-		challengeManager.getTopThreePlayedChallenge(function(errors, challenges){
-			if(errors.length > 0){
+		challengeManager.getTopThreePlayedChallenge(function(errorCodes, challenges){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else {
 				const model = {

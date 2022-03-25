@@ -21,11 +21,11 @@ module.exports = function({commentManager, errorTranslator}){
             challengeId: request.params.challengeId
         }
 
-        commentManager.createComment(comment, function(errors, id){ // what is id for? 
-            if(errors.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+        commentManager.createComment(comment, function(errorCodes, id){ // what is id for? 
+            if(errorCodes.length > 0){
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
-                    errors: errorCodes,
+                    errors: translatedErrors,
                     challengeId: comment.challengeId,
                     comment: comment
                 }
@@ -55,8 +55,8 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const challengeId = request.params.challengeId
 
-        commentManager.deleteCommentById(commentId, function(errors){
-            if(errors.length > 0){
+        commentManager.deleteCommentById(commentId, function(errorCodes){
+            if(errorCodes.length > 0){
                 response.render("internal-server-error.hbs")
             }else {
                 response.redirect('/challenges/'+challengeId+'/preview')
@@ -67,8 +67,8 @@ module.exports = function({commentManager, errorTranslator}){
     router.get('/:commentId/update', function(request, response){
         const commentId = request.params.commentId
 
-        commentManager.getCommentById(commentId, function(errors, comment){
-            if(errors.length > 0){
+        commentManager.getCommentById(commentId, function(errorCodes, comment){
+            if(errorCodes.length > 0){
                 response.render("internal-server-error.hbs")
             }else {
 
@@ -91,14 +91,11 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const newCommentText = request.body.commentText
         
-        commentManager.updateCommentById(commentId, newCommentText, function(errors){
-            if(errors.length > 0){
-                const errorCodes = errorTranslator.translateErrorCodes(errors)
-                const comment = {
-
-                }
+        commentManager.updateCommentById(commentId, newCommentText, function(errorCodes){
+            if(errorCodes.length > 0){
+                const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
-                    errors: errorCodes,
+                    errors: translatedErrors,
                     comment: {
                         id: commentId,
                         commentText: newCommentText
@@ -114,8 +111,8 @@ module.exports = function({commentManager, errorTranslator}){
     router.get('/:commentId/preview', function(request, response){
         const commentId = request.params.commentId
 
-        commentManager.getCommentById(commentId, function(errors, comment){
-            if(errors.length > 0){
+        commentManager.getCommentById(commentId, function(errorCodes, comment){
+            if(errorCodes.length > 0){
                 response.render('internal-server-error.hbs')
             }else {
                 var isOwner = false

@@ -27,12 +27,12 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			accountUsername: request.body.accountUsername
 		}
 		
-		challengeManager.createChallenge(challenge, function(errors, challengeId){
+		challengeManager.createChallenge(challenge, function(errorCodes, challengeId){
 			
-			if(errors.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+			if(errorCodes.length > 0){
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errors: errorCodes,
+					errors: translatedErrors,
 					challenge: challenge,
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES
@@ -50,8 +50,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	
 	router.get("/", function(request, response){
 	
-		challengeManager.getAllChallenges(function(errors, challenges){
-			if(errors.length > 0){
+		challengeManager.getAllChallenges(function(errorCodes, challenges){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else {
 				const model = {
@@ -68,15 +68,15 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		
 		let allErrors = [] // This is maybe unnecessary because there is a posibility that there will be two databaseError:s
 	
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			allErrors.push(...errors)
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			allErrors.push(...errorCodes)
 
 			if(challenge == undefined){
 				response.render("page-not-found.hbs")
 			}
-			commentManager.getCommentsByChallengeId(challengeId, function(errors, comments){
+			commentManager.getCommentsByChallengeId(challengeId, function(errorCodes, comments){
         
-				allErrors.push(...errors)
+				allErrors.push(...errorCodes)
 				if(allErrors.length > 0){
 					response.render("internal-server-error.hbs")
 				}else {
@@ -93,10 +93,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	router.get('/:challengeId/play', function(request, response){
 		const challengeId = request.params.challengeId
 	
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			if(errors.length > 0){
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
-			}else if(challenge == undefined){ // can just be if(challenge) 
+			}else if(challenge){ // can just be if(challenge) 
 				response.render("page-not-found.hbs")
 			}else {
 				const model = {
@@ -115,14 +115,14 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		challengeManager.getResultsFromChallengeTextWithId(
 			challengeId, 
 			changedChallengeText, 
-			function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
-				if(errors.length > 0){
+			function(errorCodes, numOfRightAnswers, totalNumOfAnswers, challenge){
+				if(errorCodes.length > 0){
 		
 					challenge.challengeText = changedChallengeText
 					
-					const errorCodes = errorTranslator.translateErrorCodes(errors) // errorcodes should be reversed. errorcodes before translation and errors after.
+					const translatedErrors = errorTranslator.translateErrorCodes(errorCodes) // errorcodes should be reversed. errorcodes before translation and errors after.
 					const model = {
-						errors: errorCodes,
+						errors: translatedErrors,
 						challenge: challenge
 					}
 		
@@ -142,8 +142,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			if(errors.length > 0){
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			if(errorCodes.length > 0){
 				response.render('internal-server-error.hbs')
 			}else {
 
@@ -166,8 +166,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	router.post('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
 		
-		challengeManager.deleteChallengeById(challengeId, function(errors, results){
-			if(errors.length > 0){
+		challengeManager.deleteChallengeById(challengeId, function(errorCodes, results){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else {
 				const username = request.session.accountUsername
@@ -178,8 +178,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get('/:challengeId/update', function(request, response){
 		const challengeId = request.params.challengeId
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			if(errors.length > 0){
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			if(errorCodes.length > 0){
 				response.render('internal-server-error.hbs')
 			} else {
 
@@ -222,10 +222,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			response.render('challenge-update.hbs', model)
 		}
 
-		challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors){
-			if(errors.length > 0){
+		challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errorCodes){
+			if(errorCodes.length > 0){
 				const model = {
-					errors: errors,
+					errors: errorCodes,
 					challenge: updatedChallenge,
 					challengeId: challengeId,
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,

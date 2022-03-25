@@ -4,8 +4,8 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	const router = express.Router()
 
 	router.get("/sign-out", function(request, response){
-		request.session.destroy(function(error){
-			if(error){
+		request.session.destroy(function(errorCodes){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else{
 				response.redirect("/")
@@ -22,12 +22,12 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	})
 
 	router.get("/", function(request, response){
-		accountManager.getAllAccounts(function(errors, accounts){
-			if(errors.length > 0){
+		accountManager.getAllAccounts(function(errorCodes, accounts){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else {
 				const model = {
-					errors: errors,
+					errorCodes: errorCodes,
 					accounts: accounts
 				}
 				response.render("accounts-list-all.hbs", model)
@@ -38,14 +38,14 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	router.get("/:accountUsername", function(request,response){
 		const accountUsername = request.params.accountUsername
 
-		accountManager.getAccountByUsername(accountUsername, function(errors, account){
-			if(errors.length > 0){
+		accountManager.getAccountByUsername(accountUsername, function(errorCodes, account){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else if(account == undefined){
 				response.render("page-not-found.hbs")
 			}else{
-				challengeManager.getChallengesByUsername(accountUsername, function(errors, challenges){
-					if(errors.length > 0){
+				challengeManager.getChallengesByUsername(accountUsername, function(errorCodes, challenges){
+					if(errorCodes.length > 0){
 						response.render("internal-server-error.hbs")
 					}else {
 						var isProfileOwner = false
@@ -65,8 +65,8 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	})
 
 	router.get("/:username/updateBio", function(request, response){
-		accountManager.getAccountByUsername(request.session.accountUsername, function(error, account){
-			if(error.length > 0){
+		accountManager.getAccountByUsername(request.session.accountUsername, function(errorCodes, account){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else if(account == undefined){
 				response.render("page-not-found.hbs")
@@ -82,11 +82,11 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	router.post("/:username/updateBio", function(request,response){
 		const newBioText = request.body.bioText
 		const accountUsername = request.params.username
-		accountManager.updateAccountBio(newBioText, accountUsername, function(errors, results){
-			if(errors.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+		accountManager.updateAccountBio(newBioText, accountUsername, function(errorCodes, results){
+			if(errorCodes.length > 0){
+				const errorCodes = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errors: errorCodes
+					errorCodes: errorCodes
 				}
 				response.render("profile-edit-bio.hbs", model)
 			}else {
@@ -101,14 +101,14 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 			password: request.body.password
 		}
 
-		accountManager.login(accountCredentials, function(errors, account){
-			if(errors.length > 0){ // if there are errors
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+		accountManager.login(accountCredentials, function(errorCodes, account){
+			if(errorCodes.length > 0){ // if there are errorCodes
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errors: errorCodes
+					errors: translatedErrors
 				}
 				response.render("accounts-sign-in.hbs", model)
-			}else{ // no errors, login
+			}else{ // no errerrorCodes, login
 				request.session.isLoggedIn = true
 				request.session.accountUsername = account.username
 				response.redirect("/")
@@ -122,18 +122,18 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 			password: request.body.password,
 			password2: request.body.password2
 		}
-		accountManager.createAccount(accountInformation, function(errors, account){
-			if(errors.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+		accountManager.createAccount(accountInformation, function(errorCodes, account){
+			if(errorCodes.length > 0){
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errors: errorCodes,
+					errors: translatedErrors,
 					accountInformation: accountInformation
 				}
 				response.render("accounts-sign-up.hbs", model)
 			}else{
 				request.session.isLoggedIn = true
 				request.session.accountUsername = accountInformation.username
-				response.redirect("/accounts/" + accountInformation.username) // change this at later date (maybe login the user with the account that they created and render their profile?)
+				response.redirect("/accounts/" + accountInformation.username)
 			}
 		})
 	})
