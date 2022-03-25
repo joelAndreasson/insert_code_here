@@ -71,9 +71,6 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			allErrors.push(...errorCodes)
 
-			if(challenge == undefined){
-				response.render("page-not-found.hbs")
-			}
 			commentManager.getCommentsByChallengeId(challengeId, function(errorCodes, comments){
         
 				allErrors.push(...errorCodes)
@@ -96,7 +93,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
-			}else if(challenge){ // can just be if(challenge) 
+			}else if(!challenge){
 				response.render("page-not-found.hbs")
 			}else {
 				const model = {

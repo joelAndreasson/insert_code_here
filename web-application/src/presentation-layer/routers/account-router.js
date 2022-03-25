@@ -4,8 +4,8 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	const router = express.Router()
 
 	router.get("/sign-out", function(request, response){
-		request.session.destroy(function(errorCodes){
-			if(errorCodes.length > 0){
+		request.session.destroy(function(error){
+			if(error != null){
 				response.render("internal-server-error.hbs")
 			}else{
 				response.redirect("/")
@@ -27,7 +27,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 				response.render("internal-server-error.hbs")
 			}else {
 				const model = {
-					errorCodes: errorCodes,
+					errors: errorCodes,
 					accounts: accounts
 				}
 				response.render("accounts-list-all.hbs", model)

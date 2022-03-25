@@ -30,13 +30,13 @@ module.exports = function({accountRepository, accountValidator}){
 				if(errorCodes.length > 0){
 					callback(errorCodes, null)
 				}else {
-					callback(errorCodes, account)
+					callback([], account)
 				}
 			})
 		},
 
 		login: function(loginCredentials, callback){
-			accountRepository.getAccountByUsername(loginCredentials.username, function(errerrorCodesors,account){
+			accountRepository.getAccountByUsername(loginCredentials.username, function(errorCodes,account){
 				if(errorCodes.length > 0){
 					callback(errorCodes, null)
 				}else {

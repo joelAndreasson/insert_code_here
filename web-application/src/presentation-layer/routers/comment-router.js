@@ -21,6 +21,10 @@ module.exports = function({commentManager, errorTranslator}){
             challengeId: request.params.challengeId
         }
 
+        if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
+
         commentManager.createComment(comment, function(errorCodes, id){ // what is id for? 
             if(errorCodes.length > 0){
 				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
