@@ -142,10 +142,25 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
-		const model = {
-			challengeId: challengeId
-		}
-		response.render('challenge-delete.hbs', model)
+		challengeManager.getChallengeById(challengeId, function(errors, challenge){
+			if(errors.length > 0){
+				response.render('internal-server-error.hbs')
+			}else {
+
+				var isOwner = false
+				if(request.session.accountUsername == challenge.accountUsername){
+					isOwner = true
+				}
+
+				const model = {
+					challengeId: challengeId,
+					isOwner: isOwner
+				}
+
+				response.render('challenge-delete.hbs', model)
+			}
+			
+		})
 	})
 
 	router.post('/:challengeId/delete', function(request, response){
@@ -167,10 +182,17 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			if(errors.length > 0){
 				response.render('internal-server-error.hbs')
 			} else {
+
+				var isOwner = false
+				if(request.session.accountUsername == challenge.accountUsername){
+					isOwner = true
+				}
+
 				const model = {
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES,
-					challenge: challenge
+					challenge: challenge,
+					isOwner: isOwner
 				}
 				response.render('challenge-update.hbs', model)
 			}
