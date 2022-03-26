@@ -43,7 +43,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 						return
 					}
 					else{
-						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errorCodes, results){
+						challengeRepository.updateNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errorCodes, results){
 							if(errorCodes.length > 0){
 								callback(errorCodes, null)
 							}else {
@@ -84,8 +84,8 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.getChallengesByUsername(accountUsername, callback)
 		},
 
-		increaseNumOfPlaysByOne : function(challengeId, currentNumOfPlays, callback){
-			challengeRepository.increaseNumOfPlaysByOne(challengeId, (currentNumOfPlays + 1), callback)
+		updateNumOfPlays : function(challengeId, currentNumOfPlays, callback){
+			challengeRepository.updateNumOfPlays(challengeId, (currentNumOfPlays + 1), callback)
 		},
 
 		deleteChallengeById: function(challengeId, callback){

@@ -117,7 +117,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		
 					challenge.challengeText = changedChallengeText
 					
-					const translatedErrors = errorTranslator.translateErrorCodes(errorCodes) // errorcodes should be reversed. errorcodes before translation and errors after.
+					const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 					const model = {
 						errors: translatedErrors,
 						challenge: challenge
