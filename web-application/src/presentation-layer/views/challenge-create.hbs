@@ -1,3 +1,4 @@
+{{#if isLoggedIn}}
 <h1>Create Challenge</h1>
 <div class="section">
 
@@ -125,3 +126,10 @@
 <!-- Codemirror Inititalizer has to be below the div containing the codemirror window -->
 <script src="/js/codemirror-languages.js"></script>
 <script src="/js/create-challenge-code.js"></script>
+
+{{else}}
+    <div class="has-text-centered">
+    <h2>Please login to create a challenge!</h2>
+    <a href="/accounts/login">Login</a>
+</div>
+{{/if}}

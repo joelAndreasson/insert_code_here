@@ -26,6 +26,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			numOfPlays: 0,
 			accountUsername: request.body.accountUsername
 		}
+
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
 		
 		challengeManager.createChallenge(challenge, function(errorCodes, challengeId){
 			
@@ -145,6 +149,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
+
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			if(errorCodes.length > 0){
 				if(errorCodes.includes("challengeNotExist")){
@@ -172,6 +177,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.post('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
+
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
 		
 		challengeManager.deleteChallengeById(challengeId, function(errorCodes, results){
 			if(errorCodes.length > 0){
@@ -224,6 +233,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			description: request.body.description,
 			accountUsername: request.body.accountUsername
 		}
+
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
 
 		if(sessionUsername != updatedChallenge.accountUsername){
 			const isLoggedIn = false

@@ -94,6 +94,11 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	router.post("/:accountUsername/updateBio", function(request,response){
 		const newBioText = request.body.bioText
 		const accountUsername = request.params.username
+
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
+
 		accountManager.updateAccountBio(newBioText, accountUsername, function(errorCodes, results){
 			if(errorCodes.length > 0){
 				const errorCodes = errorTranslator.translateErrorCodes(errorCodes)
