@@ -27,8 +27,9 @@ module.exports = function({accountRepository, accountValidator}){
 
 		getAccountByUsername: function(username, callback){
 			accountRepository.getAccountByUsername(username, function(errorCodes, account){
-				if(errorCodes.length > 0){
-					callback(errorCodes, null)
+				const validationErrors = accountValidator.getErrorsFetchAccount(account)
+				if(validationErrors.length > 0){
+					callback(validationErrors, account)
 				}else {
 					callback([], account)
 				}

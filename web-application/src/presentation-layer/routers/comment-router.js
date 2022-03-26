@@ -48,9 +48,13 @@ module.exports = function({commentManager, errorTranslator}){
 
         commentManager.getCommentById(commentId, function(errorCodes, comment){
             if(errorCodes.length > 0){
-                request.render('internal-server-error.hbs')
+                if(errorCodes.includes("commentNotExist")){
+                    response.render('page-not-found.hbs')
+                }else {
+                    request.render('internal-server-error.hbs')
+                }
             }else {
-                const isOwner = false
+                var isOwner = false
                 if(request.session.accountUsername == comment.accountUsername){
                     isOwner = true
                 }
@@ -87,7 +91,11 @@ module.exports = function({commentManager, errorTranslator}){
 
         commentManager.getCommentById(commentId, function(errorCodes, comment){
             if(errorCodes.length > 0){
-                response.render("internal-server-error.hbs")
+                if(errorCodes.includes("commentNotExist")){
+                    response.render('page-not-found.hbs')
+                }else {
+                    request.render('internal-server-error.hbs')
+                }
             }else {
 
                 var isOwner = false
@@ -108,14 +116,18 @@ module.exports = function({commentManager, errorTranslator}){
         const challengeId = request.params.challengeId
         const commentId = request.params.commentId
         const newCommentText = request.body.commentText
+        const isOwner = request.body.isOwner
         
         commentManager.updateCommentById(commentId, newCommentText, function(errorCodes){
+            
             if(errorCodes.length > 0){
                 const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
+                    isOwner: isOwner,
                     errors: translatedErrors,
                     comment: {
                         id: commentId,
+                        challengeId: challengeId,
                         commentText: newCommentText
                     }
                 }
@@ -131,7 +143,11 @@ module.exports = function({commentManager, errorTranslator}){
 
         commentManager.getCommentById(commentId, function(errorCodes, comment){
             if(errorCodes.length > 0){
-                response.render('internal-server-error.hbs')
+                if(errorCodes.includes("commentNotExist")){
+                    response.render('page-not-found.hbs')
+                }else {
+                    request.render('internal-server-error.hbs')
+                }
             }else {
                 var isOwner = false
                 if(request.session.accountUsername == comment.accountUsername){

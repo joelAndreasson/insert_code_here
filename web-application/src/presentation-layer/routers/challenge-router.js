@@ -75,7 +75,11 @@ module.exports = function({challengeManager, commentManager, validationVariabels
         
 				allErrors.push(...errorCodes)
 				if(allErrors.length > 0){
-					response.render("internal-server-error.hbs")
+					if(allErrors.includes("challengeNotExist")){
+						response.render('page-not-found.hbs')
+					}else {
+						response.render('internal-server-error.hbs')
+					}	
 				}else {
 					const model = {
 						challenge: challenge,
@@ -92,9 +96,11 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			if(errorCodes.length > 0){
-				response.render("internal-server-error.hbs")
-			}else if(!challenge){
-				response.render("page-not-found.hbs")
+				if(errorCodes.includes("challengeNotExist")){
+					response.render('page-not-found.hbs')
+				}else {
+					response.render('internal-server-error.hbs')
+				}	
 			}else {
 				const model = {
 					challenge: challenge
@@ -141,7 +147,11 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		const challengeId = request.params.challengeId
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			if(errorCodes.length > 0){
-				response.render('internal-server-error.hbs')
+				if(errorCodes.includes("challengeNotExist")){
+					response.render('page-not-found.hbs')
+				}else {
+					response.render('internal-server-error.hbs')
+				}	
 			}else {
 
 				var isOwner = false
@@ -177,7 +187,11 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		const challengeId = request.params.challengeId
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			if(errorCodes.length > 0){
-				response.render('internal-server-error.hbs')
+				if(errorCodes.includes("challengeNotExist")){
+					response.render('page-not-found.hbs')
+				}else {
+					response.render('internal-server-error.hbs')
+				}	
 			} else {
 
 				var isOwner = false

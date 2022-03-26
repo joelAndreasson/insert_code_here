@@ -3,7 +3,15 @@
 module.exports = function({commentRepository, commentValidator}){
 	return{
 		getCommentById: function(id, callback){
-			commentRepository.getCommentById(id, callback)
+			commentRepository.getCommentById(id, function(errorCodes, comment){
+				const validationErrors = commentValidator.getErrorsFetchComment(comment)
+
+				if(validationErrors.length > 0){
+					callback(validationErrors, comment)
+				}else {
+					callback([], comment)
+				}
+			})
 		},
 
 		getCommentsByChallengeId: function(challengeId, callback){
@@ -11,7 +19,7 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		createComment: function(comment, callback){
-			const validationErrors = commentValidator.getErrorsComment(comment)
+			const validationErrors = commentValidator.getErrorsCreateComment(comment)
 	
 			if(0 < validationErrors.length){
 				callback(validationErrors, null)
@@ -26,11 +34,13 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		deleteCommentById: function(commentId, callback){
-			commentRepository.deleteCommentById(commentId, callback)
+			commentRepository.deleteCommentById(commentId, function(errorCodes){
+
+			})
 		}, 
 
 		updateCommentById: function(commentId, newCommentText, callback){
-			const validationErrors = commentValidator.getErrorsComment(newCommentText)
+			const validationErrors = commentValidator.getErrorsUpdateComment(newCommentText)
 	
 			if(0 < validationErrors.length){
 				callback(validationErrors, null)

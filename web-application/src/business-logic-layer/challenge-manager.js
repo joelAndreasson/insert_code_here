@@ -66,7 +66,15 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		}, 
 
 		getChallengeById: function(challengeId, callback){
-			challengeRepository.getChallengeById(challengeId, callback)
+			
+			challengeRepository.getChallengeById(challengeId, function(errorCodes, challenge){
+				const validationErrors = challengeValidator.getErrorsFetchChallenge(challenge)
+				if(validationErrors.length > 0){
+					callback(validationErrors, challenge)
+				}else {
+					callback([], challenge)
+				}
+			})
 		},
 
 		createChallenge: function(challenge, callback){

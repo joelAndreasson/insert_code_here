@@ -40,9 +40,11 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 
 		accountManager.getAccountByUsername(accountUsername, function(errorCodes, account){
 			if(errorCodes.length > 0){
-				response.render("internal-server-error.hbs")
-			}else if(account == undefined){
-				response.render("page-not-found.hbs")
+				if(errorCodes.includes("accountNotExist")){
+					response.render("page-not-found.hbs")
+				}else {
+					response.render("internal-server-error.hbs")
+				}
 			}else{
 				challengeManager.getChallengesByUsername(accountUsername, function(errorCodes, challenges){
 					if(errorCodes.length > 0){
@@ -68,7 +70,11 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		const accountUsername = request.params.accountUsername
 		accountManager.getAccountByUsername(accountUsername, function(errorCodes, account){
 			if(errorCodes.length > 0){
-				response.render("internal-server-error.hbs")
+				if(errorCodes.includes("accountNotExist")){
+					response.render("page-not-found.hbs")
+				}else {
+					response.render("internal-server-error.hbs")
+				}
 			}else {
 
 				var isOwner = false
@@ -108,7 +114,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		}
 
 		accountManager.login(accountCredentials, function(errorCodes, account){
-			if(errorCodes.length > 0){ // if there are errorCodes
+			if(errorCodes.length > 0){
 				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
 					errors: translatedErrors
