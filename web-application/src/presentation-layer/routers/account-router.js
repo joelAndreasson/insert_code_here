@@ -64,14 +64,20 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		})
 	})
 
-	router.get("/:username/updateBio", function(request, response){
-		accountManager.getAccountByUsername(request.session.accountUsername, function(errorCodes, account){
+	router.get("/:accountUsername/updateBio", function(request, response){
+		const accountUsername = request.params.accountUsername
+		accountManager.getAccountByUsername(accountUsername, function(errorCodes, account){
 			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
-			}else if(account == undefined){
-				response.render("page-not-found.hbs")
 			}else {
+
+				var isOwner = false
+				if(request.session.accountUsername == account.username){
+					isOwner = true
+				}
+
 				const model = {
+					isOwner: isOwner,
 					account: account
 				}
 				response.render("profile-edit-bio.hbs", model)
@@ -79,7 +85,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		})
 	})
 
-	router.post("/:username/updateBio", function(request,response){
+	router.post("/:accountUsername/updateBio", function(request,response){
 		const newBioText = request.body.bioText
 		const accountUsername = request.params.username
 		accountManager.updateAccountBio(newBioText, accountUsername, function(errorCodes, results){

@@ -46,12 +46,26 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const challengeId = request.params.challengeId
 
-        const model = {
-            commentId: commentId,
-            challengeId: challengeId
-        }
+        commentManager.getCommentById(commentId, function(errorCodes, comment){
+            if(errorCodes.length > 0){
+                request.render('internal-server-error.hbs')
+            }else {
+                const isOwner = false
+                if(request.session.accountUsername == comment.accountUsername){
+                    isOwner = true
+                }
 
-        response.render('comment-delete.hbs', model)
+                const model = {
+                    isOwner: isOwner,
+                    commentId: commentId,
+                    challengeId: challengeId
+                }
+
+                response.render('comment-delete.hbs', model)
+            }
+        })
+
+        
 
     })
 
