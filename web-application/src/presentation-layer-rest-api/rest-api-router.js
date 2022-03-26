@@ -35,12 +35,12 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
     router.get("/challenges", function(request, response){
 
-        challengeManager.getAllChallenges(function(errors, challenges){     
-            if(errors.length == 0){
+        challengeManager.getAllChallenges(function(errorCodes, challenges){     
+            if(errorCodes.length == 0){
                 response.status(200).json(challenges)
             }
             else{
-                response.status(500).json(errors)
+                response.status(500).json(errorCodes)
             }
         })
     })
@@ -49,13 +49,13 @@ module.exports = function({accountManager, challengeManager, validationVariabels
     
         const challengeId = request.params.challengeId
 
-        challengeManager.getChallengeById(challengeId, function(errors, challenge){
+        challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 
             if(challenge){
                 response.status(200).json(challenge)
             }
-            else if(errors.length > 0){
-                response.status(500).json(errors)
+            else if(errorCodes.length > 0){
+                response.status(500).json(errorCodes)
             }
             else{
                 response.status(404).end()
@@ -70,9 +70,9 @@ module.exports = function({accountManager, challengeManager, validationVariabels
         challengeManager.getResultsFromChallengeTextWithId(
             challengeId, 
             changedChallengeText, 
-            function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
+            function(errorCodes, numOfRightAnswers, totalNumOfAnswers, challenge){
 
-                if(errors.length == 0){
+                if(errorCodes.length == 0){
                     const model = {
                         numOfRightAnswers: numOfRightAnswers,
                         totalNumOfAnswers: totalNumOfAnswers
@@ -80,11 +80,11 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
                     response.status(200).json(model)
                 }
-                else if(errors.includes(databaseError)){
-                    response.status(500).json(errors)
+                else if(errorCodes.includes(databaseError)){
+                    response.status(500).json(errorCodes)
                 }
                 else{
-                    response.status(400).json(errors)
+                    response.status(400).json(errorCodes)
                 }
 
             }
@@ -106,18 +106,21 @@ module.exports = function({accountManager, challengeManager, validationVariabels
     
                     const challengeId = request.params.challengeId
 
-                    challengeManager.getChallengeById(challengeId, function(errors, challenge){
+                    challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 
-                        if(payload.accountUsername != challenge.accountUsername){
+                        if(errorCodes.length > 0){
+                            response.status(500).json(errorCodes)
+                        }
+                        else if(payload.accountUsername != challenge.accountUsername){
                             response.status(401).json(invalidClientError)
                         }
                         else{
-                            challengeManager.deleteChallengeById(challengeId, function(errors, results){
+                            challengeManager.deleteChallengeById(challengeId, function(errorCodes, results){
                                 if(results){
                                     response.status(204).end()
                                 }
-                                else if(errors.length > 0){
-                                    response.status(500).json(errors)
+                                else if(errorCodes.length > 0){
+                                    response.status(500).json(errorCodes)
                                 }
                                 else{
                                     response.status(404).end()
@@ -149,9 +152,12 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                 else{
                     const challengeId = request.params.challengeId
 
-                    challengeManager.getChallengeById(challengeId, function(errors, challenge){
+                    challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 
-                        if(payload.accountUsername != challenge.accountUsername){
+                        if(errorCodes.length > 0){
+                            response.status(500).json(errorCodes)
+                        }
+                        else if(payload.accountUsername != challenge.accountUsername){
                             response.status(401).json(invalidClientError)
                         }
                         else{
@@ -164,15 +170,15 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                                 description: request.body.description
                             }
                 
-                            challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors, results){
-                                if(errors == 0){
+                            challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errorCodes, results){
+                                if(errorCodes == 0){
                                     response.status(204).end()
                                 }
-                                else if(errors.includes(databaseError)){
-                                    response.status(500).json(errors)
+                                else if(errorCodes.includes(databaseError)){
+                                    response.status(500).json(errorCodes)
                                 }
                                 else{
-                                    response.status(400).json(errors)
+                                    response.status(400).json(errorCodes)
                                 }
                                 
                             })
@@ -213,16 +219,16 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                         accountUsername: request.body.accountUsername
                     }
             
-                    challengeManager.createChallenge(challenge, function(errors, challengeId){
-                        if(errors.length == 0){
+                    challengeManager.createChallenge(challenge, function(errorCodes, challengeId){
+                        if(errorCodes.length == 0){
                             response.setHeader("Location", "/challenges/" + challengeId)
                             response.status(201).json(challengeId)
                         }
-                        else if(errors.includes(databaseError)){
-                            response.status(500).json(errors)
+                        else if(errorCodes.includes(databaseError)){
+                            response.status(500).json(errorCodes)
                         }
                         else{
-                            response.status(400).json(errors)
+                            response.status(400).json(errorCodes)
                         }
                     })
                 }
@@ -242,8 +248,8 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 			password2: request.body.password2
 		}
 
-        accountManager.createAccount(accountInformation, function(errors, results){
-            if(errors.length == 0){
+        accountManager.createAccount(accountInformation, function(errorCodes, results){
+            if(errorCodes.length == 0){
                 const account = {
                     username: accountInformation.username,
                     password: accountInformation.password2
@@ -252,11 +258,11 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                 response.setHeader("Location", "/accounts/" + account.username)
                 response.status(201).json(account)
             }
-            else if(errors.includes(databaseError)){
-                response.status(500).json(errors)
+            else if(errorCodes.includes(databaseError)){
+                response.status(500).json(errorCodes)
             }
             else{
-                response.status(400).json(errors)
+                response.status(400).json(errorCodes)
             }
         })
     }) 
@@ -271,8 +277,8 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                 password: request.body.password
             }
 
-            accountManager.login(accountCredentials, function(errors, account){
-                if(errors.length == 0){
+            accountManager.login(accountCredentials, function(errorCodes, account){
+                if(errorCodes.length == 0){
 
                     const payload = {
                         accountUsername: account.username
@@ -290,11 +296,11 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                         }                        
                     })
                 }
-                else if(errors.includes(databaseError)){
-                    response.status(500).json(errors)
+                else if(errorCodes.includes(databaseError)){
+                    response.status(500).json(errorCodes)
                 }
                 else{
-                    response.status(401).json(errors)
+                    response.status(401).json(errorCodes)
                 }
                 
             })
