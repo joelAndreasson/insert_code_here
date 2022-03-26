@@ -24,6 +24,10 @@ module.exports = function({challengeManager}){
 		response.render("contact.hbs")
 	})
 
+	router.use(function(request, response){
+		response.render('page-not-found.hbs')
+	})
+
 	return router
 }
 

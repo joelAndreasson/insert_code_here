@@ -56,11 +56,11 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	app.use(express.static(path.join(__dirname, 'public')))
 	
 	// Attach all routers.
-	app.use('/', variousRouter)
 	app.use('/accounts', accountRouter)
 	app.use('/challenges', challengeRouter)
 	app.use('/challenges/:challengeId/comments', commentRouter)
 	app.use('/api', restApiRouter)
+	app.use('/', variousRouter)
 
 	return app
 }
