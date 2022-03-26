@@ -13,14 +13,12 @@
     {{/if}}
 
     <form action="/challenges/{{comment.challengeId}}/comments/{{comment.id}}/update" method="post">
-
-        
         <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
 
         <div class="control">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button class="button is-success" type="submit" value="Create">Update</button>
         </div>
-
     </form>
 {{else}}
 <h1>You dont have rights to this comment.</h1>

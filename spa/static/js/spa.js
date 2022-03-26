@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function(){
         logout()
     }); 
 
-    (async function(){ //Should use validationVariables.progLanguages
+    (async function(){
         const progLanguageSelector = document.getElementById('prog-language-selector')
         const progLanguageSelectorUpdate = document.getElementById('prog-language-selector-update')
         const variabels = await getValidationVariables()
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     })(); 
 
-    (async function(){ //Should use validationVariables.difficulties
+    (async function(){
         const allDifficultiesSelector = document.getElementById('difficulty-selector')
         const allDifficultiesSelectorUpdate = document.getElementById('difficulty-selector-update')
         const variabels = await getValidationVariables()

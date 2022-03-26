@@ -1,7 +1,7 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
 
-const secret = 'adhfjhbreoiwevbisdvcbrejksiuf' //global???
+const secret = 'adhfjhbreoiwevbisdvcbrejksiuf'
 
 const invalidClientError = {
     error: "invalid_client"
