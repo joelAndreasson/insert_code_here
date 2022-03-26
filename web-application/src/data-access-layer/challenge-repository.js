@@ -77,7 +77,7 @@ module.exports = function({db}){
 			})
 		},
 
-		increaseNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
+		updateNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
 			const query = `UPDATE challenges SET numOfPlays = ? WHERE id = ?`
 			const values = [newNumOfPlays, challengeId]
 
@@ -135,7 +135,7 @@ module.exports = function({db}){
 			})
 		},
 
-		getTopThreePlayedChallenge: function(callback){
+		getTopThreePlayedChallenges: function(callback){
 			const query = `SELECT * FROM challenges ORDER BY numOfPlays DESC LIMIT 3`
 			
 			db.query(query, function(error, challenges){
@@ -145,19 +145,7 @@ module.exports = function({db}){
 					callback([], challenges)
 				}
 			})
-		},
-
-		deleteChallengeById: function(challengeId, callback){
-			const query = `DELETE FROM challenges WHERE id = ?`
-			const values = [challengeId]
-
-			db.query(query, values, function(error, results){
-				if(error){
-					callback(['databaseError'], null)
-				}else {
-					callback([], results)
-				}
-			})
 		}
+
 	}
 }

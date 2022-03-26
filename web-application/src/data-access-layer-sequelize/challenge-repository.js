@@ -64,6 +64,30 @@ module.exports = function({initSequelize}){
                 console.log(error)
                 callback(['databaseError'], null)
             })
+        }, 
+
+        getTopThreePlayedChallenges: function(callback){
+            initSequelize.challenges.findAll({order: [['numOfPlays', 'DESC']], limit: 3, raw: true})
+                .then(challenges => callback([], challenges))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
+        },
+
+        updateNumOfPlays: function(challengeId, newNumOfPlays, callback){
+            initSequelize.challenges.update({
+                numOfPlays: newNumOfPlays,
+            }, {
+                where: {id: challengeId}, 
+                raw: true
+            })
+            .then(results => callback([], results))
+            .catch(error => {
+                console.log(error)
+                callback(['databaseError'], null)
+            })
         }
+
     }
 }

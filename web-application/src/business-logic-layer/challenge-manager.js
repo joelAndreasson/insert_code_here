@@ -33,7 +33,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 						return
 					}
 					else{
-						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errors, results){
+						challengeRepository.updateNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errors, results){
 							if(errors.length > 0){
 								callback(errors, null)
 							}else {
@@ -74,10 +74,6 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.getChallengesByUsername(accountUsername, callback)
 		},
 
-		increaseNumOfPlaysByOne : function(challengeId, currentNumOfPlays, callback){
-			challengeRepository.increaseNumOfPlaysByOne(challengeId, (currentNumOfPlays + 1), callback)
-		},
-
 		deleteChallengeById: function(challengeId, callback){
 			challengeRepository.deleteChallengeById(challengeId, callback)
 		},
@@ -93,8 +89,8 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
 		},
 
-		getTopThreePlayedChallenge: function(callback){
-			challengeRepository.getTopThreePlayedChallenge(callback)
+		getTopThreePlayedChallenges: function(callback){
+			challengeRepository.getTopThreePlayedChallenges(callback)
 		},
 
 		deleteChallengeById: function(challengeId, callback){
@@ -106,6 +102,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 				} 
 			})
 		}
+		
 	}
 }
 
