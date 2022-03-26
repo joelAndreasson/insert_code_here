@@ -22,11 +22,11 @@ module.exports = function({initSequelize}){
 
         createChallenge: function(challenge, callback){
             initSequelize.challenges.create(challenge, {raw: true})
-            .then(createdChallenge => callback([], createdChallenge.id))
-            .catch(error => {
-                console.log(error)
+                .then(createdChallenge => callback([], createdChallenge.id))
+                .catch(error => {
+                    console.log(error)
                     callback(['databaseError'], null)
-            })
+                })
         },
 
         getChallengesByUsername: function(accountUsername, callback){

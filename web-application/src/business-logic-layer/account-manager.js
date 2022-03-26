@@ -4,7 +4,7 @@ const { response } = require('express') // UNNECESSARY??
 
 // brcypt variables
 const saltRounds = 10 // globals?
-const salt = bcrypt.genSaltSync(saltRounds);
+const salt = bcrypt.genSaltSync(saltRounds)
 
 module.exports = function({accountRepository, accountValidator}){
 	return{

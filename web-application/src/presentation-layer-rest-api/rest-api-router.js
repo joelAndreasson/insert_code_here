@@ -26,6 +26,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
         response.setHeader("Access-Control-Allow-Methods", "*")
 	    response.setHeader("Access-Control-Expose-Headers", "*")
 
+        //The following if-statment is to respond to a CORS preflight request with a 200 status code
         if(request.method == "OPTIONS"){
             return response.status(200).end()
         }

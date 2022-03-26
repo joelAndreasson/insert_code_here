@@ -12,7 +12,7 @@ container.register({
     //------ DATA ACCESS LAYER SEQUELIZE WITH POSTGRESQL ------
     //accountRepository: awilix.asFunction(require('./data-access-layer-sequelize/account-repository')), // Sequelize with PostgreSQL database
     //challengeRepository: awilix.asFunction(require('./data-access-layer-sequelize/challenge-repository')), // Sequelize with PostgreSQL database
-    //commentRepository: awilix.asFunction(require('./data-access-layer/comment-repository')), // Sequelize with PostgreSQL database
+    //commentRepository: awilix.asFunction(require('./data-access-layer-sequelize/comment-repository')), // Sequelize with PostgreSQL database
     initSequelize: awilix.asFunction(require('./data-access-layer-sequelize/init-sequelize')),
 
     //------ BUSINESS LOGIC LAYER ------

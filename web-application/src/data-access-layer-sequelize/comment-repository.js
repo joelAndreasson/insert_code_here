@@ -21,11 +21,34 @@ module.exports = function({initSequelize}){
         },
 
         createComment: function(comment, callback){
-            initSequelize.comments.create(comment)
-            .then(createdComment => callback([], createdComment.id))
+            initSequelize.comments.create(comment, {raw: true})
+                .then(createdComment => callback([], createdComment.id))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
+        },
+
+        deleteCommentById: function(commentId, callback){
+            initSequelize.comments.destroy({where: {id: commentId}, raw: true})
+                .then(results => callback([], results))
+                .catch(error => {
+                    console.log(error)
+                    callback(['databaseError'], null)
+                })
+        },
+
+        updateCommentById: function(commentId, newCommentText, callback){
+            initSequelize.comments.update({
+                commentText: newCommentText
+            }, {
+                where: {id: commentId}, 
+                raw: true
+            })
+            .then(results => callback([], results))
             .catch(error => {
                 console.log(error)
-                    callback(['databaseError'], null)
+                callback(['databaseError'], null)
             })
         }
 

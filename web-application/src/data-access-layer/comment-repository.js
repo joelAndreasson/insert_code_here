@@ -36,7 +36,6 @@ module.exports = function({db}){
             
             db.query(query, values, function(error, results){
                 if(error){
-                    // TODO: Look for commentUnique violation.
                     callback(['databaseError'], null)
                 }else{
                     callback([], results.insertId)

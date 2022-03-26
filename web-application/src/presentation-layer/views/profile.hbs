@@ -1,49 +1,61 @@
 {{#if account}}
     <h1 class="is-size-1 has-text-centered">{{account.username}}</h1>
-    <div class="hero">
-        <div class="box hero-body">
-            <p class="has-text-centered">
+    <div class="content box columns is-centered">
+        <div class="column is-two-thirds">
+            <p class="has-text-centered title is-6">
             {{#if account.bio}}
                 {{account.bio}}
             {{else}}
                 This user has yet to introduce themselves.
             {{/if}}
             </p>
+            {{#if isProfileOwner}}
+                <a href="/accounts/{{account.username}}/updateBio">Edit Bio</a>
+            {{/if}} 
         </div>
-        {{#if isProfileOwner}}
-            <a href="/accounts/{{account.username}}/updateBio">Edit</a>
-        {{/if}} 
+        
     </div>
-    <div>
-                
-    </div>
-    {{#each challenges}}
-        <div class="card">
-            <div class="card-content">
-                <div class="content">
-                    <div class="columns">
-                        <div class="column is-one-fifth">
-                            <p><b>Played: </b>{{this.numOfPlays}}</p>
+    {{#if challenges}}
+        <div class="has-text-centered">
+            <h2>Challenges by {{account.username}}</h2>   
+        </div>
+        {{#each challenges}}
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column is-one-fifth">
+                                <p><b>Plays: </b>{{this.numOfPlays}}</p>
+                            </div>
+                            <div class="column">
+                                <b>{{this.title}}</b>                  
+                            </div>
+                            <div class="column">
+                                {{this.datePublished}}
+                            </div>
+                            <div class="buttons">
+                                <div class="column has-text-right">
+                                    <a href="../challenges/{{this.id}}/preview">
+                                        <button class="button is-primary"> 
+                                            Preview Challange
+                                        </button>
+                                    </a>
+                                </div>
+                                {{#if ../isProfileOwner}}
+                                    <a class="button is-danger" href="/challenges/{{this.id}}/delete">Delete</a>
+                                    <a class="button is-info" href="/challenges/{{this.id}}/update">Update</a>
+                                {{/if}}
+                            </div>
                         </div>
-                        <div class="column">
-                            <b>{{this.title}}</b>                  
-                        </div>
-                        <div class="column has-text-right">
-                            <a href="../challenges/{{this.id}}/preview">
-                                <button class="button is-primary" > 
-                                    Play Challange
-                                </button>
-                            </a>
-                        </div>
-                        {{#if ../isProfileOwner}}
-                            <a href="/challenges/{{this.id}}/delete">Delete</a>
-                            <a href="/challenges/{{this.id}}/update">Update</a>
-                        {{/if}}
                     </div>
                 </div>
             </div>
+        {{/each}}
+    {{else}}
+        <div class="has-text-centered">
+            <h2>There are no challenges by {{account.username}} yet...</h2>   
         </div>
-    {{/each}}
+    {{/if}}
 {{else}}
-    <h2>There is not profile matching this user.</h2>
+    <h2>There is no profile matching this user.</h2>
 {{/if}}
