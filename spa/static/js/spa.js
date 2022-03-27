@@ -757,7 +757,11 @@ function translateErrorCodes(errorCodes){
         challengeNotExist: "Challenge does not exist.",
         notAuthorized: "Authorization failed.",
         invalid_client: "Authorization failed.",
-        unsupported_grant_type: "Something went wrong when authentication, please try again later..."
+        unsupported_grant_type: "Something went wrong when authentication, please try again later...",
+        descTooLong: "Max description length is " + validationVariables.MAX_DESCRIPTION_LENGTH + " characters",
+        commentTooLong: "Max comment length is " + validationVariables.MAX_COMMENT_LENGTH + " characters",
+        challengeTextTooLong: "Max code length is " + validationVariables.MAX_CHALLENGE_TEXT_LENGTH + " characters",
+        solutionTextTooLong: "Max solution text length is " + validationVariables.MAX_SOLUTION_TEXT  + " characters"
     }
 
     const translations = errorCodes.map(error => errorTranslations[error])

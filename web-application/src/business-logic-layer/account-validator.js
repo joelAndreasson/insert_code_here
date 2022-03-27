@@ -55,7 +55,7 @@ module.exports = function({validationVariabels}){
 			const errorCodes = []
       
       		if(bioText.length > validationVariabels.MAX_BIO_LENGTH){
-				errorCodes.push(validationVariabels.bioToLong)
+				errorCodes.push(validationVariabels.bioTooLong)
 			}
 
 			if(profileAccountUsername != requesterUsername){

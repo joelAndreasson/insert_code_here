@@ -23,8 +23,6 @@ module.exports = function({validationVariabels, challengeRepository}){
                     if(!blankAnswers || !solutionAnswers || blankAnswers.length != solutionAnswers.length){
                         errorCodes.push(validationVariabels.solutionsNotMatchBlanks)
                     }
-                    
-        
                     if(updatedChallenge.title.length < validationVariabels.MIN_TITLE_LENGTH){
                         errorCodes.push(validationVariabels.titleTooShort)
                     }
@@ -37,6 +35,16 @@ module.exports = function({validationVariabels, challengeRepository}){
                     if(updatedChallenge.description.length < validationVariabels.MIN_DESCRIPTION_LENGTH){
                         errorCodes.push(validationVariabels.descriptionTooShort)
                     }
+                    if(updatedChallenge.description.length > validationVariabels.MAX_DESCRIPTION_LENGTH){
+                        errorCodes.push(validationVariabels.descTooLong)
+                    }
+                    if(updatedChallenge.challengeText.length > validationVariabels.MAX_CHALLENGE_TEXT_LENGTH){
+                        errorCodes.push(validationVariabels.challengeTextTooLong)
+                    }
+                    if(updatedChallenge.solutionText.length > validationVariabels.MAX_SOLUTION_TEXT){
+                        errorCodes.push(validationVariabels.solutionTextTooLong)
+                    }
+                    
 
         
                     callback(errorCodes)
@@ -61,8 +69,6 @@ module.exports = function({validationVariabels, challengeRepository}){
             if(!blankAnswers || !solutionAnswers || blankAnswers.length != solutionAnswers.length){
                 errorCodes.push("solutionsNotMatchBlanks")
             }
-            
-
             if(challenge.title.length < validationVariabels.MIN_TITLE_LENGTH){
                 errorCodes.push("titleTooShort")
             }
@@ -74,6 +80,15 @@ module.exports = function({validationVariabels, challengeRepository}){
             }
             if(challenge.description.length < validationVariabels.MIN_DESCRIPTION_LENGTH){
                 errorCodes.push("descriptionTooShort")
+            }
+            if(challenge.description.length > validationVariabels.MAX_DESCRIPTION_LENGTH){
+                errorCodes.push(validationVariabels.descTooLong)
+            }
+            if(challenge.challengeText.length > validationVariabels.MAX_CHALLENGE_TEXT_LENGTH){
+                errorCodes.push(validationVariabels.challengeTextTooLong)
+            }
+            if(challenge.solutionText.length > validationVariabels.MAX_SOLUTION_TEXT){
+                errorCodes.push(validationVariabels.solutionTextTooLong)
             }
 
             return errorCodes

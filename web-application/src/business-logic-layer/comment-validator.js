@@ -10,6 +10,9 @@ module.exports = function({validationVariabels, commentRepository}){
             if(comment.commentText.length < validationVariabels.MIN_COMMENT_LENGTH){
                 errorCodes.push(validationVariabels.commentTooShort)
             }
+            if(comment.commentText.length > validationVariabels.MAX_COMMENT_LENGTH){
+                errorCodes.push(validationVariabels.commentTooLong)
+            }
 
             return errorCodes
         },
@@ -27,6 +30,9 @@ module.exports = function({validationVariabels, commentRepository}){
                     }
                     if(newCommentText.length < validationVariabels.MIN_COMMENT_LENGTH){
                         errorCodes.push(validationVariabels.commentTooShort)
+                    }
+                    if(comment.commentText.length > validationVariabels.MAX_COMMENT_LENGTH){
+                        errorCodes.push(validationVariabels.commentTooLong)
                     }
 
                     callback(errorCodes)

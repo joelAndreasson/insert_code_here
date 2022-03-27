@@ -15,6 +15,10 @@ module.exports = function({}){
         BLANKS_REGEX: /\[\[INSERT_CODE_HERE\]\]/g,
         MAX_BIO_LENGTH: 400,
         MIN_COMMENT_LENGTH: 5,
+        MAX_COMMENT_LENGTH: 180,
+        MAX_CHALLENGE_TEXT_LENGTH: 1500,
+        MAX_SOLUTION_TEXT: 1500,
+        MAX_DESCRIPTION_LENGTH: 700,
         
         // The following three values are the start values when creating a new challenge.
         START_CHALLENGE_TEXT: 'console.log("[[INSERT_CODE_HERE]]")\n\n// What should the blank say in order to print out "Hello world"?',
@@ -42,7 +46,11 @@ module.exports = function({}){
         challengeNotExist: "challengeNotExist",
         accountNotExist: "accountNotExist",
         notAuthorized: "notAuthorized",
-        bioToLong: "bioToLong"
+        bioTooLong: "bioToLong",
+        descTooLong: "descTooLong",
+        commentTooLong: "commentTooLong",
+        challengeTextTooLong: "challengeTextTooLong",
+        solutionTextTooLong: "solutionTextTooLong"
       
     }
 
