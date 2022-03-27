@@ -39,6 +39,16 @@ module.exports = function({validationVariabels}){
 			}
 
 			return errors
+		},
+
+		getErrorsFetchAccount: function(account){
+			errors = []
+
+			if(account == undefined){
+				errors.push("accountNotExist")
+			}
+
+			return errors
 		}
 	}
 }

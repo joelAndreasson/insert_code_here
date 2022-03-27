@@ -36,8 +36,11 @@ module.exports = function({db}){
             
             db.query(query, values, function(error, results){
                 if(error){
-                    // TODO: Look for commentUnique violation.
-                    callback(['databaseError'], null)
+                    if(error.code == "ER_NO_REFERENCED_ROW_2"){ // TODO: Look for commentUnique violation.
+                        callback(['challengeNotExist'], null)
+                    }else {
+                        callback(['databaseError'], null)
+                    }
                 }else{
                     callback([], results.insertId)
                 }

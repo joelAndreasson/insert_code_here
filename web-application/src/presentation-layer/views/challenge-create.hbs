@@ -1,3 +1,4 @@
+{{#if isLoggedIn}}
 <h1>Create Challenge</h1>
 <div class="section">
 
@@ -14,7 +15,7 @@
             <form class="is-half" action="/challenges/create" method="post">
                 <!-- Challange name -->
                 <div class="field">
-                    <label class="label">Challange Title</label>
+                    <label class="label">Title</label>
                     <div class="control">
                         <input class="input" type="text" placeholder="Challange Title" name="title" value="{{challenge.title}}">
                     </div>
@@ -39,14 +40,14 @@
                 </div>
                 <!-- Challange Text -->
                 <div class="field">
-                    <label class="label">Challenge Text</label>
+                    <label class="label">Code</label>
                     <div class="control">
                         <textarea id="challenge-text" class="textarea" name="challengeText" placeholder="Challenge Text">{{challenge.challengeText}}</textarea>
                     </div>
                 </div>
                 <!-- Solution Text -->
                 <div class="field">
-                    <label class="label">Solution Text</label>
+                    <label class="label">Solutions</label>
                     <div class="control">
                         <textarea class="textarea" name="solutionText" placeholder="Solution Text">{{challenge.solutionText}}</textarea>
                     </div>
@@ -83,9 +84,6 @@
                 <div class="field is-grouped">
                     <div class="control">
                         <button class="button is-success" type="submit" value="Create">Create</button>
-                    </div>
-                    <div class="control">
-                        <button class="button is-danger">Cancel</button>
                     </div>
                 </div>
             </form>
@@ -128,3 +126,10 @@
 <!-- Codemirror Inititalizer has to be below the div containing the codemirror window -->
 <script src="/js/codemirror-languages.js"></script>
 <script src="/js/create-challenge-code.js"></script>
+
+{{else}}
+    <div class="has-text-centered">
+    <h2>Please login to create a challenge!</h2>
+    <a href="/accounts/login">Login</a>
+</div>
+{{/if}}

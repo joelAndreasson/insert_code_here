@@ -77,7 +77,7 @@ module.exports = function({db}){
 			})
 		},
 
-		increaseNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
+		updateNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
 			const query = `UPDATE challenges SET numOfPlays = ? WHERE id = ?`
 			const values = [newNumOfPlays, challengeId]
 

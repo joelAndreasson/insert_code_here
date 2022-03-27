@@ -1,24 +1,30 @@
+{{#if isLoggedIn}}
+    <div class="has-text-centered">
+        <h1>Create comment</h1>
 
-<h1>Create comment</h1>
-
-{{#if errors.length}}
-    <p>Oh no, something went wrong:</p>
-    <ul>
-        {{#each errors}}
-        <li>{{this}}</li>
-        {{/each}}
-    </ul>
-{{/if}}
-
-<div class="columns">
-    <div class="column is-half">
+        {{#if errors.length}}
+            <p>Oh no, something went wrong:</p>
+            <ul>
+                {{#each errors}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        {{/if}}
         <form action="/challenges/{{challengeId}}/comments/create" method="post">
-            <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
+            <!--<textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>-->
+            <div class="column is-half is-offset-one-quarter">
+                <input name="commentText" class="input" type="text" placeholder="Comment text" value="{{comment.commentText}}">
+            </div>
 
-            <div class="control">
+            <div class="control has-text-centered">
                 <button class="button is-success" type="submit" value="Create">Create</button>
             </div>
         </form>
     </div>
+{{else}}
+<div class="has-text-centered">
+    <h2>Please login to write a comment!</h2>
+    <a href="/accounts/login">Login</a>
 </div>
+{{/if}}
 
