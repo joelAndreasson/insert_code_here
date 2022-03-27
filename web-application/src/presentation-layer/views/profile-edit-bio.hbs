@@ -3,7 +3,8 @@
         <div class="column">
             <form action="/accounts/{{account.username}}/updateBio" method="post">
                 <textarea name="bioText" cols="100" rows="20"></textarea>
-                <input type="submit" class="button is-success">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <input type="submit" class="button is-success" value="Update">
             </form>
             <ul>
                 {{#each errors}}
@@ -17,3 +18,4 @@
 {{else}}
     <h1 class="has-text-centered">You are not the owner of this bio!</h1>
 {{/if}}
+

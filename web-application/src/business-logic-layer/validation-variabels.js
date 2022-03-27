@@ -3,7 +3,7 @@
 module.exports = function({}){
     const variables = {
         MIN_USERNAME_LENGTH: 3,
-        MAX_USERNAME_LENGTH: 10,
+        MAX_USERNAME_LENGTH: 20,
         MIN_PASSWORD_LENGTH: 3,
         MAX_PASSWORD_LENGTH: 25,
         MIN_TITLE_LENGTH: 3,

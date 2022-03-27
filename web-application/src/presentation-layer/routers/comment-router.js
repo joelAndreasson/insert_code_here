@@ -17,7 +17,7 @@ module.exports = function({commentManager, errorTranslator}){
 
         const comment = {
             commentText: request.body.commentText,
-            accountUsername: request.session.accountUsername,
+            accountUsername: request.session.accountUsername, // Should come from the body of the request!!!!!!!!!!!!!!
             challengeId: request.params.challengeId
         }
 
@@ -37,7 +37,7 @@ module.exports = function({commentManager, errorTranslator}){
                 response.render('comment-create.hbs', model)
             }
             else{
-                response.redirect('/challenges/' + comment.challengeId + '/preview')
+                response.redirect('/challenges/' + comment.challengeId + '/preview') // REMOVE PREVIEW !!
             }
         })
     })
@@ -138,7 +138,7 @@ module.exports = function({commentManager, errorTranslator}){
         })
     })
 
-    router.get('/:commentId/preview', function(request, response){
+    router.get('/:commentId/preview', function(request, response){ // REMOVE PREVIEW !!
         const commentId = request.params.commentId
 
         commentManager.getCommentById(commentId, function(errorCodes, comment){

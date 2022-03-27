@@ -65,6 +65,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			}
 		})
 	})
+
+	
 	
 	router.get("/:challengeId/preview", function(request,response){
 	
@@ -260,6 +262,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 				response.redirect('/challenges/'+challengeId+'/preview')
 			}
 		})
+	})
+
+	router.get('/:challengeId', function(request, response){
+		response.redirect('/challenges/' + request.params.challengeId + '/preview')
 	})
 
 	return router

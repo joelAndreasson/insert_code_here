@@ -111,8 +111,8 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
 		},
 
-		getTopThreePlayedChallenge: function(callback){
-			challengeRepository.getTopThreePlayedChallenge(callback)
+		getTopThreePlayedChallenges: function(callback){
+			challengeRepository.getTopThreePlayedChallenges(callback)
 		},
 
 		deleteChallengeById: function(challengeId, callback){
@@ -124,6 +124,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 				} 
 			})
 		}
+		
 	}
 }
 
