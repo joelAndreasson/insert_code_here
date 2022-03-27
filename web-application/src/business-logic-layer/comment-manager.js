@@ -21,8 +21,8 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByChallengeId(challengeId, callback)
 		},
 
-		createComment: function(comment, callback){
-			const validationErrorCodes = commentValidator.getErrorsCreateComment(comment)
+		createComment: function(requesterUsername, comment, callback){ // CALL VALIDATOR AND CHECK OWNER
+			const validationErrorCodes = commentValidator.getErrorsCreateComment(requesterUsername, comment)
 	
 			if(0 < validationErrorCodes.length){
 				callback(validationErrorCodes, null)
@@ -36,18 +36,34 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByUsername(username, callback)
 		},
 
-		deleteCommentById: function(commentId, callback){
-			commentRepository.deleteCommentById(commentId, callback)
+		deleteCommentById: function(requesterUsername, commentId, callback){ // CALL VALIDATOR AND CHECK OWNER
+			commentValidator.getErrorsDeleteComment(
+				requesterUsername, 
+				commentId, 
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
+						return
+					}
+					commentRepository.deleteCommentById(commentId, callback)
+				}
+			)
+			
 		}, 
 
-		updateCommentById: function(commentId, newCommentText, callback){
-			const validationErrorCodes = commentValidator.getErrorsUpdateComment(newCommentText)
-	
-			if(0 < validationErrorCodes.length){
-				callback(validationErrorCodes, null)
-				return
-			}
-			commentRepository.updateCommentById(commentId, newCommentText, callback)
+		updateCommentById: function(requesterUsername, commentId, newCommentText, callback){ // CALL VALIDATOR AND CHECK OWNER
+			commentValidator.getErrorsUpdateComment(
+				requesterUsername, 
+				commentId, 
+				newCommentText, 
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
+						return
+					}
+					commentRepository.updateCommentById(commentId, newCommentText, callback)
+				}
+			)
 		}
 	}
 }

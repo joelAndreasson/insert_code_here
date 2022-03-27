@@ -17,15 +17,12 @@ module.exports = function({commentManager, errorTranslator}){
 
         const comment = {
             commentText: request.body.commentText,
-            accountUsername: request.session.accountUsername, // Should come from the body of the request!!!!!!!!!!!!!!
+            accountUsername: request.body.accountUsername, // Should come from the body of the request!!!!!!!!!!!!!!
             challengeId: request.params.challengeId
         }
 
-        if(!request.session.isLoggedIn){
-            response.redirect('/accounts/login')
-        }
-
-        commentManager.createComment(comment, function(errorCodes, id){ // what is id for? 
+        const requesterUsername = request.session.accountUsername
+        commentManager.createComment(requesterUsername, comment, function(errorCodes, id){ // what is id for? 
             if(errorCodes.length > 0){
 				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
@@ -77,7 +74,8 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const challengeId = request.params.challengeId
 
-        commentManager.deleteCommentById(commentId, function(errorCodes){
+        const requesterUsername = request.session.accountUsername
+        commentManager.deleteCommentById(requesterUsername, commentId, function(errorCodes){
             if(errorCodes.length > 0){
                 response.render('internal-server-error.hbs')
             }else {
@@ -97,15 +95,8 @@ module.exports = function({commentManager, errorTranslator}){
                     request.render('internal-server-error.hbs')
                 }
             }else {
-
-                var isOwner = false
-                if(request.session.accountUsername == comment.accountUsername){
-                    isOwner = true
-                }
-
                 const model = {
-                    comment: comment,
-                    isOwner: isOwner
+                    comment: comment
                 }
                 response.render('comment-update.hbs', model)
             }
@@ -116,14 +107,13 @@ module.exports = function({commentManager, errorTranslator}){
         const challengeId = request.params.challengeId
         const commentId = request.params.commentId
         const newCommentText = request.body.commentText
-        const isOwner = request.body.isOwner
         
-        commentManager.updateCommentById(commentId, newCommentText, function(errorCodes){
+        const requesterUsername = request.session.accountUsername
+        commentManager.updateCommentById(requesterUsername, commentId, newCommentText, function(errorCodes){
             
             if(errorCodes.length > 0){
                 const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
-                    isOwner: isOwner,
                     errors: translatedErrors,
                     comment: {
                         id: commentId,

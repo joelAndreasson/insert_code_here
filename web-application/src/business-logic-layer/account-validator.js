@@ -4,61 +4,65 @@ const bcrypt = require('bcrypt')
 module.exports = function({validationVariabels}){
 	return{
 		getErrorsNewAccount: function(accountInformation){
-			const errors = []
+			const errorCodes = []
 
 			// Validate username.
 			if(!accountInformation.hasOwnProperty("username")){
-				errors.push("usernameMissing")
+				errorCodes.push(validationVariabels.usernameMissing)
 			}else if(accountInformation.username.length < validationVariabels.MIN_USERNAME_LENGTH){
-				errors.push("usernameTooShort")
+				errorCodes.push(validationVariabels.usernameTooShort)
 			}
 			if(validationVariabels.MAX_USERNAME_LENGTH < accountInformation.username.length){
-				errors.push("usernameTooLong")
+				errorCodes.push(validationVariabels.usernameTooLong)
 			}
 
 			// Validate password 
 			if(accountInformation.password.length < validationVariabels.MIN_PASSWORD_LENGTH){
-				errors.push("passwordToShort")
+				errorCodes.push(validationVariabels.passwordToShort)
 			}else if(accountInformation.password.length > validationVariabels.MAX_PASSWORD_LENGTH){
-				errors.push("passwordToLong")
+				errorCodes.push(validationVariabels.passwordToLong)
 			}
 			if(accountInformation.password2 != accountInformation.password){
-				errors.push("passwordsNotMatch")
+				errorCodes.push(validationVariabels.passwordsNotMatch)
 			}
 			
-			return errors
+			return errorCodes
 		},
 
 		getErrorsLogin: function(loginCredentials, account){
-			const errors = []
-	
+			const errorCodes = []
+      
 			if(account == undefined){
-				errors.push("accountDoesNotExist")
+				errorCodes.push(validationVariabels.accountDoesNotExist)
 			}else if(!bcrypt.compareSync(loginCredentials.password, account.password)){
-				errors.push("accountDoesNotExist")
+				errorCodes.push(validationVariabels.accountDoesNotExist)
 			}
 
-			return errors
+			return errorCodes
 		},
 
 		getErrorsFetchAccount: function(account){
-			errors = []
+			const errorCodes = []
 
 			if(account == undefined){
-				errors.push("accountNotExist")
+				errorCodes.push(validationVariabels.accountNotExist)
 			}
-
-			return errors
+      
+			return errorCodes
 		},
 
-		getErrorsUpdateBio: function(bioText){
-			errors = []
-
-			if(bioText.length >= validationVariabels.MAX_BIO_LENGTH){
-				errors.push("bioToLong")
+		getErrorsUpdateBio: function(requesterUsername, profileAccountUsername, bioText){ // add bioText in manager, must be three arguments
+			const errorCodes = []
+      
+      if(bioText.length > validationVariabels.MAX_BIO_LENGTH){
+				errorCodes.push("bioToLong") // add as validationVariable
 			}
 
-			return errors
+			if(profileAccountUsername != requesterUsername){
+				errorCodes.push(validationVariabels.notAuthorized)
+			}
+
+			return errorCodes
 		}
 	}
 }

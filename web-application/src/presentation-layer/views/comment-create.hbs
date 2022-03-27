@@ -15,6 +15,7 @@
             <div class="column is-half is-offset-one-quarter">
                 <input name="commentText" class="input" type="text" placeholder="Comment text" value="{{comment.commentText}}">
             </div>
+            <input type="hidden" value="{{accountUsername}}" name="accountUsername">
             <div class="control has-text-centered">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button class="button is-success" type="submit" value="Create">Create</button>

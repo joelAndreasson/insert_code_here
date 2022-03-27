@@ -50,7 +50,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 					if(errorCodes.length > 0){
 						response.render("internal-server-error.hbs")
 					}else {
-						var isProfileOwner = false
+						let isProfileOwner = false
 						if(request.session.accountUsername == account.username){
 							isProfileOwner = true
 						}
@@ -76,14 +76,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 					response.render("internal-server-error.hbs")
 				}
 			}else {
-
-				var isOwner = false
-				if(request.session.accountUsername == account.username){
-					isOwner = true
-				}
-
 				const model = {
-					isOwner: isOwner,
 					account: account
 				}
 				response.render("profile-edit-bio.hbs", model)
@@ -93,28 +86,26 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 
 	router.post("/:accountUsername/updateBio", function(request,response){
 		const newBioText = request.body.bioText
-		const accountUsername = request.params.accountUsername
+		const profileAccountUsername = request.params.accountUsername
 
-		if(!request.session.isLoggedIn){
-            response.redirect('/accounts/login')
-        }
-
-		accountManager.updateAccountBio(newBioText, accountUsername, function(errorCodes, results){
+		const requesterUsername = request.session.accountUsername
+		accountManager.updateAccountBio(requesterUsername, newBioText, profileAccountUsername, function(errorCodes, results){
 			if(errorCodes.length > 0){
-				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
+				const translatedErrorCodes = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					isOwner: true,
-					errors: translatedErrors,
+					errors: translatedErrorCodes,
 					account: {
-						username: accountUsername,
+						username: profileAccountUsername,
 						bio: newBioText
 					}
 				}
 				response.render("profile-edit-bio.hbs", model)
 			}else {
-				response.redirect("/accounts/"+accountUsername)
+				response.redirect("/accounts/"+profileAccountUsername)
 			}
 		})
+		
+		
 	})
 
 	router.post("/login", function(request, response){
@@ -139,11 +130,13 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 	})
 
 	router.post("/create", function(request,response){
+		
 		const accountInformation = {
 			username: request.body.username,
 			password: request.body.password,
 			password2: request.body.password2
 		}
+		
 		accountManager.createAccount(accountInformation, function(errorCodes, account){
 			if(errorCodes.length > 0){
 				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
