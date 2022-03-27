@@ -20,7 +20,6 @@ module.exports = function({validationVariabels, commentRepository}){
             commentRepository.getCommentById(commentId, function(errors, comment){
                 if(errors.length > 0){
                     errorCodes.push(...errors)
-                    console.log('================== CALLBACKED ========================')
                     callback(errorCodes)
                 }else{
                     if(comment.accountUsername != requesterUsername){
@@ -42,7 +41,6 @@ module.exports = function({validationVariabels, commentRepository}){
             commentRepository.getCommentById(commentId, function(errors, comment){
                 if(errors.length > 0){
                     errorCodes.push(...errors)
-                    console.log('================== CALLBACKED ========================')
                     callback(errorCodes)
                 } else{
                     if(comment.accountUsername != requesterUsername){

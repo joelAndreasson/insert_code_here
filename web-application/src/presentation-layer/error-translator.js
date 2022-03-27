@@ -5,7 +5,7 @@ module.exports = function({validationVariabels}){
             const errorTranslations = {
                 databaseError: "Internal server error, please try again later...", //What should this say?
                 usernameMissing: "Please enter a username",
-                usernameTooShort: "The username has to be a minimum of" + validationVariabels.MIN_USERNAME_LENGTH + " characters",
+                usernameTooShort: "The username has to be a minimum of " + validationVariabels.MIN_USERNAME_LENGTH + " characters",
                 passwordsNotMatch: "Passwords does not match",
                 accountDoesNotExist: "Username or password did not match any account, please try again",
                 notEnoughBlanks: "There needs to be a minimum of " + validationVariabels.MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets",

@@ -82,7 +82,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.updateNumOfPlays(challengeId, (currentNumOfPlays + 1), callback)
 		},
 
-		deleteChallengeById: function(requesterUsername, challengeId, callback){// CALL VALIDATOR AND CHECK OWNER
+		deleteChallengeById: function(requesterUsername, challengeId, callback){
 			challengeValidator.getErrorsDeleteChallenge(
 				challengeId, 
 				requesterUsername, 

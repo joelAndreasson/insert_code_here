@@ -208,17 +208,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 					response.render('internal-server-error.hbs')
 				}	
 			} else {
-
-				var isOwner = false
-				if(request.session.accountUsername == challenge.accountUsername){
-					isOwner = true
-				}
-
 				const model = {
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES,
-					challenge: challenge,
-					isOwner: isOwner
+					challenge: challenge
 				}
 				response.render('challenge-update.hbs', model)
 			}
@@ -246,8 +239,11 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 				updatedChallenge, 
 				function(errorCodes, results){
 					if(errorCodes.length > 0){
+
+						const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
+
 						const model = {
-							errors: errorCodes,
+							errors: translatedErrors,
 							challenge: updatedChallenge,
 							challengeId: challengeId,
 							progLanguages: validationVariabels.ALL_PROG_LANGUAGES,

@@ -18,7 +18,7 @@ module.exports = function({validationVariabels}){
 
 			// Validate password 
 			if(accountInformation.password.length < validationVariabels.MIN_PASSWORD_LENGTH){
-				errorCodes.push(validationVariabelspasswordToShort)
+				errorCodes.push(validationVariabels.passwordToShort)
 			}else if(accountInformation.password.length > validationVariabels.MAX_PASSWORD_LENGTH){
 				errorCodes.push(validationVariabels.passwordToLong)
 			}

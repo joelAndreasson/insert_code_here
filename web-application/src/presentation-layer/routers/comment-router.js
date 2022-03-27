@@ -95,15 +95,8 @@ module.exports = function({commentManager, errorTranslator}){
                     request.render('internal-server-error.hbs')
                 }
             }else {
-
-                var isOwner = false
-                if(request.session.accountUsername == comment.accountUsername){
-                    isOwner = true
-                }
-
                 const model = {
-                    comment: comment,
-                    isOwner: isOwner
+                    comment: comment
                 }
                 response.render('comment-update.hbs', model)
             }
@@ -114,7 +107,6 @@ module.exports = function({commentManager, errorTranslator}){
         const challengeId = request.params.challengeId
         const commentId = request.params.commentId
         const newCommentText = request.body.commentText
-        const isOwner = request.body.isOwner
         
         const requesterUsername = request.session.accountUsername
         commentManager.updateCommentById(requesterUsername, commentId, newCommentText, function(errorCodes){
@@ -122,7 +114,6 @@ module.exports = function({commentManager, errorTranslator}){
             if(errorCodes.length > 0){
                 const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
-                    isOwner: isOwner,
                     errors: translatedErrors,
                     comment: {
                         id: commentId,

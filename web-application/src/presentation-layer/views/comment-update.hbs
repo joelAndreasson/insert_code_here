@@ -1,4 +1,4 @@
-{{#if isOwner}}
+{{#if isLoggedIn}}
     <h1>Update comment</h1>
 
     {{#if errors.length}}
@@ -11,7 +11,6 @@
     {{/if}}
 
     <form action="/challenges/{{comment.challengeId}}/comments/{{comment.id}}/update" method="post">
-        <input type="hidden" value="{{isOwner}}" name="isOwner">
         <textarea name="commentText" placeholder="Comment Text">{{comment.commentText}}</textarea>
 
         <div class="control">
@@ -20,5 +19,8 @@
         </div>
     </form>
 {{else}}
-<h1>You dont have rights to this comment.</h1>
+    <div class="has-text-centered">
+        <h2>You are not logged in and do not have access to this!</h2>
+        <a href="/accounts/login">Login</a>
+    </div>
 {{/if}}

@@ -3,15 +3,12 @@ module.exports = function({validationVariabels, challengeRepository}){
         getErrorsUpdateChallenge: function(requesterUsername, challengeId, updatedChallenge, callback){
             const errorCodes = []
 
-            console.log("================" + requesterUsername + "===================")
-
             const blankAnswers = updatedChallenge.challengeText.match(validationVariabels.BLANKS_REGEX)
             const solutionAnswers = updatedChallenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 
             challengeRepository.getChallengeById(challengeId, function(errors, challenge){
                 if(errors.length > 0){
                     errorCodes.push(...errors)
-                    console.log('================== CALLBACKED ========================')
                     callback(errorCodes)
                 }
                 else{
@@ -42,7 +39,6 @@ module.exports = function({validationVariabels, challengeRepository}){
                         errorCodes.push(validationVariabels.descriptionTooShort)
                     }
 
-                    console.log('================== CALLBACKED ========================')
         
                     callback(errorCodes)
                 }
@@ -108,7 +104,6 @@ module.exports = function({validationVariabels, challengeRepository}){
             challengeRepository.getChallengeById(challengeId, function(errors, challenge){
                 if(errors.length > 0){
                     errorCodes.push(...errors)
-                    console.log('================== CALLBACKED ========================')
                     callback(errorCodes)
                 }
                 else{
