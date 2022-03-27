@@ -22,10 +22,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 					const enteredAnswers = changedChallengeText.match(validationVariabels.SOLUTIONS_REGEX)
 					const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 			
-					const validationErrors = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
+					const validationErrorCodes = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
 			
-					if(validationErrors.length > 0){
-						callback(validationErrors, null, null, challenge)
+					if(validationErrorCodes.length > 0){
+						callback(validationErrorCodes, null, null, challenge)
 						return
 					}
 					else{
@@ -54,9 +54,13 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		getChallengeById: function(challengeId, callback){
 			
 			challengeRepository.getChallengeById(challengeId, function(errorCodes, challenge){
-				const validationErrors = challengeValidator.getErrorsFetchChallenge(challenge)
-				if(validationErrors.length > 0){
-					callback(validationErrors, challenge)
+				var allErrors = []
+
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = challengeValidator.getErrorsFetchChallenge(challenge)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, challenge)
 				}else {
 					callback([], challenge)
 				}
@@ -86,10 +90,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeValidator.getErrorsDeleteChallenge(
 				challengeId, 
 				requesterUsername, 
-				function(validationErrors){
+				function(validationErrorCodes){
 
-					if(0 < validationErrors.length){
-						callback(validationErrors, null)
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
 						return
 					}
 		
@@ -104,9 +108,9 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 				requesterUsername, 
 				challengeId,
 				updatedChallenge, 
-				function(validationErrors){
-					if(0 < validationErrors.length){
-						callback(validationErrors, null)
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
 						return
 					}
 

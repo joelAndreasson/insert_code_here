@@ -4,10 +4,13 @@ module.exports = function({commentRepository, commentValidator}){
 	return{
 		getCommentById: function(id, callback){
 			commentRepository.getCommentById(id, function(errorCodes, comment){
-				const validationErrors = commentValidator.getErrorsFetchComment(comment)
+				var allErrors = []
 
-				if(validationErrors.length > 0){
-					callback(validationErrors, comment)
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = commentValidator.getErrorsFetchComment(comment)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, comment)
 				}else {
 					callback([], comment)
 				}
@@ -19,10 +22,10 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		createComment: function(requesterUsername, comment, callback){ // CALL VALIDATOR AND CHECK OWNER
-			const validationErrors = commentValidator.getErrorsCreateComment(requesterUsername, comment)
+			const validationErrorCodes = commentValidator.getErrorsCreateComment(requesterUsername, comment)
 	
-			if(0 < validationErrors.length){
-				callback(validationErrors, null)
+			if(0 < validationErrorCodes.length){
+				callback(validationErrorCodes, null)
 				return
 			}
 
@@ -37,9 +40,9 @@ module.exports = function({commentRepository, commentValidator}){
 			commentValidator.getErrorsDeleteComment(
 				requesterUsername, 
 				commentId, 
-				function(validationErrors){
-					if(0 < validationErrors.length){
-						callback(validationErrors, null)
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
 						return
 					}
 					commentRepository.deleteCommentById(commentId, callback)
@@ -53,16 +56,14 @@ module.exports = function({commentRepository, commentValidator}){
 				requesterUsername, 
 				commentId, 
 				newCommentText, 
-				function(validationErrors){
-					if(0 < validationErrors.length){
-						callback(validationErrors, null)
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
 						return
 					}
 					commentRepository.updateCommentById(commentId, newCommentText, callback)
 				}
 			)
-	
-			
 		}
 	}
 }

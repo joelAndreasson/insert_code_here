@@ -1,8 +1,7 @@
-
 <div class="columns">
     <div class="column">
         <form action="/accounts/{{account.username}}/updateBio" method="post">
-            <textarea name="bioText" cols="100" rows="20"></textarea>
+            <textarea name="bioText" cols="100" rows="20">{{account.bio}}</textarea>
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <input type="submit" class="button is-success" value="Update">
         </form>
@@ -15,5 +14,6 @@
         </ul>
     </div>
 </div>
+
 
 

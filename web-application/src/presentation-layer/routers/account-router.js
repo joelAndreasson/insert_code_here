@@ -76,14 +76,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 					response.render("internal-server-error.hbs")
 				}
 			}else {
-
-				let isOwner = false
-				if(request.session.accountUsername == account.username){
-					isOwner = true
-				}
-
 				const model = {
-					isOwner: isOwner,
 					account: account
 				}
 				response.render("profile-edit-bio.hbs", model)
@@ -98,9 +91,13 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		const requesterUsername = request.session.accountUsername
 		accountManager.updateAccountBio(requesterUsername, newBioText, profileAccountUsername, function(errorCodes, results){
 			if(errorCodes.length > 0){
-				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
+				const translatedErrorCodes = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errors: translatedErrors
+					errors: translatedErrorCodes,
+					account: {
+						username: profileAccountUsername,
+						bio: newBioText
+					}
 				}
 				response.render("profile-edit-bio.hbs", model)
 			}else {

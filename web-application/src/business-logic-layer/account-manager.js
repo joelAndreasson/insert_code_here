@@ -15,9 +15,9 @@ module.exports = function({accountRepository, accountValidator}){
 		createAccount: function(accountInformation, callback){
 			
 			// Validate the account.
-			const errors = accountValidator.getErrorsNewAccount(accountInformation)
-			if(errors.length > 0){
-				callback(errors, null)
+			const validationErrorCodes = accountValidator.getErrorsNewAccount(accountInformation)
+			if(validationErrorCodes.length > 0){
+				callback(validationErrorCodes, null)
 				return
 			}
 			// hash password
@@ -27,9 +27,12 @@ module.exports = function({accountRepository, accountValidator}){
 
 		getAccountByUsername: function(username, callback){
 			accountRepository.getAccountByUsername(username, function(errorCodes, account){
-				const validationErrors = accountValidator.getErrorsFetchAccount(account)
-				if(validationErrors.length > 0){
-					callback(validationErrors, account)
+				var allErrors = []
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = accountValidator.getErrorsFetchAccount(account)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, account)
 				}else {
 					callback([], account)
 				}
@@ -41,8 +44,8 @@ module.exports = function({accountRepository, accountValidator}){
 				if(errorCodes.length > 0){
 					callback(errorCodes, null)
 				}else {
-					const validationErrors = accountValidator.getErrorsLogin(loginCredentials, account)
-					callback(validationErrors, account)
+					const validationErrorCodes = accountValidator.getErrorsLogin(loginCredentials, account)
+					callback(validationErrorCodes, account)
 				}
 			})
 		},
@@ -53,13 +56,12 @@ module.exports = function({accountRepository, accountValidator}){
 
 		updateAccountBio: function(requesterUsername, newBioText, profileAccountUsername, callback){
 
-			const errorCodes = accountValidator.getErrorsUpdateBio(requesterUsername, profileAccountUsername)
+			const validationErrorCodes = accountValidator.getErrorsUpdateBio(requesterUsername, profileAccountUsername)
 
-			if(errorCodes.length > 0){
-				callback(errorCodes, null)
+			if(validationErrorCodes.length > 0){
+				callback(validationErrorCodes, null)
 				return
 			}
-
 			accountRepository.updateAccountBio(newBioText, profileAccountUsername, callback)
 		}
 	}

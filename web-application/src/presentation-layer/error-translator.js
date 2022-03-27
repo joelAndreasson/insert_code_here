@@ -6,6 +6,7 @@ module.exports = function({validationVariabels}){
                 databaseError: "Internal server error, please try again later...", //What should this say?
                 usernameMissing: "Please enter a username",
                 usernameTooShort: "The username has to be a minimum of " + validationVariabels.MIN_USERNAME_LENGTH + " characters",
+                bioToLong: "Your bio can be no longer than " + validationVariabels.MAX_BIO_LENGTH,
                 passwordsNotMatch: "Passwords does not match",
                 accountDoesNotExist: "Username or password did not match any account, please try again",
                 notEnoughBlanks: "There needs to be a minimum of " + validationVariabels.MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets",
@@ -20,6 +21,7 @@ module.exports = function({validationVariabels}){
                 passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
                 usernameTaken: "Username already taken",
                 challengeNotExist: "Challenge does not exist.",
+                accountNotExist: "Account does not exist.",
                 notAuthorized: "Authorization failed." //BETTER DESC???????
             }
     

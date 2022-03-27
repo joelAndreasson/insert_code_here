@@ -31,8 +31,8 @@ module.exports = function({validationVariabels}){
 
 		getErrorsLogin: function(loginCredentials, account){
 			const errorCodes = []
-	
-			if(account == null){
+      
+			if(account == undefined){
 				errorCodes.push(validationVariabels.accountDoesNotExist)
 			}else if(!bcrypt.compareSync(loginCredentials.password, account.password)){
 				errorCodes.push(validationVariabels.accountDoesNotExist)
@@ -47,17 +47,18 @@ module.exports = function({validationVariabels}){
 			if(account == undefined){
 				errorCodes.push(validationVariabels.accountNotExist)
 			}
-
+      
 			return errorCodes
 		},
 
-		getErrorsUpdateBio: function(requesterUsername, profileAccountUsername){
+		getErrorsUpdateBio: function(requesterUsername, profileAccountUsername, bioText){ // add bioText in manager, must be three arguments
 			const errorCodes = []
+      
+      if(bioText.length > validationVariabels.MAX_BIO_LENGTH){
+				errorCodes.push("bioToLong") // add as validationVariable
+			}
 
-			console.log("requesterUsername: " + requesterUsername)
-			console.log("profileAccountUsername: " + profileAccountUsername)
-
-			if(profileAccountUsername != requesterUsername){ //ADD MAX LENGTH CHECK!!!!!!!!!!!!
+			if(profileAccountUsername != requesterUsername){
 				errorCodes.push(validationVariabels.notAuthorized)
 			}
 

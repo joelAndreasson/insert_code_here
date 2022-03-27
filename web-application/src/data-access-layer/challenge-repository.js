@@ -20,11 +20,11 @@ module.exports = function({db}){
 			const query = `SELECT * FROM challenges WHERE id = ? LIMIT 1`
 			const values = [challengeId]
 			
-			db.query(query, values, function(error, challenges){
+			db.query(query, values, function(error, challenge){
 				if(error){
 					callback(['databaseError'], null)
 				}else{
-					callback([], challenges[0])
+					callback([], challenge[0])
 				}
 			})
 		},
@@ -56,8 +56,11 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, results){
 				if(error){
-					// TODO: Look for challengeUnique violation.
-					callback(['databaseError'], null)
+					if(error.code == "ER_NO_REFERENCED_ROW_2"){
+                        callback(['accountNotExist'], null)
+                    }else {
+						callback(['databaseError'], null)
+					}
 				}else{
 					callback([], results.insertId)
 				}

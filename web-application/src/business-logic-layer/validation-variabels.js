@@ -13,7 +13,8 @@ module.exports = function({}){
         MIN_AMOUNT_OF_BLANKS: 1,
         SOLUTIONS_REGEX: /(?<=\[\[).*?(?=\]\])/g,
         BLANKS_REGEX: /\[\[INSERT_CODE_HERE\]\]/g,
-        MIN_COMMENT_LENGTH: 5, 
+        MAX_BIO_LENGTH: 400,
+        MIN_COMMENT_LENGTH: 5,
 
         // ----- All error codes -----
         databaseError: "databaseError",
@@ -34,8 +35,8 @@ module.exports = function({}){
         usernameTaken: "usernameTaken",
         challengeNotExist: "challengeNotExist",
         accountNotExist: "accountNotExist",
-        notAuthorized: "notAuthorized",
-
+        notAuthorized: "notAuthorized"
+      
     }
 
     return variables
