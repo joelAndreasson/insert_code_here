@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const secret = 'adhfjhbreoiwevbisdvcbrejksiuf'
 
-const invalidClientError = {
-    error: "invalid_client"
-}
+const invalidClientError = ["invalid_client"]
 
 const databaseError = "databaseError"
 
@@ -116,7 +114,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                             response.status(401).json(invalidClientError)
                         }
                         else{
-                            challengeManager.deleteChallengeById(challengeId, function(errorCodes, results){
+                            challengeManager.deleteChallengeById(payload.accountUsername, challengeId, function(errorCodes, results){
                                 if(results){
                                     response.status(204).end()
                                 }
@@ -171,7 +169,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                                 description: request.body.description
                             }
                 
-                            challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errorCodes, results){
+                            challengeManager.updateChallengeById(payload.accountUsername, challengeId, updatedChallenge, function(errorCodes, results){
                                 if(errorCodes == 0){
                                     response.status(204).end()
                                 }
@@ -220,7 +218,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                         accountUsername: request.body.accountUsername
                     }
             
-                    challengeManager.createChallenge(challenge, function(errorCodes, challengeId){
+                    challengeManager.createChallenge(payload.accountUsername, challenge, function(errorCodes, challengeId){
                         if(errorCodes.length == 0){
                             response.setHeader("Location", "/challenges/" + challengeId)
                             response.status(201).json(challengeId)
@@ -307,7 +305,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
             })
         }
         else{
-            response.status(400).json({error: "unsupported_grant_type"})
+            response.status(400).json(["unsupported_grant_type"])
         }
     })
 

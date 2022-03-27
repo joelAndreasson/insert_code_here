@@ -62,13 +62,12 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('logout-button').addEventListener('click', function(event){
         event.preventDefault()
         logout()
-    }); 
+    })
 
-    (async function(){
+    getValidationVariables(function(variables){
         const progLanguageSelector = document.getElementById('prog-language-selector')
         const progLanguageSelectorUpdate = document.getElementById('prog-language-selector-update')
-        const variabels = await getValidationVariables()
-        const allProgLanguages = variabels.ALL_PROG_LANGUAGES
+        const allProgLanguages = variables.ALL_PROG_LANGUAGES
     
         for(const progLanguage of allProgLanguages){
             const option = document.createElement('option')
@@ -79,13 +78,14 @@ document.addEventListener('DOMContentLoaded', function(){
             optionUpdate.innerText = progLanguage
             progLanguageSelectorUpdate.appendChild(optionUpdate)
         }
-    })(); 
+    })
+        
+   
 
-    (async function(){
+    getValidationVariables(function(variables){
         const allDifficultiesSelector = document.getElementById('difficulty-selector')
         const allDifficultiesSelectorUpdate = document.getElementById('difficulty-selector-update')
-        const variabels = await getValidationVariables()
-        const allDifficulties = variabels.ALL_DIFFICULTIES
+        const allDifficulties = variables.ALL_DIFFICULTIES
 
         for(const difficulty of allDifficulties){
             const option = document.createElement('option')
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function(){
             optionUpdate.innerText = difficulty
             allDifficultiesSelectorUpdate.appendChild(optionUpdate)
         }
-    })(); 
+    })
 
     document.getElementById('create-challenge-form').addEventListener('submit', function(event){
         event.preventDefault()
@@ -722,32 +722,43 @@ async function signUp(username, password, password2){
 
 // ---------- Validation ----------
 
-const validationVariabels = getValidationVariables()
 
-async function getValidationVariables(){
+
+async function getValidationVariables(callback){
     const response = await fetch(API_URL + "validationVariables")
-    const variabels = await response.json()
-    return variabels
+    const variables = await response.json()
+    callback(variables)
 }
 
+let validationVariables
+
+getValidationVariables(function(variables){
+    validationVariables = variables
+})
+
 function translateErrorCodes(errorCodes){
+    
     const errorTranslations = {
         databaseError: "Internal server error, please try again later...", //What should this say?
         usernameMissing: "Please enter a username",
-        usernameTooShort: "The username has to be a minimum of" + validationVariabels.MIN_USERNAME_LENGTH + " characters",
+        usernameTooShort: "The username has to be a minimum of " + validationVariables.MIN_USERNAME_LENGTH + " characters",
         passwordsNotMatch: "Passwords does not match",
         accountDoesNotExist: "Username or password did not match any account, please try again",
-        notEnoughBlanks: "There needs to be a minimum of " + validationVariabels.MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets",
+        notEnoughBlanks: "There needs to be a minimum of " + validationVariables.MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets",
         solutionsNotMatchBlanks: "The number of solutions needs to be the same as the number of [[INSERT_CODE_HERE]] brackets",
-        titleTooShort: "Title needs to be at least " + validationVariabels.MIN_TITLE_LENGTH + " characters",
+        titleTooShort: "Title needs to be at least " + validationVariables.MIN_TITLE_LENGTH + " characters",
         progLanguageNotValid: "Select a valid programming language",
         difficultyNotValid: "Select a valid difficulty",
-        descriptionTooShort: "Description needs to be at least " + validationVariabels.MIN_DESCRIPTION_LENGTH + " characters",
+        descriptionTooShort: "Description needs to be at least " + validationVariables.MIN_DESCRIPTION_LENGTH + " characters",
         numOfBlanksChanged: "The number of [[INSERT_CODE_HERE]] brackets needs to be the same as it was originally",
-        passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
-        passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
+        passwordToShort: "Password must be more than " + validationVariables.MIN_PASSWORD_LENGTH + " characters",
+        passwordToLong: "Password cannot be more than " + validationVariables.MAX_PASSWORD_LENGTH + " characters",
         usernameTaken: "Username already taken",
-        defaultError: "Oops, something went wrong, please try again later..."
+        defaultError: "Oops, something went wrong, please try again later...",
+        challengeNotExist: "Challenge does not exist.",
+        notAuthorized: "Authorization failed.",
+        invalid_client: "Authorization failed.",
+        unsupported_grant_type: "Something went wrong when authentication, please try again later..."
     }
 
     const translations = errorCodes.map(error => errorTranslations[error])

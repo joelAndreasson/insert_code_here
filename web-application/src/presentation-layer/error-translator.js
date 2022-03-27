@@ -1,12 +1,11 @@
 
 module.exports = function({validationVariabels}){
-    //const validation = validationVariabels.variables
     return {
         translateErrorCodes: function(errorCodes){
             const errorTranslations = {
                 databaseError: "Internal server error, please try again later...", //What should this say?
                 usernameMissing: "Please enter a username",
-                usernameTooShort: "The username has to be a minimum of" + validationVariabels.MIN_USERNAME_LENGTH + " characters",
+                usernameTooShort: "The username has to be a minimum of " + validationVariabels.MIN_USERNAME_LENGTH + " characters",
                 passwordsNotMatch: "Passwords does not match",
                 accountDoesNotExist: "Username or password did not match any account, please try again",
                 notEnoughBlanks: "There needs to be a minimum of " + validationVariabels.MIN_AMOUNT_OF_BLANKS + " [[INSERT_CODE_HERE]] brackets",
@@ -20,7 +19,8 @@ module.exports = function({validationVariabels}){
                 passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
                 passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
                 usernameTaken: "Username already taken",
-                challengeNotExist: "Challenge does not exist."
+                challengeNotExist: "Challenge does not exist.",
+                notAuthorized: "Authorization failed." //BETTER DESC???????
             }
     
             const translations = errorCodes.map(error => errorTranslations[error])

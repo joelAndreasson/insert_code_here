@@ -13,7 +13,29 @@ module.exports = function({}){
         MIN_AMOUNT_OF_BLANKS: 1,
         SOLUTIONS_REGEX: /(?<=\[\[).*?(?=\]\])/g,
         BLANKS_REGEX: /\[\[INSERT_CODE_HERE\]\]/g,
-        MIN_COMMENT_LENGTH: 5
+        MIN_COMMENT_LENGTH: 5, 
+
+        // ----- All error codes -----
+        databaseError: "databaseError",
+        usernameMissing: "usernameMissing",
+        usernameTooShort: "usernameTooShort",
+        passwordsNotMatch: "passwordsNotMatch",
+        accountDoesNotExist: "accountDoesNotExist",
+        notEnoughBlanks: "notEnoughBlanks",
+        solutionsNotMatchBlanks: "solutionsNotMatchBlanks",
+        titleTooShort: "titleTooShort",
+        progLanguageNotValid: "progLanguageNotValid",
+        difficultyNotValid: "difficultyNotValid",
+        descriptionTooShort: "descriptionTooShort",
+        numOfBlanksChanged: "numOfBlanksChanged",
+        commentTooShort: "commentTooShort",
+        passwordToShort: "passwordToShort",
+        passwordToLong: "passwordToLong",
+        usernameTaken: "usernameTaken",
+        challengeNotExist: "challengeNotExist",
+        accountNotExist: "accountNotExist",
+        notAuthorized: "notAuthorized",
+
     }
 
     return variables

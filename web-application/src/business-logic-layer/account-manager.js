@@ -37,7 +37,7 @@ module.exports = function({accountRepository, accountValidator}){
 		},
 
 		login: function(loginCredentials, callback){
-			accountRepository.getAccountByUsername(loginCredentials.username, function(errorCodes,account){
+			accountRepository.getAccountByUsername(loginCredentials.username, function(errorCodes, account){
 				if(errorCodes.length > 0){
 					callback(errorCodes, null)
 				}else {
@@ -51,8 +51,16 @@ module.exports = function({accountRepository, accountValidator}){
 			accountRepository.getAccountById(accountId, callback)
 		},
 
-		updateAccountBio: function(newBioText, accountUsername, callback){
-			accountRepository.updateAccountBio(newBioText, accountUsername, callback)
+		updateAccountBio: function(requesterUsername, newBioText, profileAccountUsername, callback){
+
+			const errorCodes = accountValidator.getErrorsUpdateBio(requesterUsername, profileAccountUsername)
+
+			if(errorCodes.length > 0){
+				callback(errorCodes, null)
+				return
+			}
+
+			accountRepository.updateAccountBio(newBioText, profileAccountUsername, callback)
 		}
 	}
 }
