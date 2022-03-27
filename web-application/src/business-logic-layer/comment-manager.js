@@ -18,8 +18,8 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByChallengeId(challengeId, callback)
 		},
 
-		createComment: function(comment, callback){
-			const validationErrors = commentValidator.getErrorsCreateComment(comment)
+		createComment: function(requesterUsername, comment, callback){ // CALL VALIDATOR AND CHECK OWNER
+			const validationErrors = commentValidator.getErrorsCreateComment(requesterUsername, comment)
 	
 			if(0 < validationErrors.length){
 				callback(validationErrors, null)
@@ -33,20 +33,36 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByUsername(username, callback)
 		},
 
-		deleteCommentById: function(commentId, callback){
-			commentRepository.deleteCommentById(commentId, function(errorCodes){
-
-			})
+		deleteCommentById: function(requesterUsername, commentId, callback){ // CALL VALIDATOR AND CHECK OWNER
+			commentValidator.getErrorsDeleteComment(
+				requesterUsername, 
+				commentId, 
+				function(validationErrors){
+					if(0 < validationErrors.length){
+						callback(validationErrors, null)
+						return
+					}
+					commentRepository.deleteCommentById(commentId, callback)
+				}
+			)
+			
 		}, 
 
-		updateCommentById: function(commentId, newCommentText, callback){
-			const validationErrors = commentValidator.getErrorsUpdateComment(newCommentText)
+		updateCommentById: function(requesterUsername, commentId, newCommentText, callback){ // CALL VALIDATOR AND CHECK OWNER
+			commentValidator.getErrorsUpdateComment(
+				requesterUsername, 
+				commentId, 
+				newCommentText, 
+				function(validationErrors){
+					if(0 < validationErrors.length){
+						callback(validationErrors, null)
+						return
+					}
+					commentRepository.updateCommentById(commentId, newCommentText, callback)
+				}
+			)
 	
-			if(0 < validationErrors.length){
-				callback(validationErrors, null)
-				return
-			}
-			commentRepository.updateCommentById(commentId, newCommentText, callback)
+			
 		}
 	}
 }

@@ -1,6 +1,5 @@
 
 module.exports = function({validationVariabels}){
-    //const validation = validationVariabels.variables
     return {
         translateErrorCodes: function(errorCodes){
             const errorTranslations = {
@@ -20,7 +19,8 @@ module.exports = function({validationVariabels}){
                 passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
                 passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
                 usernameTaken: "Username already taken",
-                challengeNotExist: "Challenge does not exist."
+                challengeNotExist: "Challenge does not exist.",
+                notAuthorized: "Authorization failed." //BETTER DESC???????
             }
     
             const translations = errorCodes.map(error => errorTranslations[error])

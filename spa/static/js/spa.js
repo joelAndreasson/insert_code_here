@@ -747,7 +747,11 @@ function translateErrorCodes(errorCodes){
         passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
         passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
         usernameTaken: "Username already taken",
-        defaultError: "Oops, something went wrong, please try again later..."
+        defaultError: "Oops, something went wrong, please try again later...",
+        challengeNotExist: "Challenge does not exist.",
+        notAuthorized: "Authorization failed.",
+        invalid_client: "Authorization failed.",
+        unsupported_grant_type: "Something went wrong when authentication, please try again later..."
     }
 
     const translations = errorCodes.map(error => errorTranslations[error])

@@ -7,20 +7,6 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			var mm = String(today.getMonth() + 1).padStart(2, '0')
 			var yyyy = today.getFullYear()
 
-
-			/*console.log(today)
-			const yyyy = today.getUTCFullYear()
-			console.log(yyyy)
-			let mm = today.getUTCMonth()
-			console.log(mm)
-			mm = mm < 10 ? "0" + mm : mm;
-
-			let dd = today.getUTCDay()
-			console.log(dd)
-			dd = dd < 10 ? "0" + dd : dd;
-
-			console.log(yyyy + "-" + mm + "-" + dd)*/
-
 			return yyyy + "-" + mm + "-" + dd
 		},
 
@@ -77,10 +63,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			})
 		},
 
-		createChallenge: function(challenge, callback){
-			const validationErrorCodes = challengeValidator.getErrorsNewChallenge(challenge)
+		createChallenge: function(requesterUsername, challenge, callback){
+			const validationErrorCodes = challengeValidator.getErrorsNewChallenge(requesterUsername, challenge)
 	
-			if(0 < validationErrors.length){
+			if(0 < validationErrorCodes.length){
 				callback(validationErrorCodes, null)
 				return
 			}
@@ -96,34 +82,43 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.updateNumOfPlays(challengeId, (currentNumOfPlays + 1), callback)
 		},
 
-		deleteChallengeById: function(challengeId, callback){
-			challengeRepository.deleteChallengeById(challengeId, callback)
+		deleteChallengeById: function(requesterUsername, challengeId, callback){// CALL VALIDATOR AND CHECK OWNER
+			challengeValidator.getErrorsDeleteChallenge(
+				challengeId, 
+				requesterUsername, 
+				function(validationErrors){
+
+					if(0 < validationErrors.length){
+						callback(validationErrors, null)
+						return
+					}
+		
+					challengeRepository.deleteChallengeById(challengeId, callback)
+				}
+			)
+
 		},
 
-		updateChallengeById: function(challengeId, updatedChallenge, callback){
-			const validationErrors = challengeValidator.getErrorsNewChallenge(updatedChallenge)
+		updateChallengeById: function(requesterUsername, challengeId, updatedChallenge, callback){
+			challengeValidator.getErrorsUpdateChallenge(
+				requesterUsername, 
+				challengeId,
+				updatedChallenge, 
+				function(validationErrors){
+					if(0 < validationErrors.length){
+						callback(validationErrors, null)
+						return
+					}
 
-			if(0 < validationErrors.length){
-				callback(validationErrors, null)
-				return
-			}
-
-			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
+					challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
+				}
+			) 
+			
 		},
 
 		getTopThreePlayedChallenges: function(callback){
 			challengeRepository.getTopThreePlayedChallenges(callback)
 		},
-
-		deleteChallengeById: function(challengeId, callback){
-			challengeRepository.deleteChallengeById(challengeId, function(errorCodes, results){
-				if(errorCodes.length > 0){
-					callback(errorCodes, null)
-				}else {
-					callback([], results)
-				} 
-			})
-		}
 		
 	}
 }

@@ -15,40 +15,43 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	
 	router.post('/create', function(request, response){
 	
-		const challenge = {
-			title: request.body.title,
-			challengeText: request.body.challengeText,
-			solutionText: request.body.solutionText,
-			progLanguage: request.body.progLanguage,
-			difficulty: request.body.difficulty,
-			description: request.body.description,
-			datePublished: challengeManager.getTodaysDate(),
-			numOfPlays: 0,
-			accountUsername: request.body.accountUsername
-		}
-
-		if(!request.session.isLoggedIn){
-            response.redirect('/accounts/login')
-        }
-		
-		challengeManager.createChallenge(challenge, function(errorCodes, challengeId){
+		if(request.session.isLoggedIn){
+			const challenge = {
+				title: request.body.title,
+				challengeText: request.body.challengeText,
+				solutionText: request.body.solutionText,
+				progLanguage: request.body.progLanguage,
+				difficulty: request.body.difficulty,
+				description: request.body.description,
+				datePublished: challengeManager.getTodaysDate(),
+				numOfPlays: 0,
+				accountUsername: request.body.accountUsername
+			}
 			
-			if(errorCodes.length > 0){
-				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
-				const model = {
-					errors: translatedErrors,
-					challenge: challenge,
-					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
-					difficulties: validationVariabels.ALL_DIFFICULTIES
+			const requesterUsername = request.session.accountUsername
+			challengeManager.createChallenge(requesterUsername, challenge, function(errorCodes, challengeId){
+				
+				if(errorCodes.length > 0){
+					const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
+					const model = {
+						errors: translatedErrors,
+						challenge: challenge,
+						progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+						difficulties: validationVariabels.ALL_DIFFICULTIES
+					}
+					response.render('challenge-create.hbs', model)
 				}
-				response.render('challenge-create.hbs', model)
-			}
-			else{
-				response.redirect('/challenges/' + challengeId + '/preview')
-			}
-	
-			
-		})
+				else{
+					response.redirect('/challenges/' + challengeId + '/preview')
+				}
+		
+				
+			})
+		}
+		else{
+			response.render("challenge-create.hbs")
+		}
+		
 	
 	})
 	
@@ -65,14 +68,12 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			}
 		})
 	})
-
-	
 	
 	router.get("/:challengeId/preview", function(request,response){
 	
 		const challengeId = request.params.challengeId
 		
-		let allErrors = [] // This is maybe unnecessary because there is a posibility that there will be two databaseError:s
+		let allErrors = []
 	
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			allErrors.push(...errorCodes)
@@ -136,8 +137,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 					}
 		
 					response.render('challenge-play.hbs', model)
-				}
-				else{
+				}else{
 					const model = {
 						numOfRightAnswers: numOfRightAnswers,
 						totalNumOfAnswers: totalNumOfAnswers,
@@ -180,22 +180,26 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	router.post('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
 
-		if(!request.session.isLoggedIn){
-            response.redirect('/accounts/login')
-        }
+		if(request.session.isLoggedIn){
+			const requesterUsername = request.session.accountUsername
+			challengeManager.deleteChallengeById(requesterUsername, challengeId, function(errorCodes, results){
+				if(errorCodes.length > 0){
+					response.render("internal-server-error.hbs")
+				}else {
+					const username = request.session.accountUsername
+					response.redirect('/accounts/' + username)
+				}
+			})
+		}else{
+			response.render('challenge-delete.hbs')
+		}
 		
-		challengeManager.deleteChallengeById(challengeId, function(errorCodes, results){
-			if(errorCodes.length > 0){
-				response.render("internal-server-error.hbs")
-			}else {
-				const username = request.session.accountUsername
-				response.redirect('/accounts/' + username)
-			}
-		})
+		
 	})
 
 	router.get('/:challengeId/update', function(request, response){
 		const challengeId = request.params.challengeId
+
 		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 			if(errorCodes.length > 0){
 				if(errorCodes.includes("challengeNotExist")){
@@ -223,45 +227,43 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.post('/:challengeId/update', function(request, response){
 		const challengeId = request.params.challengeId
-		const sessionUsername = request.session.accountUsername
-		
-		const updatedChallenge = {
-			id: request.params.challengeId,
-			title: request.body.title,
-			challengeText: request.body.challengeText,
-			solutionText: request.body.solutionText,
-			progLanguage: request.body.progLanguage,
-			difficulty: request.body.difficulty,
-			description: request.body.description,
-			accountUsername: request.body.accountUsername
-		}
 
-		if(!request.session.isLoggedIn){
-            response.redirect('/accounts/login')
-        }
-
-		if(sessionUsername != updatedChallenge.accountUsername){
-			const isLoggedIn = false
-			const model = {
-				isLoggedIn: isLoggedIn
+		if(request.session.isLoggedIn){
+			const updatedChallenge = {
+				id: request.params.challengeId,
+				title: request.body.title,
+				challengeText: request.body.challengeText,
+				solutionText: request.body.solutionText,
+				progLanguage: request.body.progLanguage,
+				difficulty: request.body.difficulty,
+				description: request.body.description
 			}
-			response.render('challenge-update.hbs', model)
-		}
-
-		challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errorCodes){
-			if(errorCodes.length > 0){
-				const model = {
-					errors: errorCodes,
-					challenge: updatedChallenge,
-					challengeId: challengeId,
-					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
-					difficulties: validationVariabels.ALL_DIFFICULTIES
+			
+			const requesterUsername = request.session.accountUsername
+			challengeManager.updateChallengeById(
+				requesterUsername, 
+				challengeId, 
+				updatedChallenge, 
+				function(errorCodes, results){
+					if(errorCodes.length > 0){
+						const model = {
+							errors: errorCodes,
+							challenge: updatedChallenge,
+							challengeId: challengeId,
+							progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+							difficulties: validationVariabels.ALL_DIFFICULTIES
+						}
+						response.render('challenge-update.hbs', model)
+					}else {
+						response.redirect('/challenges/'+challengeId+'/preview')
+					}
 				}
-				response.render('challenge-update.hbs', model)
-			}else {
-				response.redirect('/challenges/'+challengeId+'/preview')
-			}
-		})
+			)
+		}else{
+			console.log("IS NOT LOGGED IN")
+			response.render('challenge-update.hbs')
+		}
+		
 	})
 
 	router.get('/:challengeId', function(request, response){

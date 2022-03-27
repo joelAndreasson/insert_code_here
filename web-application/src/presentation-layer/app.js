@@ -4,7 +4,6 @@ const app = express()
 const { engine } = require('express-handlebars')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
-//const mySql = require('mysql') // not used anymore
 const redis = require('redis')
 const csurf = require('csurf')
 const redisClient = redis.createClient(process.env.REDIS_URL)
