@@ -1,13 +1,13 @@
 
 
-module.exports = function({initSequelize}){
+module.exports = function({initSequelize, validationVariabels}){
     return {
         getAllChallenges: function(callback){
             initSequelize.challenges.findAll({raw: true})
                 .then(challenges => callback([], challenges))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -16,17 +16,17 @@ module.exports = function({initSequelize}){
                 .then(challenge => callback([], challenge))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
         createChallenge: function(challenge, callback){
             initSequelize.challenges.create(challenge, {raw: true})
-            .then(createdChallenge => callback([], createdChallenge.id))
-            .catch(error => {
-                console.log(error)
-                    callback(['databaseError'], null)
-            })
+                .then(createdChallenge => callback([], createdChallenge.id))
+                .catch(error => {
+                    console.log(error)
+                    callback([validationVariabels.databaseError], null)
+                })
         },
 
         getChallengesByUsername: function(accountUsername, callback){
@@ -34,7 +34,7 @@ module.exports = function({initSequelize}){
                 .then(challenges => callback([], challenges))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -43,7 +43,7 @@ module.exports = function({initSequelize}){
                 .then(results => callback([], results))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -62,8 +62,32 @@ module.exports = function({initSequelize}){
             .then(results => callback([], results))
             .catch(error => {
                 console.log(error)
-                callback(['databaseError'], null)
+                callback([validationVariabels.databaseError], null)
+            })
+        }, 
+
+        getTopThreePlayedChallenges: function(callback){
+            initSequelize.challenges.findAll({order: [['numOfPlays', 'DESC']], limit: 3, raw: true})
+                .then(challenges => callback([], challenges))
+                .catch(error => {
+                    console.log(error)
+                    callback([validationVariabels.databaseError], null)
+                })
+        },
+
+        updateNumOfPlays: function(challengeId, newNumOfPlays, callback){
+            initSequelize.challenges.update({
+                numOfPlays: newNumOfPlays,
+            }, {
+                where: {id: challengeId}, 
+                raw: true
+            })
+            .then(results => callback([], results))
+            .catch(error => {
+                console.log(error)
+                callback([validationVariabels.databaseError], null)
             })
         }
+
     }
 }

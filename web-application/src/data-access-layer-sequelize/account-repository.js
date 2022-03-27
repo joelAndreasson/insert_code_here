@@ -1,13 +1,13 @@
 
 
-module.exports = function({initSequelize}){
+module.exports = function({initSequelize, validationVariabels}){
     return {
         getAllAccounts: function(callback){
             initSequelize.accounts.findAll({raw: true})
                 .then(accounts => callback([], accounts))
                 .catch(error => {
-                    console.log(error) // remove console.logs later 
-                    callback(['databaseError'], null)
+                    console.log(error)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -16,7 +16,7 @@ module.exports = function({initSequelize}){
                 .then(account => callback([], account))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -28,12 +28,12 @@ module.exports = function({initSequelize}){
                 .then(account => callback([], account))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
         createAccount: function(accountInformation, callback){
-            initSequelize.accounts.create({ //Maybe only enter "accountInformation" model here directly?
+            initSequelize.accounts.create({
                 username: accountInformation.username,
                 password: accountInformation.password,
                 bio: accountInformation.bio
@@ -42,31 +42,31 @@ module.exports = function({initSequelize}){
             .catch(error => {
                 if(error.name == "SequelizeUniqueConstraintError"){
                     console.log(error)
-                    callback(['usernameTaken'], null)
+                    callback([validationVariabels.usernameTaken], null)
                 }
                 else{
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 }
                 
             })
         },
 
-        getAccountById: function(accountId, callback){ //fill this function at later date
+        getAccountById: function(accountId, callback){
 			initSequelize.accounts.findByPk(accountId, {raw: true})
                 .then(account => callback([], account))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
 		},
 
-        updateAccountBio: function(newBioText, accountUsername, callback){ // fill in at later date
+        updateAccountBio: function(newBioText, accountUsername, callback){
             initSequelize.accounts.update({bio: newBioText}, {where: {username: accountUsername}})
-                .then(results => callback([], results)) //results not needed ???
+                .then(results => callback([], results))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
 
 		}

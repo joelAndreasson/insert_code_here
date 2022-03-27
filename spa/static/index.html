@@ -67,6 +67,11 @@
 
     <main class="padding">
 
+        <div id="errors-div" class="is-hidden box">
+            <p>Oh no, something went wrong:</p>
+            <ul id="errors-list"></ul>
+        </div>
+
         <section id="home-page" class="page">
             <h2 class="has-text-centered">HOME</h2>
 
@@ -183,9 +188,8 @@
 
                     <!-- Challange Text -->
                     <div class="field">
-                        <label class="label">Challenge Text</label>
+                        <label class="label">Code</label>
                         <div class="control">
-                            <!-- the input tag below should be replaced with codemirror thingy -->
                             <textarea id="new-challenge-text" class="textarea" name="challengeText"
                                 placeholder="Challenge Text"></textarea>
                         </div>
@@ -194,7 +198,7 @@
 
                     <!-- Solution Text -->
                     <div class="field">
-                        <label class="label">Solution Text</label>
+                        <label class="label">Solutions</label>
                         <div class="control">
                             <!-- the input tag below should be replaced with codemirror thingy -->
                             <textarea id="new-solution-text" class="textarea" name="solutionText"
@@ -233,6 +237,55 @@
                     </form>
                 </div>
 
+
+                <!-- tutorial -->
+                <div class="column is-half box">
+                    <h1 class="has-text-centered is-underlined">
+                        Tutorial
+                    </h1>
+                    <p class=" is-size-6">
+                        Welcome to <b>INSERT_CODE_HERE's</b> challenge editor! <br>
+                        In this tutorial you will <b>quickly</b> learn how to create your own
+                        challenge!
+                    </p>
+                    <p class="is-size-6">
+                        <b>1. A Good title never hurts.</b> <br> make sure to give your challenge a
+                        good name so that others can find and understand what the challenge is
+                        about.
+                    </p>
+                    <p class="is-size-6">
+                        <b>2. Make sure you speak their language.</b> <br> Select the language you
+                        want and make sure it is the correct one or there will be angry challenge
+                        takers...
+                    </p>
+                    <p class="is-size-6">
+                        <b>3. Write that code!</b> <br> When writing your code you have complete
+                        freedom in doing soo. The places you want users to enter code into add
+                        <b>[[INSERT_CODE_HERE]]</b> and
+                        our editor will recognize it as a so called blank that challenge taker must
+                        fill in. You can add as many blanks as you want. The sky is the limit! 
+                        Remember to add a comment in the text and leave a clue to what the challenge taker should do!
+                    </p>
+                    <p class="is-size-6">
+                        <b>4. Questions needs answers! </b> <br> Now the code is done and it's time
+                        to add answers to all the blanks you created in the previous step. Adding an
+                        answer is
+                        as simple as can be, just add [[]] to the text field and enter your answer
+                        into it. Like this; [[ANSWER]]. Remember that your answers must come in the
+                        same order as your
+                        blanks in the code.
+                    </p>
+                    <p class="is-size-6">
+                        <b>5. Describe!</b> <br> Give your challenge a description. Maybe it's a
+                        tutorial, challenge tips or just your life story. You do you!
+                    </p>
+                    <p class="is-size-6">
+                        <b>6. Select difficulty, it's not hard... or is it?!</b> <br> Try to
+                        estimate difficulty for this challenge.
+                        A correctly estimated difficulty will help challenge takers find your
+                        challenges.
+                    </p>
+                </div>
                 
             </section>
 
@@ -255,18 +308,15 @@
                             <label class="label">Language</label>
                             <div class="control">
                                 <select id="prog-language-selector" name="progLanguage">
-                                    <!-- Options should not be hardcoded maybe? Stor in db? -->
                                     <option selected>Language</option>
-                                    <!-- iterate through list of progLanguages -->
                                 </select>
                             </div>
                         </div>
 
                         <!-- Challange Text -->
                         <div class="field">
-                            <label class="label">Challenge Text</label>
+                            <label class="label">Code</label>
                             <div class="control">
-                                <!-- the input tag below should be replaced with codemirror thingy -->
                                 <textarea id="challenge-text-input" class="textarea"
                                     name="challengeText" placeholder="Challenge Text"></textarea>
                             </div>
@@ -275,9 +325,8 @@
 
                         <!-- Solution Text -->
                         <div class="field">
-                            <label class="label">Solution Text</label>
+                            <label class="label">Solutions</label>
                             <div class="control">
-                                <!-- the input tag below should be replaced with codemirror thingy -->
                                 <textarea id="solution-text-input" class="textarea" name="solutionText"
                                     placeholder="Solution Text"></textarea>
                             </div>
@@ -297,7 +346,6 @@
                             <div class="control">
                                 <select id="difficulty-selector" name="difficulty">
                                     <option selected>Difficulty</option>
-                                    <!-- iterate through list of difficulties -->
                                 </select>
                             </div>
                         </div>
@@ -337,7 +385,8 @@
                         freedom in doing soo. The places you want users to enter code into add
                         <b>[[INSERT_CODE_HERE]]</b> and
                         our editor will recognize it as a so called blank that challenge taker must
-                        fill in. You can add as many blanks as you want. The sky is the limit!
+                        fill in. You can add as many blanks as you want. The sky is the limit! 
+                        Remember to add a comment in the text and leave a clue to what the challenge taker should do!
                     </p>
                     <p class="is-size-6">
                         <b>4. Questions needs answers! </b> <br> Now the code is done and it's time
@@ -366,7 +415,18 @@
             <h2>ABOUT</h2>
             <div class="section">
                 <div class="column box is-one-quarter">
-                    Text here...
+                    <h1 class="has-text-centered">About</h1>
+                    <p >Welcome to INSERT_CODE_HERE the perfect place for programmers of all ages! </p>
+                    <p >When using INSERT_CODE_HERE, please be civil and use common sense. If you have problems please reference our table below for how to behave when creating comments and challenges</p>
+
+                    <ul>
+                        <li>Be friendly to others</li>
+                        <li>No cursewords</li>
+                        <li>No threats</li>
+                        <li>Be welcoming to beginners</li>
+                    </ul>
+
+                    <p>If you have any qestions regarding your visit to INSERT_CODE_HERE please refer to the <a href="/contact" class="page-link">Contact</a> page. Have a great day!</p>
                 </div>
             </div>
 
@@ -392,8 +452,8 @@
                             </tr>
                             <tr>
                                 <td>Mattias Spångberg</td>
-                                <td>MATTIAS EMAIL</td>
-                                <td>MATTIAS PHONE</td>
+                                <td>spma20pm@student.ju.se</td>
+                                <td>+46723020160</td>
                             </tr>
                         </table>
                     </div>
@@ -459,22 +519,13 @@
                 <a class="button is-success page-link" href="/challenges">Play another challenge</a>
             </div>
 
-            <!-- <p id="challenge-numOfRightAnswers"></p>
-                <p>Of</p>
-                <p id="challenge-totalNumOfAnswers"></p> -->
         </section>
 
         <section id="not-found-page" class="page">
             <h2>404 NOT FOUND</h2>
         </section>
 
-        <div id="errors-div" class="is-hidden">
-            <p>Oh no, something went wrong:</p>
-            <ul id="errors-list"></ul>
-        </div>
-
     </main>
-
 
 </body>
 

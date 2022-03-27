@@ -15,16 +15,8 @@
                 <p class="is-size-5 has-text-centered">{{challenge.description}}</p>
                 <textarea id="play-challenge-textarea" class="textarea" name="challengeText">{{challenge.challengeText}}</textarea>
             </div>
-            <div class="section">
-                <div class="column box is-one-quarter">
-                    <p>Date Published: {{challenge.datePublished}}</p>
-                    <p>Created By: {{challenge.accountUsername}}</p>
-                    <p>Number of plays: {{challenge.numOfPlays}}</p>
-                    <p>Difficulty: {{challenge.difficulty}}</p>
-                    <p>Language: {{challenge.progLanguage}}</p>
-                </div>
-            </div>
             <div class="has-text-centered">
+		        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button class="button is-success" type="submit" value="Submit">Submit</button>
             </div>
         </form>

@@ -3,18 +3,29 @@
 module.exports = function({commentRepository, commentValidator}){
 	return{
 		getCommentById: function(id, callback){
-			commentRepository.getCommentById(id, callback)
+			commentRepository.getCommentById(id, function(errorCodes, comment){
+				var allErrors = []
+
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = commentValidator.getErrorsFetchComment(comment)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, comment)
+				}else {
+					callback([], comment)
+				}
+			})
 		},
 
 		getCommentsByChallengeId: function(challengeId, callback){
 			commentRepository.getCommentsByChallengeId(challengeId, callback)
 		},
 
-		createComment: function(comment, callback){
-			const errors = commentValidator.getErrorsNewComment(comment)
+		createComment: function(requesterUsername, comment, callback){
+			const validationErrorCodes = commentValidator.getErrorsCreateComment(requesterUsername, comment)
 	
-			if(0 < errors.length){
-				callback(errors, null)
+			if(0 < validationErrorCodes.length){
+				callback(validationErrorCodes, null)
 				return
 			}
 
@@ -25,18 +36,34 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByUsername(username, callback)
 		},
 
-		deleteCommentById: function(commentId, callback){
-			commentRepository.deleteCommentById(commentId, callback)
+		deleteCommentById: function(requesterUsername, commentId, callback){
+			commentValidator.getErrorsDeleteComment(
+				requesterUsername, 
+				commentId, 
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
+						return
+					}
+					commentRepository.deleteCommentById(commentId, callback)
+				}
+			)
+			
 		}, 
 
-		updateCommentById: function(commentId, newCommentText, callback){
-			const errors = commentValidator.getErrorsUpdateComment(newCommentText)
-	
-			if(0 < errors.length){
-				callback(errors, null)
-				return
-			}
-			commentRepository.updateCommentById(commentId, newCommentText, callback)
+		updateCommentById: function(requesterUsername, commentId, newCommentText, callback){
+			commentValidator.getErrorsUpdateComment(
+				requesterUsername, 
+				commentId, 
+				newCommentText, 
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
+						return
+					}
+					commentRepository.updateCommentById(commentId, newCommentText, callback)
+				}
+			)
 		}
 	}
 }

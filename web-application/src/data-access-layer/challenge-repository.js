@@ -1,6 +1,6 @@
 
 
-module.exports = function({db}){
+module.exports = function({db, validationVariabels}){
 	return{
 		getAllChallenges: function(callback){
 			const query = 'SELECT * FROM challenges ORDER BY id DESC'
@@ -8,9 +8,8 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
-					callback(['databaseError'], null)
-				}
-				else{
+					callback([validationVariabels.databaseError], null)
+				}else{
 					callback([], challenges)
 				}
 			})
@@ -20,11 +19,11 @@ module.exports = function({db}){
 			const query = `SELECT * FROM challenges WHERE id = ? LIMIT 1`
 			const values = [challengeId]
 			
-			db.query(query, values, function(error, challenges){
+			db.query(query, values, function(error, challenge){
 				if(error){
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else{
-					callback([], challenges[0])
+					callback([], challenge[0])
 				}
 			})
 		},
@@ -56,8 +55,11 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, results){
 				if(error){
-					// TODO: Look for challengeUnique violation.
-					callback(['databaseError'], null)
+					if(error.code == "ER_NO_REFERENCED_ROW_2"){
+                        callback([validationVariabels.accountNotExist], null)
+                    }else {
+						callback([validationVariabels.databaseError], null)
+					}
 				}else{
 					callback([], results.insertId)
 				}
@@ -70,20 +72,20 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else {
 					callback([], challenges)
 				}
 			})
 		},
 
-		increaseNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
+		updateNumOfPlays: function(challengeId, newNumOfPlays, callback){
 			const query = `UPDATE challenges SET numOfPlays = ? WHERE id = ?`
 			const values = [newNumOfPlays, challengeId]
 
 			db.query(query, values, function(error, results){
 				if(error){
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else {
 					callback([], results)
 				}
@@ -97,9 +99,8 @@ module.exports = function({db}){
 			db.query(query, values, function(error, results){
 				if(error){
 					console.log(error)
-					callback(['databaseError'], null)
-				}
-				else {
+					callback([validationVariabels.databaseError], null)
+				}else {
 					callback([], results)
 				}
 			})
@@ -125,39 +126,27 @@ module.exports = function({db}){
 				challengeId
 			]
 
-			db.query(query, values, function(error, results){ //Results or challenge?
+			db.query(query, values, function(error, results){
 				if(error){
-					callback(['databaseError'], null)
-				}
-				else {
+					callback([validationVariabels.databaseError], null)
+				}else {
 					callback([], results)
 				}
 			})
 		},
 
-		getTopThreePlayedChallenge: function(callback){
+		getTopThreePlayedChallenges: function(callback){
 			const query = `SELECT * FROM challenges ORDER BY numOfPlays DESC LIMIT 3`
 			
 			db.query(query, function(error, challenges){
 				if(error){	
-					callback(['databaseError'], null)
+					console.log(error)
+					callback([validationVariabels.databaseError], null)
 				}else {
 					callback([], challenges)
 				}
 			})
-		},
-
-		deleteChallengeById: function(challengeId, callback){
-			const query = `DELETE FROM challenges WHERE id = ?`
-			const values = [challengeId]
-
-			db.query(query, values, function(error, results){
-				if(error){
-					callback(['databaseError'], null)
-				}else {
-					callback([], results)
-				}
-			})
 		}
+
 	}
 }

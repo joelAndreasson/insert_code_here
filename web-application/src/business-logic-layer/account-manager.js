@@ -1,10 +1,9 @@
 
 const bcrypt = require('bcrypt')
-const { response } = require('express') // UNNECESSARY??
 
 // brcypt variables
-const saltRounds = 10 // globals?
-const salt = bcrypt.genSaltSync(saltRounds);
+const saltRounds = 10
+const salt = bcrypt.genSaltSync(saltRounds)
 
 module.exports = function({accountRepository, accountValidator}){
 	return{
@@ -15,9 +14,9 @@ module.exports = function({accountRepository, accountValidator}){
 		createAccount: function(accountInformation, callback){
 			
 			// Validate the account.
-			const errors = accountValidator.getErrorsNewAccount(accountInformation)
-			if(errors.length > 0){
-				callback(errors, null)
+			const validationErrorCodes = accountValidator.getErrorsNewAccount(accountInformation)
+			if(validationErrorCodes.length > 0){
+				callback(validationErrorCodes, null)
 				return
 			}
 			// hash password
@@ -26,22 +25,26 @@ module.exports = function({accountRepository, accountValidator}){
 		},
 
 		getAccountByUsername: function(username, callback){
-			accountRepository.getAccountByUsername(username, function(errors, account){
-				if(errors.length > 0){
-					callback(errors, null)
+			accountRepository.getAccountByUsername(username, function(errorCodes, account){
+				var allErrors = []
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = accountValidator.getErrorsFetchAccount(account)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, account)
 				}else {
-					callback(errors, account)
+					callback([], account)
 				}
 			})
 		},
 
 		login: function(loginCredentials, callback){
-			accountRepository.getAccountByUsername(loginCredentials.username, function(errors,account){
-				if(errors.length > 0){
-					callback(errors, null)
+			accountRepository.getAccountByUsername(loginCredentials.username, function(errorCodes, account){
+				if(errorCodes.length > 0){
+					callback(errorCodes, null)
 				}else {
-					const validationErrors = accountValidator.getErrorsLogin(loginCredentials, account)
-					callback(validationErrors, account)
+					const validationErrorCodes = accountValidator.getErrorsLogin(loginCredentials, account)
+					callback(validationErrorCodes, account)
 				}
 			})
 		},
@@ -50,8 +53,15 @@ module.exports = function({accountRepository, accountValidator}){
 			accountRepository.getAccountById(accountId, callback)
 		},
 
-		updateAccountBio: function(newBioText, accountUsername, callback){
-			accountRepository.updateAccountBio(newBioText, accountUsername, callback)
+		updateAccountBio: function(requesterUsername, newBioText, profileAccountUsername, callback){
+
+			const validationErrorCodes = accountValidator.getErrorsUpdateBio(requesterUsername, profileAccountUsername, newBioText)
+
+			if(validationErrorCodes.length > 0){
+				callback(validationErrorCodes, null)
+				return
+			}
+			accountRepository.updateAccountBio(newBioText, profileAccountUsername, callback)
 		}
 	}
 }

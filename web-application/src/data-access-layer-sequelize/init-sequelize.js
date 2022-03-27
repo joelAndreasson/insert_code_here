@@ -5,9 +5,13 @@ const sequelize = new Sequelize('postgres://postgres:hejsan123@postgres_database
 const accounts = sequelize.define('accounts', {
     username: {
         type: DataTypes.TEXT,
-        unique: true
+        unique: true,
+        allowNull: false
     },
-    password: DataTypes.TEXT,
+    password: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     bio: DataTypes.TEXT
 }, {
     timestamps: false
@@ -20,23 +24,32 @@ const challenges = sequelize.define('challenges', {
     progLanguage: DataTypes.TEXT,
     difficulty: DataTypes.TEXT,
     description: DataTypes.TEXT,
-    datePublished: DataTypes.TEXT, // Date not working, FIX!!
+    datePublished: DataTypes.TEXT,
     numOfPlays: DataTypes.INTEGER,
-    accountUsername: DataTypes.TEXT
+    accountUsername: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    }
 }, {
     timestamps: false
 })
 
 const comments = sequelize.define('comments', {
     commentText: DataTypes.TEXT,
-    accountUsername: DataTypes.TEXT,
-    challengeId: DataTypes.INTEGER
+    accountUsername: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    challengeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
 }, {
     timestamps: false
 })
 
-challenges.hasMany(comments, {foreignKey: 'challengeId'})
-comments.belongsTo(challenges) //ON DELETE CASCADE???
+challenges.hasMany(comments, {foreignKey: 'challengeId', onDelete: 'CASCADE'})
+comments.belongsTo(challenges)
 
 accounts.hasMany(challenges, {foreignKey: 'accountUsername', sourceKey: 'username'})
 challenges.belongsTo(accounts, {foreignKey: 'accountUsername', sourceKey: 'username'})

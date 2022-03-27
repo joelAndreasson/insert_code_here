@@ -3,36 +3,36 @@ const express = require('express')
 module.exports = function({commentManager, errorTranslator}){
     const router = express.Router({ mergeParams: true })
 
-    router.get("/create", function(request, response){
+    router.get('/create', function(request, response){
         const challengeId = request.params.challengeId
         
         const model = {
             challengeId: challengeId
         }
 
-        response.render("comment-create.hbs", model)
+        response.render('comment-create.hbs', model)
     })
 
     router.post('/create', function(request, response){
 
         const comment = {
             commentText: request.body.commentText,
-            accountUsername: request.session.accountUsername,
+            accountUsername: request.body.accountUsername,
             challengeId: request.params.challengeId
         }
 
-        commentManager.createComment(comment, function(errors, id){ // what is id for? 
-            if(errors.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+        const requesterUsername = request.session.accountUsername
+        commentManager.createComment(requesterUsername, comment, function(errorCodes, id){
+            if(errorCodes.length > 0){
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
-                    errors: errorCodes,
+                    errors: translatedErrors,
                     challengeId: comment.challengeId,
                     comment: comment
                 }
 
                 response.render('comment-create.hbs', model)
-            }
-            else{
+            }else{
                 response.redirect('/challenges/' + comment.challengeId + '/preview')
             }
         })
@@ -42,12 +42,30 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const challengeId = request.params.challengeId
 
-        const model = {
-            commentId: commentId,
-            challengeId: challengeId
-        }
+        commentManager.getCommentById(commentId, function(errorCodes, comment){
+            if(errorCodes.length > 0){
+                if(errorCodes.includes("commentNotExist")){
+                    response.render('page-not-found.hbs')
+                }else {
+                    request.render('internal-server-error.hbs')
+                }
+            }else {
+                var isOwner = false
+                if(request.session.accountUsername == comment.accountUsername){
+                    isOwner = true
+                }
 
-        response.render('comment-delete.hbs', model)
+                const model = {
+                    isOwner: isOwner,
+                    commentId: commentId,
+                    challengeId: challengeId
+                }
+
+                response.render('comment-delete.hbs', model)
+            }
+        })
+
+        
 
     })
 
@@ -55,9 +73,10 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const challengeId = request.params.challengeId
 
-        commentManager.deleteCommentById(commentId, function(errors){
-            if(errors.length > 0){
-                response.render("internal-server-error.hbs")
+        const requesterUsername = request.session.accountUsername
+        commentManager.deleteCommentById(requesterUsername, commentId, function(errorCodes){
+            if(errorCodes.length > 0){
+                response.render('internal-server-error.hbs')
             }else {
                 response.redirect('/challenges/'+challengeId+'/preview')
             }
@@ -67,21 +86,18 @@ module.exports = function({commentManager, errorTranslator}){
     router.get('/:commentId/update', function(request, response){
         const commentId = request.params.commentId
 
-        commentManager.getCommentById(commentId, function(errors, comment){
-            if(errors.length > 0){
-                response.render("internal-server-error.hbs")
+        commentManager.getCommentById(commentId, function(errorCodes, comment){
+            if(errorCodes.length > 0){
+                if(errorCodes.includes("commentNotExist")){
+                    response.render('page-not-found.hbs')
+                }else {
+                    request.render('internal-server-error.hbs')
+                }
             }else {
-
-                var isOwner = false
-                if(request.session.accountUsername == comment.accountUsername){
-                    isOwner = true
-                }
-
                 const model = {
-                    comment: comment,
-                    isOwner: isOwner
+                    comment: comment
                 }
-                response.render("comment-update.hbs", model)
+                response.render('comment-update.hbs', model)
             }
         })
     })
@@ -91,16 +107,16 @@ module.exports = function({commentManager, errorTranslator}){
         const commentId = request.params.commentId
         const newCommentText = request.body.commentText
         
-        commentManager.updateCommentById(commentId, newCommentText, function(errors){
-            if(errors.length > 0){
-                const errorCodes = errorTranslator.translateErrorCodes(errors)
-                const comment = {
-
-                }
+        const requesterUsername = request.session.accountUsername
+        commentManager.updateCommentById(requesterUsername, commentId, newCommentText, function(errorCodes){
+            
+            if(errorCodes.length > 0){
+                const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
-                    errors: errorCodes,
+                    errors: translatedErrors,
                     comment: {
                         id: commentId,
+                        challengeId: challengeId,
                         commentText: newCommentText
                     }
                 }
@@ -114,9 +130,13 @@ module.exports = function({commentManager, errorTranslator}){
     router.get('/:commentId/preview', function(request, response){
         const commentId = request.params.commentId
 
-        commentManager.getCommentById(commentId, function(errors, comment){
-            if(errors.length > 0){
-                response.render('internal-server-error.hbs')
+        commentManager.getCommentById(commentId, function(errorCodes, comment){
+            if(errorCodes.length > 0){
+                if(errorCodes.includes("commentNotExist")){
+                    response.render('page-not-found.hbs')
+                }else {
+                    request.render('internal-server-error.hbs')
+                }
             }else {
                 var isOwner = false
                 if(request.session.accountUsername == comment.accountUsername){

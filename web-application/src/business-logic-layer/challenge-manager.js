@@ -2,14 +2,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 	return {
 		getTodaysDate: function(){
 			const today = new Date()
-
-			const yyyy = today.getFullYear()
-
-			let mm = today.getMonth()
-			mm = mm < 10 ? "0" + mm : mm;
-
-			let dd = today.getDay()
-			dd = dd < 10 ? "0" + dd : dd;
+			
+			var dd = String(today.getDate()).padStart(2, '0')
+			var mm = String(today.getMonth() + 1).padStart(2, '0')
+			var yyyy = today.getFullYear()
 
 			return yyyy + "-" + mm + "-" + dd
 		},
@@ -17,35 +13,37 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		getResultsFromChallengeTextWithId: function(challengeId, changedChallengeText, callback){
 			const increase = 1
 
-			challengeRepository.getChallengeById(challengeId, function(errors, challenge){
-				if(errors.length > 0){
-					callback(errors, null, null, null)
+			challengeRepository.getChallengeById(challengeId, function(errorCodes, challenge){
+				if(errorCodes.length > 0){
+					callback(errorCodes, null, null, null)
 					return
-				}
-				else{
+				}else{
 					const enteredAnswers = changedChallengeText.match(validationVariabels.SOLUTIONS_REGEX)
 					const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 			
-					const validationErrors = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
+					const validationErrorCodes = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
 			
-					if(validationErrors.length > 0){
-						callback(validationErrors, null, null, challenge)
+					if(validationErrorCodes.length > 0){
+						callback(validationErrorCodes, null, null, challenge)
 						return
-					}
-					else{
-						challengeRepository.increaseNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errors, results){
-							if(errors.length > 0){
-								callback(errors, null)
-							}else {
-								let numOfRightAnswers = 0
-								let totalNumOfAnswers = solutionAnswers.length
-								for(i = 0; i < totalNumOfAnswers; i+=1){
-									numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+					}else{
+						challengeRepository.updateNumOfPlays(
+							challenge.id, 
+							(challenge.numOfPlays + increase), 
+							function(errorCodes, results){
+								if(errorCodes.length > 0){
+									callback(errorCodes, null)
+								}else {
+									let numOfRightAnswers = 0
+									let totalNumOfAnswers = solutionAnswers.length
+									for(i = 0; i < totalNumOfAnswers; i+=1){
+										numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+									}
+							
+									callback([], numOfRightAnswers, totalNumOfAnswers, null)
 								}
-						
-								callback([], numOfRightAnswers, totalNumOfAnswers, null)
-								}
-						})
+							}
+						)
 					}
 				}
 			})
@@ -56,14 +54,26 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		}, 
 
 		getChallengeById: function(challengeId, callback){
-			challengeRepository.getChallengeById(challengeId, callback)
+			
+			challengeRepository.getChallengeById(challengeId, function(errorCodes, challenge){
+				var allErrors = []
+
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = challengeValidator.getErrorsFetchChallenge(challenge)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, challenge)
+				}else {
+					callback([], challenge)
+				}
+			})
 		},
 
-		createChallenge: function(challenge, callback){
-			const validationErrors = challengeValidator.getErrorsNewChallenge(challenge)
+		createChallenge: function(requesterUsername, challenge, callback){
+			const validationErrorCodes = challengeValidator.getErrorsNewChallenge(requesterUsername, challenge)
 	
-			if(0 < validationErrors.length){
-				callback(validationErrors, null)
+			if(0 < validationErrorCodes.length){
+				callback(validationErrorCodes, null)
 				return
 			}
 			
@@ -74,38 +84,48 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.getChallengesByUsername(accountUsername, callback)
 		},
 
-		increaseNumOfPlaysByOne : function(challengeId, currentNumOfPlays, callback){
-			challengeRepository.increaseNumOfPlaysByOne(challengeId, (currentNumOfPlays + 1), callback)
+		updateNumOfPlays : function(challengeId, currentNumOfPlays, callback){
+			challengeRepository.updateNumOfPlays(challengeId, (currentNumOfPlays + 1), callback)
 		},
 
-		deleteChallengeById: function(challengeId, callback){
-			challengeRepository.deleteChallengeById(challengeId, callback)
+		deleteChallengeById: function(requesterUsername, challengeId, callback){
+			challengeValidator.getErrorsDeleteChallenge(
+				challengeId, 
+				requesterUsername, 
+				function(validationErrorCodes){
+
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
+						return
+					}
+		
+					challengeRepository.deleteChallengeById(challengeId, callback)
+				}
+			)
+
 		},
 
-		updateChallengeById: function(challengeId, updatedChallenge, callback){
-			const validationErrors = challengeValidator.getErrorsNewChallenge(updatedChallenge)
+		updateChallengeById: function(requesterUsername, challengeId, updatedChallenge, callback){
+			challengeValidator.getErrorsUpdateChallenge(
+				requesterUsername, 
+				challengeId,
+				updatedChallenge, 
+				function(validationErrorCodes){
+					if(0 < validationErrorCodes.length){
+						callback(validationErrorCodes, null)
+						return
+					}
 
-			if(0 < validationErrors.length){
-				callback(validationErrors, null)
-				return
-			}
-
-			challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
+					challengeRepository.updateChallengeById(challengeId, updatedChallenge, callback)
+				}
+			) 
+			
 		},
 
-		getTopThreePlayedChallenge: function(callback){
-			challengeRepository.getTopThreePlayedChallenge(callback)
+		getTopThreePlayedChallenges: function(callback){
+			challengeRepository.getTopThreePlayedChallenges(callback)
 		},
-
-		deleteChallengeById: function(challengeId, callback){
-			challengeRepository.deleteChallengeById(challengeId, function(errors, results){
-				if(errors.length > 0){
-					callback(errors, null)
-				}else {
-					callback([], results)
-				} 
-			})
-		}
+		
 	}
 }
 

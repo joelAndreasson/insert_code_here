@@ -3,7 +3,7 @@
 module.exports = function({}){
     const variables = {
         MIN_USERNAME_LENGTH: 3,
-        MAX_USERNAME_LENGTH: 10,
+        MAX_USERNAME_LENGTH: 20,
         MIN_PASSWORD_LENGTH: 3,
         MAX_PASSWORD_LENGTH: 25,
         MIN_TITLE_LENGTH: 3,
@@ -13,7 +13,45 @@ module.exports = function({}){
         MIN_AMOUNT_OF_BLANKS: 1,
         SOLUTIONS_REGEX: /(?<=\[\[).*?(?=\]\])/g,
         BLANKS_REGEX: /\[\[INSERT_CODE_HERE\]\]/g,
-        MIN_COMMENT_LENGTH: 5
+        MAX_BIO_LENGTH: 400,
+        MIN_COMMENT_LENGTH: 5,
+        MAX_COMMENT_LENGTH: 180,
+        MAX_CHALLENGE_TEXT_LENGTH: 1500,
+        MAX_SOLUTION_TEXT: 1500,
+        MAX_DESCRIPTION_LENGTH: 700,
+        
+        // The following three values are the start values when creating a new challenge.
+        START_CHALLENGE_TEXT: 'console.log("[[INSERT_CODE_HERE]]")\n\n// What should the blank say in order to print out "Hello world"?',
+        START_SOLUTION_TEXT: '[[Hello world]]',
+        START_PROG_LANGUAGE: 'JavaScript',
+
+
+        // ----- All error codes -----
+        databaseError: "databaseError",
+        usernameMissing: "usernameMissing",
+        usernameTooShort: "usernameTooShort",
+        passwordsNotMatch: "passwordsNotMatch",
+        accountDoesNotExist: "accountDoesNotExist",
+        notEnoughBlanks: "notEnoughBlanks",
+        solutionsNotMatchBlanks: "solutionsNotMatchBlanks",
+        titleTooShort: "titleTooShort",
+        progLanguageNotValid: "progLanguageNotValid",
+        difficultyNotValid: "difficultyNotValid",
+        descriptionTooShort: "descriptionTooShort",
+        numOfBlanksChanged: "numOfBlanksChanged",
+        commentTooShort: "commentTooShort",
+        passwordToShort: "passwordToShort",
+        passwordToLong: "passwordToLong",
+        usernameTaken: "usernameTaken",
+        challengeNotExist: "challengeNotExist",
+        accountNotExist: "accountNotExist",
+        notAuthorized: "notAuthorized",
+        bioTooLong: "bioToLong",
+        descTooLong: "descTooLong",
+        commentTooLong: "commentTooLong",
+        challengeTextTooLong: "challengeTextTooLong",
+        solutionTextTooLong: "solutionTextTooLong"
+      
     }
 
     return variables

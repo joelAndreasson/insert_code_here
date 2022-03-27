@@ -6,7 +6,8 @@ module.exports = function({}){
 		host     : 'database',
 		user     : 'root',
 		password : 'theRootPassword',
-		database : 'webAppDatabase'
+		database : 'webAppDatabase',
+		dateStrings: true
 	})
 	
 	return connection
