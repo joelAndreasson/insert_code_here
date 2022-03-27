@@ -1,6 +1,6 @@
 module.exports = function({validationVariabels}){
     return{
-        getErrorsNewComment: function(comment){
+        getErrorsCreateComment: function(comment){
             errors = []
     
             if(comment.commentText.length < validationVariabels.MIN_COMMENT_LENGTH){
@@ -15,6 +15,16 @@ module.exports = function({validationVariabels}){
     
             if(newCommentText.length < validationVariabels.MIN_COMMENT_LENGTH){
                 errors.push("commentTooShort")
+            }
+
+            return errors
+        },
+
+        getErrorsFetchComment: function(comment){
+            errors = []
+
+            if(comment == undefined){
+                errors.push("commentNotExist")
             }
 
             return errors

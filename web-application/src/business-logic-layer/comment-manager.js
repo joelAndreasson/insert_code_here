@@ -3,7 +3,15 @@
 module.exports = function({commentRepository, commentValidator}){
 	return{
 		getCommentById: function(id, callback){
-			commentRepository.getCommentById(id, callback)
+			commentRepository.getCommentById(id, function(errorCodes, comment){
+				const validationErrors = commentValidator.getErrorsFetchComment(comment)
+
+				if(validationErrors.length > 0){
+					callback(validationErrors, comment)
+				}else {
+					callback([], comment)
+				}
+			})
 		},
 
 		getCommentsByChallengeId: function(challengeId, callback){
@@ -11,10 +19,10 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		createComment: function(comment, callback){
-			const errors = commentValidator.getErrorsNewComment(comment)
+			const validationErrors = commentValidator.getErrorsCreateComment(comment)
 	
-			if(0 < errors.length){
-				callback(errors, null)
+			if(0 < validationErrors.length){
+				callback(validationErrors, null)
 				return
 			}
 
@@ -26,14 +34,16 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		deleteCommentById: function(commentId, callback){
-			commentRepository.deleteCommentById(commentId, callback)
+			commentRepository.deleteCommentById(commentId, function(errorCodes){
+
+			})
 		}, 
 
 		updateCommentById: function(commentId, newCommentText, callback){
-			const errors = commentValidator.getErrorsUpdateComment(newCommentText)
+			const validationErrors = commentValidator.getErrorsUpdateComment(newCommentText)
 	
-			if(0 < errors.length){
-				callback(errors, null)
+			if(0 < validationErrors.length){
+				callback(validationErrors, null)
 				return
 			}
 			commentRepository.updateCommentById(commentId, newCommentText, callback)

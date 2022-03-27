@@ -26,19 +26,20 @@ module.exports = function({accountRepository, accountValidator}){
 		},
 
 		getAccountByUsername: function(username, callback){
-			accountRepository.getAccountByUsername(username, function(errors, account){
-				if(errors.length > 0){
-					callback(errors, null)
+			accountRepository.getAccountByUsername(username, function(errorCodes, account){
+				const validationErrors = accountValidator.getErrorsFetchAccount(account)
+				if(validationErrors.length > 0){
+					callback(validationErrors, account)
 				}else {
-					callback(errors, account)
+					callback([], account)
 				}
 			})
 		},
 
 		login: function(loginCredentials, callback){
-			accountRepository.getAccountByUsername(loginCredentials.username, function(errors,account){
-				if(errors.length > 0){
-					callback(errors, null)
+			accountRepository.getAccountByUsername(loginCredentials.username, function(errorCodes,account){
+				if(errorCodes.length > 0){
+					callback(errorCodes, null)
 				}else {
 					const validationErrors = accountValidator.getErrorsLogin(loginCredentials, account)
 					callback(validationErrors, account)

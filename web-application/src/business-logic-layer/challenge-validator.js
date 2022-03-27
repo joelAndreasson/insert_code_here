@@ -38,7 +38,16 @@ module.exports = function({validationVariabels}){
             }
 
             return errors
+        },
+
+        getErrorsFetchChallenge: function(challenge){
+            var errors = []
+            if(challenge == undefined){
+                errors.push("challengeNotExist")
+            }
+            return errors
         }
+
     }
 }
 

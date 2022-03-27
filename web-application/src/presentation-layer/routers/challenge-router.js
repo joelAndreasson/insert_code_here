@@ -26,13 +26,17 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			numOfPlays: 0,
 			accountUsername: request.body.accountUsername
 		}
+
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
 		
-		challengeManager.createChallenge(challenge, function(errors, challengeId){
+		challengeManager.createChallenge(challenge, function(errorCodes, challengeId){
 			
-			if(errors.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errors)
+			if(errorCodes.length > 0){
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errors: errorCodes,
+					errors: translatedErrors,
 					challenge: challenge,
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES
@@ -50,8 +54,8 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	
 	router.get("/", function(request, response){
 	
-		challengeManager.getAllChallenges(function(errors, challenges){
-			if(errors.length > 0){
+		challengeManager.getAllChallenges(function(errorCodes, challenges){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else {
 				const model = {
@@ -70,17 +74,18 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		
 		let allErrors = [] // This is maybe unnecessary because there is a posibility that there will be two databaseError:s
 	
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			allErrors.push(...errors)
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			allErrors.push(...errorCodes)
 
-			if(challenge == undefined){
-				response.render("page-not-found.hbs")
-			}
-			commentManager.getCommentsByChallengeId(challengeId, function(errors, comments){
+			commentManager.getCommentsByChallengeId(challengeId, function(errorCodes, comments){
         
-				allErrors.push(...errors)
+				allErrors.push(...errorCodes)
 				if(allErrors.length > 0){
-					response.render("internal-server-error.hbs")
+					if(allErrors.includes("challengeNotExist")){
+						response.render('page-not-found.hbs')
+					}else {
+						response.render('internal-server-error.hbs')
+					}	
 				}else {
 					const model = {
 						challenge: challenge,
@@ -95,11 +100,13 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 	router.get('/:challengeId/play', function(request, response){
 		const challengeId = request.params.challengeId
 	
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			if(errors.length > 0){
-				response.render("internal-server-error.hbs")
-			}else if(challenge == undefined){ // can just be if(challenge) 
-				response.render("page-not-found.hbs")
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			if(errorCodes.length > 0){
+				if(errorCodes.includes("challengeNotExist")){
+					response.render('page-not-found.hbs')
+				}else {
+					response.render('internal-server-error.hbs')
+				}	
 			}else {
 				const model = {
 					challenge: challenge
@@ -117,14 +124,14 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		challengeManager.getResultsFromChallengeTextWithId(
 			challengeId, 
 			changedChallengeText, 
-			function(errors, numOfRightAnswers, totalNumOfAnswers, challenge){
-				if(errors.length > 0){
+			function(errorCodes, numOfRightAnswers, totalNumOfAnswers, challenge){
+				if(errorCodes.length > 0){
 		
 					challenge.challengeText = changedChallengeText
 					
-					const errorCodes = errorTranslator.translateErrorCodes(errors) // errorcodes should be reversed. errorcodes before translation and errors after.
+					const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 					const model = {
-						errors: errorCodes,
+						errors: translatedErrors,
 						challenge: challenge
 					}
 		
@@ -144,17 +151,41 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
-		const model = {
-			challengeId: challengeId
-		}
-		response.render('challenge-delete.hbs', model)
+
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			if(errorCodes.length > 0){
+				if(errorCodes.includes("challengeNotExist")){
+					response.render('page-not-found.hbs')
+				}else {
+					response.render('internal-server-error.hbs')
+				}	
+			}else {
+
+				var isOwner = false
+				if(request.session.accountUsername == challenge.accountUsername){
+					isOwner = true
+				}
+
+				const model = {
+					challengeId: challengeId,
+					isOwner: isOwner
+				}
+
+				response.render('challenge-delete.hbs', model)
+			}
+			
+		})
 	})
 
 	router.post('/:challengeId/delete', function(request, response){
 		const challengeId = request.params.challengeId
+
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
 		
-		challengeManager.deleteChallengeById(challengeId, function(errors, results){
-			if(errors.length > 0){
+		challengeManager.deleteChallengeById(challengeId, function(errorCodes, results){
+			if(errorCodes.length > 0){
 				response.render("internal-server-error.hbs")
 			}else {
 				const username = request.session.accountUsername
@@ -165,14 +196,25 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get('/:challengeId/update', function(request, response){
 		const challengeId = request.params.challengeId
-		challengeManager.getChallengeById(challengeId, function(errors, challenge){
-			if(errors.length > 0){
-				response.render('internal-server-error.hbs')
+		challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
+			if(errorCodes.length > 0){
+				if(errorCodes.includes("challengeNotExist")){
+					response.render('page-not-found.hbs')
+				}else {
+					response.render('internal-server-error.hbs')
+				}	
 			} else {
+
+				var isOwner = false
+				if(request.session.accountUsername == challenge.accountUsername){
+					isOwner = true
+				}
+
 				const model = {
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES,
-					challenge: challenge
+					challenge: challenge,
+					isOwner: isOwner
 				}
 				response.render('challenge-update.hbs', model)
 			}
@@ -194,6 +236,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			accountUsername: request.body.accountUsername
 		}
 
+		if(!request.session.isLoggedIn){
+            response.redirect('/accounts/login')
+        }
+
 		if(sessionUsername != updatedChallenge.accountUsername){
 			const isLoggedIn = false
 			const model = {
@@ -202,10 +248,10 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			response.render('challenge-update.hbs', model)
 		}
 
-		challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errors){
-			if(errors.length > 0){
+		challengeManager.updateChallengeById(challengeId, updatedChallenge, function(errorCodes){
+			if(errorCodes.length > 0){
 				const model = {
-					errors: errors,
+					errors: errorCodes,
 					challenge: updatedChallenge,
 					challengeId: challengeId,
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,

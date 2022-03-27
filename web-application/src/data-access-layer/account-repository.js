@@ -21,7 +21,6 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, accounts){
 				if(error){
-					console.log(error.code)
 					callback(['databaseError'], null)
 				}else{
 					callback([], accounts[0])
@@ -48,7 +47,6 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, results){
 				if(error){
-					console.log(error.code) // TODO: Remove
 					if(error.code == "ER_DUP_ENTRY"){
 						callback(['usernameTaken'], null)
 					}
@@ -67,7 +65,6 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, account){
 				if(error){
-					// better error handling
 					callback(['databaseError'], null)
 				}else {
 					callback([], account[0])

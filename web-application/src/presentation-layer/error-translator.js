@@ -19,7 +19,8 @@ module.exports = function({validationVariabels}){
                 commentTooShort: "Comment needs to be at least " + validationVariabels.MIN_COMMENT_LENGTH + " characters",
                 passwordToShort: "Password must be more than " + validationVariabels.MIN_PASSWORD_LENGTH + " characters",
                 passwordToLong: "Password cannot be more than " + validationVariabels.MAX_PASSWORD_LENGTH + " characters",
-                usernameTaken: "Username already taken"
+                usernameTaken: "Username already taken",
+                challengeNotExist: "Challenge does not exist."
             }
     
             const translations = errorCodes.map(error => errorTranslations[error])
