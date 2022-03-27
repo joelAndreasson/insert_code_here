@@ -13,7 +13,8 @@ module.exports = function({}){
         MIN_AMOUNT_OF_BLANKS: 1,
         SOLUTIONS_REGEX: /(?<=\[\[).*?(?=\]\])/g,
         BLANKS_REGEX: /\[\[INSERT_CODE_HERE\]\]/g,
-        MIN_COMMENT_LENGTH: 5
+        MIN_COMMENT_LENGTH: 5,
+        MAX_BIO_LENGTH: 400
     }
 
     return variables

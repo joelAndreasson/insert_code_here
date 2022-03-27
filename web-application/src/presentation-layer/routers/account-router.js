@@ -93,7 +93,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 
 	router.post("/:accountUsername/updateBio", function(request,response){
 		const newBioText = request.body.bioText
-		const accountUsername = request.params.username
+		const accountUsername = request.params.accountUsername
 
 		if(!request.session.isLoggedIn){
             response.redirect('/accounts/login')
@@ -101,9 +101,14 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 
 		accountManager.updateAccountBio(newBioText, accountUsername, function(errorCodes, results){
 			if(errorCodes.length > 0){
-				const errorCodes = errorTranslator.translateErrorCodes(errorCodes)
+				const validationErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
-					errorCodes: errorCodes
+					isOwner: true,
+					errors: validationErrors,
+					account: {
+						username: accountUsername,
+						bio: newBioText
+					}
 				}
 				response.render("profile-edit-bio.hbs", model)
 			}else {

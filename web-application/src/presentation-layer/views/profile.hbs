@@ -9,12 +9,12 @@
                 This user has yet to introduce themselves.
             {{/if}}
             </p>
-            {{#if isProfileOwner}}
-                <a href="/accounts/{{account.username}}/updateBio">Edit Bio</a>
-            {{/if}} 
         </div>
         
     </div>
+    {{#if isProfileOwner}}
+        <a href="/accounts/{{account.username}}/updateBio">Edit Bio</a>
+    {{/if}} 
     {{#if challenges}}
         <div class="has-text-centered">
             <h2>Challenges by {{account.username}}</h2>   

@@ -68,9 +68,13 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		getChallengeById: function(challengeId, callback){
 			
 			challengeRepository.getChallengeById(challengeId, function(errorCodes, challenge){
-				const validationErrors = challengeValidator.getErrorsFetchChallenge(challenge)
-				if(validationErrors.length > 0){
-					callback(validationErrors, challenge)
+				var allErrors = []
+
+				errors.push(...errorCodes)
+				const validationErrorCodes = challengeValidator.getErrorsFetchChallenge(challenge)
+				errors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, challenge)
 				}else {
 					callback([], challenge)
 				}
@@ -80,7 +84,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		createChallenge: function(challenge, callback){
 			const validationErrorCodes = challengeValidator.getErrorsNewChallenge(challenge)
 	
-			if(0 < validationErrors.length){
+			if(0 < validationErrorCodes.length){
 				callback(validationErrorCodes, null)
 				return
 			}

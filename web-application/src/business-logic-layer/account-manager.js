@@ -27,9 +27,12 @@ module.exports = function({accountRepository, accountValidator}){
 
 		getAccountByUsername: function(username, callback){
 			accountRepository.getAccountByUsername(username, function(errorCodes, account){
-				const validationErrors = accountValidator.getErrorsFetchAccount(account)
-				if(validationErrors.length > 0){
-					callback(validationErrors, account)
+				var allErrors = []
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = accountValidator.getErrorsFetchAccount(account)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, account)
 				}else {
 					callback([], account)
 				}
@@ -52,6 +55,12 @@ module.exports = function({accountRepository, accountValidator}){
 		},
 
 		updateAccountBio: function(newBioText, accountUsername, callback){
+
+			const errors = accountValidator.getErrorsUpdateBio(newBioText)
+			if(errors.length > 0){
+				callback(errors, null)
+				return
+			}
 			accountRepository.updateAccountBio(newBioText, accountUsername, callback)
 		}
 	}

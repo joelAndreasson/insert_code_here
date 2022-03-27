@@ -32,7 +32,7 @@ module.exports = function({validationVariabels}){
 		getErrorsLogin: function(loginCredentials, account){
 			const errors = []
 	
-			if(account == null){
+			if(account == undefined){
 				errors.push("accountDoesNotExist")
 			}else if(!bcrypt.compareSync(loginCredentials.password, account.password)){
 				errors.push("accountDoesNotExist")
@@ -46,6 +46,16 @@ module.exports = function({validationVariabels}){
 
 			if(account == undefined){
 				errors.push("accountNotExist")
+			}
+
+			return errors
+		},
+
+		getErrorsUpdateBio: function(bioText){
+			errors = []
+
+			if(bioText.length >= validationVariabels.MAX_BIO_LENGTH){
+				errors.push("bioToLong")
 			}
 
 			return errors

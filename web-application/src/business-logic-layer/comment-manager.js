@@ -4,10 +4,13 @@ module.exports = function({commentRepository, commentValidator}){
 	return{
 		getCommentById: function(id, callback){
 			commentRepository.getCommentById(id, function(errorCodes, comment){
-				const validationErrors = commentValidator.getErrorsFetchComment(comment)
+				var allErrors = []
 
-				if(validationErrors.length > 0){
-					callback(validationErrors, comment)
+				allErrors.push(...errorCodes)
+				const validationErrorCodes = commentValidator.getErrorsFetchComment(comment)
+				allErrors.push(...validationErrorCodes)
+				if(allErrors.length > 0){
+					callback(allErrors, comment)
 				}else {
 					callback([], comment)
 				}
