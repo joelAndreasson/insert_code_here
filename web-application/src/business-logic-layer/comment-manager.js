@@ -37,9 +37,7 @@ module.exports = function({commentRepository, commentValidator}){
 		},
 
 		deleteCommentById: function(commentId, callback){
-			commentRepository.deleteCommentById(commentId, function(errorCodes){
-
-			})
+			commentRepository.deleteCommentById(commentId, callback)
 		}, 
 
 		updateCommentById: function(commentId, newCommentText, callback){

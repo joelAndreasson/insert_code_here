@@ -15,9 +15,9 @@ module.exports = function({accountRepository, accountValidator}){
 		createAccount: function(accountInformation, callback){
 			
 			// Validate the account.
-			const errors = accountValidator.getErrorsNewAccount(accountInformation)
-			if(errors.length > 0){
-				callback(errors, null)
+			const validationErrorCodes = accountValidator.getErrorsNewAccount(accountInformation)
+			if(validationErrorCodes.length > 0){
+				callback(validationErrorCodes, null)
 				return
 			}
 			// hash password
@@ -44,8 +44,8 @@ module.exports = function({accountRepository, accountValidator}){
 				if(errorCodes.length > 0){
 					callback(errorCodes, null)
 				}else {
-					const validationErrors = accountValidator.getErrorsLogin(loginCredentials, account)
-					callback(validationErrors, account)
+					const validationErrorCodes = accountValidator.getErrorsLogin(loginCredentials, account)
+					callback(validationErrorCodes, account)
 				}
 			})
 		},
@@ -56,9 +56,9 @@ module.exports = function({accountRepository, accountValidator}){
 
 		updateAccountBio: function(newBioText, accountUsername, callback){
 
-			const errors = accountValidator.getErrorsUpdateBio(newBioText)
-			if(errors.length > 0){
-				callback(errors, null)
+			const validationErrorCodes = accountValidator.getErrorsUpdateBio(newBioText)
+			if(validationErrorCodes.length > 0){
+				callback(validationErrorCodes, null)
 				return
 			}
 			accountRepository.updateAccountBio(newBioText, accountUsername, callback)

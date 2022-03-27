@@ -101,10 +101,10 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 
 		accountManager.updateAccountBio(newBioText, accountUsername, function(errorCodes, results){
 			if(errorCodes.length > 0){
-				const validationErrors = errorTranslator.translateErrorCodes(errorCodes)
+				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
 				const model = {
 					isOwner: true,
-					errors: validationErrors,
+					errors: translatedErrors,
 					account: {
 						username: accountUsername,
 						bio: newBioText

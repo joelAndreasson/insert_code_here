@@ -36,10 +36,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 					const enteredAnswers = changedChallengeText.match(validationVariabels.SOLUTIONS_REGEX)
 					const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 			
-					const validationErrors = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
+					const validationErrorCodes = challengeValidator.getErrorsPlayChallenge(enteredAnswers, solutionAnswers)
 			
-					if(validationErrors.length > 0){
-						callback(validationErrors, null, null, challenge)
+					if(validationErrorCodes.length > 0){
+						callback(validationErrorCodes, null, null, challenge)
 						return
 					}
 					else{
@@ -70,9 +70,9 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 			challengeRepository.getChallengeById(challengeId, function(errorCodes, challenge){
 				var allErrors = []
 
-				errors.push(...errorCodes)
+				allErrors.push(...errorCodes)
 				const validationErrorCodes = challengeValidator.getErrorsFetchChallenge(challenge)
-				errors.push(...validationErrorCodes)
+				allErrors.push(...validationErrorCodes)
 				if(allErrors.length > 0){
 					callback(allErrors, challenge)
 				}else {
@@ -105,10 +105,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		},
 
 		updateChallengeById: function(challengeId, updatedChallenge, callback){
-			const validationErrors = challengeValidator.getErrorsNewChallenge(updatedChallenge)
+			const validationErrorCodes = challengeValidator.getErrorsNewChallenge(updatedChallenge)
 
-			if(0 < validationErrors.length){
-				callback(validationErrors, null)
+			if(0 < validationErrorCodes.length){
+				callback(validationErrorCodes, null)
 				return
 			}
 
