@@ -20,11 +20,11 @@ module.exports = function({db}){
 			const query = `SELECT * FROM challenges WHERE id = ? LIMIT 1`
 			const values = [challengeId]
 			
-			db.query(query, values, function(error, challenges){
+			db.query(query, values, function(error, challenge){
 				if(error){
 					callback(['databaseError'], null)
 				}else{
-					callback([], challenges[0])
+					callback([], challenge[0])
 				}
 			})
 		},
