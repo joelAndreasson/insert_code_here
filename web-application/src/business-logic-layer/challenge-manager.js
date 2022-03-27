@@ -78,10 +78,10 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 		},
 
 		createChallenge: function(challenge, callback){
-			const validationErrors = challengeValidator.getErrorsNewChallenge(challenge)
+			const validationErrorCodes = challengeValidator.getErrorsNewChallenge(challenge)
 	
 			if(0 < validationErrors.length){
-				callback(validationErrors, null)
+				callback(validationErrorCodes, null)
 				return
 			}
 			

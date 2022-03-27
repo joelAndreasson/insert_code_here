@@ -3,14 +3,14 @@ const express = require('express')
 module.exports = function({commentManager, errorTranslator}){
     const router = express.Router({ mergeParams: true })
 
-    router.get("/create", function(request, response){
+    router.get('/create', function(request, response){
         const challengeId = request.params.challengeId
         
         const model = {
             challengeId: challengeId
         }
 
-        response.render("comment-create.hbs", model)
+        response.render('comment-create.hbs', model)
     })
 
     router.post('/create', function(request, response){
@@ -79,7 +79,7 @@ module.exports = function({commentManager, errorTranslator}){
 
         commentManager.deleteCommentById(commentId, function(errorCodes){
             if(errorCodes.length > 0){
-                response.render("internal-server-error.hbs")
+                response.render('internal-server-error.hbs')
             }else {
                 response.redirect('/challenges/'+challengeId+'/preview')
             }
@@ -107,7 +107,7 @@ module.exports = function({commentManager, errorTranslator}){
                     comment: comment,
                     isOwner: isOwner
                 }
-                response.render("comment-update.hbs", model)
+                response.render('comment-update.hbs', model)
             }
         })
     })
