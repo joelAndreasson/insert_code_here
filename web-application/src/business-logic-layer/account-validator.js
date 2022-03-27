@@ -51,11 +51,11 @@ module.exports = function({validationVariabels}){
 			return errorCodes
 		},
 
-		getErrorsUpdateBio: function(requesterUsername, profileAccountUsername, bioText){ // add bioText in manager, must be three arguments
+		getErrorsUpdateBio: function(requesterUsername, profileAccountUsername, bioText){
 			const errorCodes = []
       
-      if(bioText.length > validationVariabels.MAX_BIO_LENGTH){
-				errorCodes.push("bioToLong") // add as validationVariable
+      		if(bioText.length > validationVariabels.MAX_BIO_LENGTH){
+				errorCodes.push(validationVariabels.bioToLong)
 			}
 
 			if(profileAccountUsername != requesterUsername){

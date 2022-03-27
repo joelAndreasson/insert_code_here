@@ -21,7 +21,7 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByChallengeId(challengeId, callback)
 		},
 
-		createComment: function(requesterUsername, comment, callback){ // CALL VALIDATOR AND CHECK OWNER
+		createComment: function(requesterUsername, comment, callback){
 			const validationErrorCodes = commentValidator.getErrorsCreateComment(requesterUsername, comment)
 	
 			if(0 < validationErrorCodes.length){
@@ -36,7 +36,7 @@ module.exports = function({commentRepository, commentValidator}){
 			commentRepository.getCommentsByUsername(username, callback)
 		},
 
-		deleteCommentById: function(requesterUsername, commentId, callback){ // CALL VALIDATOR AND CHECK OWNER
+		deleteCommentById: function(requesterUsername, commentId, callback){
 			commentValidator.getErrorsDeleteComment(
 				requesterUsername, 
 				commentId, 
@@ -51,7 +51,7 @@ module.exports = function({commentRepository, commentValidator}){
 			
 		}, 
 
-		updateCommentById: function(requesterUsername, commentId, newCommentText, callback){ // CALL VALIDATOR AND CHECK OWNER
+		updateCommentById: function(requesterUsername, commentId, newCommentText, callback){
 			commentValidator.getErrorsUpdateComment(
 				requesterUsername, 
 				commentId, 

@@ -10,8 +10,7 @@ module.exports = function({validationVariabels, challengeRepository}){
                 if(errors.length > 0){
                     errorCodes.push(...errors)
                     callback(errorCodes)
-                }
-                else{
+                }else{
                     const ownerUsername = challenge.accountUsername
 
                     if(ownerUsername != requesterUsername){
@@ -47,37 +46,37 @@ module.exports = function({validationVariabels, challengeRepository}){
         },
 
         getErrorsNewChallenge: function(requesterUsername, challenge){
-            const errors = [] // errorCodes
+            const errorCodes = []
 
             const blankAnswers = challenge.challengeText.match(validationVariabels.BLANKS_REGEX)
             const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 
             if(challenge.accountUsername != requesterUsername){
-                errors.push(validationVariabels.notAuthorized)
+                errorCodes.push(validationVariabels.notAuthorized)
             }
 
             if(!blankAnswers || blankAnswers.length < validationVariabels.MIN_AMOUNT_OF_BLANKS){
-                errors.push("notEnoughBlanks")
+                errorCodes.push("notEnoughBlanks")
             }
             if(!blankAnswers || !solutionAnswers || blankAnswers.length != solutionAnswers.length){
-                errors.push("solutionsNotMatchBlanks")
+                errorCodes.push("solutionsNotMatchBlanks")
             }
             
 
             if(challenge.title.length < validationVariabels.MIN_TITLE_LENGTH){
-                errors.push("titleTooShort")
+                errorCodes.push("titleTooShort")
             }
             if(!validationVariabels.ALL_PROG_LANGUAGES.includes(challenge.progLanguage)){
-                errors.push("progLanguageNotValid")
+                errorCodes.push("progLanguageNotValid")
             }
             if(!validationVariabels.ALL_DIFFICULTIES.includes(challenge.difficulty)){
-                errors.push("difficultyNotValid")
+                errorCodes.push("difficultyNotValid")
             }
             if(challenge.description.length < validationVariabels.MIN_DESCRIPTION_LENGTH){
-                errors.push("descriptionTooShort")
+                errorCodes.push("descriptionTooShort")
             }
 
-            return errors
+            return errorCodes
         },
 
         getErrorsPlayChallenge: function(enteredAnswers, solutionAnswers){
@@ -105,8 +104,7 @@ module.exports = function({validationVariabels, challengeRepository}){
                 if(errors.length > 0){
                     errorCodes.push(...errors)
                     callback(errorCodes)
-                }
-                else{
+                }else{
                     const ownerUsername = challenge.accountUsername
 
                     if(ownerUsername != requesterUsername){

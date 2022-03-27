@@ -1,16 +1,15 @@
 
 
-module.exports = function({db}){
+module.exports = function({db, validationVariabels}){
     return{
-        getCommentById: function(id, callback){ // unnecessary????
+        getCommentById: function(id, callback){
             const query = 'SELECT * FROM comments WHERE id = ? LIMIT 1'
             const values = [id]
 
             db.query(query, values, function(error, comments){
                 if(error){
-                    callback(['databaseError'], null)
-                }
-                else{
+                    callback([validationVariabels.databaseError], null)
+                }else{
                     callback([], comments[0])
                 }
             })
@@ -22,9 +21,8 @@ module.exports = function({db}){
 
             db.query(query, values, function(error, comments){
                 if(error){
-                    callback(['databaseError'], null)
-                }
-                else{
+                    callback([validationVariabels.databaseError], null)
+                }else{
                     callback([], comments)
                 }
             })
@@ -36,10 +34,10 @@ module.exports = function({db}){
             
             db.query(query, values, function(error, results){
                 if(error){
-                    if(error.code == "ER_NO_REFERENCED_ROW_2"){ // TODO: Look for commentUnique violation.
-                        callback(['challengeNotExist'], null)
+                    if(error.code == "ER_NO_REFERENCED_ROW_2"){
+                        callback([validationVariabels.challengeNotExist], null)
                     }else {
-                        callback(['databaseError'], null)
+                        callback([validationVariabels.databaseError], null)
                     }
                 }else{
                     callback([], results.insertId)
@@ -53,7 +51,7 @@ module.exports = function({db}){
 
             db.query(query, values, function(error, comments){
                 if(error){
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 }else {
                     callback([], comments)
                 }
@@ -66,7 +64,7 @@ module.exports = function({db}){
 
             db.query(query, values, function(error){
                 if(error){
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 }else {
                     callback([], null)
                 }
@@ -79,7 +77,7 @@ module.exports = function({db}){
 
             db.query(query, values, function(error){
                 if(error){
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 }else {
                     callback([], null)
                 }

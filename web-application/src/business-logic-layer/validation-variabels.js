@@ -15,6 +15,12 @@ module.exports = function({}){
         BLANKS_REGEX: /\[\[INSERT_CODE_HERE\]\]/g,
         MAX_BIO_LENGTH: 400,
         MIN_COMMENT_LENGTH: 5,
+        
+        // The following three values are the start values when creating a new challenge.
+        START_CHALLENGE_TEXT: 'console.log("[[INSERT_CODE_HERE]]")\n\n// What should the blank say in order to print out "Hello world"?',
+        START_SOLUTION_TEXT: '[[Hello world]]',
+        START_PROG_LANGUAGE: 'JavaScript',
+
 
         // ----- All error codes -----
         databaseError: "databaseError",
@@ -35,7 +41,8 @@ module.exports = function({}){
         usernameTaken: "usernameTaken",
         challengeNotExist: "challengeNotExist",
         accountNotExist: "accountNotExist",
-        notAuthorized: "notAuthorized"
+        notAuthorized: "notAuthorized",
+        bioToLong: "bioToLong"
       
     }
 

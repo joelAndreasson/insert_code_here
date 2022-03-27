@@ -1,13 +1,13 @@
 
 
-module.exports = function({initSequelize}){
+module.exports = function({initSequelize, validationVariabels}){
     return {
         getAllChallenges: function(callback){
             initSequelize.challenges.findAll({raw: true})
                 .then(challenges => callback([], challenges))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -16,7 +16,7 @@ module.exports = function({initSequelize}){
                 .then(challenge => callback([], challenge))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -25,7 +25,7 @@ module.exports = function({initSequelize}){
                 .then(createdChallenge => callback([], createdChallenge.id))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -34,7 +34,7 @@ module.exports = function({initSequelize}){
                 .then(challenges => callback([], challenges))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -43,7 +43,7 @@ module.exports = function({initSequelize}){
                 .then(results => callback([], results))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -62,7 +62,7 @@ module.exports = function({initSequelize}){
             .then(results => callback([], results))
             .catch(error => {
                 console.log(error)
-                callback(['databaseError'], null)
+                callback([validationVariabels.databaseError], null)
             })
         }, 
 
@@ -71,7 +71,7 @@ module.exports = function({initSequelize}){
                 .then(challenges => callback([], challenges))
                 .catch(error => {
                     console.log(error)
-                    callback(['databaseError'], null)
+                    callback([validationVariabels.databaseError], null)
                 })
         },
 
@@ -85,7 +85,7 @@ module.exports = function({initSequelize}){
             .then(results => callback([], results))
             .catch(error => {
                 console.log(error)
-                callback(['databaseError'], null)
+                callback([validationVariabels.databaseError], null)
             })
         }
 

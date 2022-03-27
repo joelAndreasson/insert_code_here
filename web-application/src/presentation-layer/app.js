@@ -19,9 +19,12 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	}))
 
 	app.use('/static', express.static("public"))
-	
+
+	//The following variable spcifies a redis sessions time-to-live, 60 seconds * 60 minutes * 1 hour
+	const redisSessionTTL = 60 * 60 * 1
+
 	app.use(session({
-		store: new RedisStore({ client: redisClient,  ttl: 60 * 60 * 1  }), //Magic numbers?????
+		store: new RedisStore({ client: redisClient,  ttl: redisSessionTTL }),
 		secret: "jasirhwenvjhsduyqkvhsaoeruhgrhasdfm",
 		saveUninitialized: false,
 		resave: false
@@ -32,8 +35,6 @@ module.exports = function({accountRouter, challengeRouter, variousRouter, commen
 	// Setup express-handlebars.
 	app.set('views', path.join(__dirname, 'views'))
 	
-	// Note: This code is for an old version of express-handlebars.
-	// One should use newest version of packages.
 	app.engine('hbs', engine({
 		extname: 'hbs',
 		defaultLayout: 'main',

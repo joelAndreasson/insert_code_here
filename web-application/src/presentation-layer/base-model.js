@@ -1,5 +1,4 @@
 
-
 module.exports = function({}){
     
     function baseModel(request, response, next){

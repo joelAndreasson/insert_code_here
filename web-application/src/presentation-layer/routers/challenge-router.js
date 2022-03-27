@@ -5,9 +5,15 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 
 	router.get("/create", function(request, response){
 
+		const startChallenge = {
+			progLanguage: validationVariabels.START_PROG_LANGUAGE,
+			challengeText: validationVariabels.START_CHALLENGE_TEXT,
+			solutionText: validationVariabels.START_SOLUTION_TEXT
+		}
 		const model = {
 			progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
-			difficulties: validationVariabels.ALL_DIFFICULTIES
+			difficulties: validationVariabels.ALL_DIFFICULTIES,
+			challenge: startChallenge
 		}
 
 		response.render("challenge-create.hbs", model)
@@ -29,26 +35,26 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			}
 			
 			const requesterUsername = request.session.accountUsername
-			challengeManager.createChallenge(requesterUsername, challenge, function(errorCodes, challengeId){
-				
-				if(errorCodes.length > 0){
-					const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
-					const model = {
-						errors: translatedErrors,
-						challenge: challenge,
-						progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
-						difficulties: validationVariabels.ALL_DIFFICULTIES
+			challengeManager.createChallenge(
+				requesterUsername, 
+				challenge, 
+				function(errorCodes, challengeId){
+					if(errorCodes.length > 0){
+						const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
+						const model = {
+							errors: translatedErrors,
+							challenge: challenge,
+							progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
+							difficulties: validationVariabels.ALL_DIFFICULTIES
+						}
+						response.render('challenge-create.hbs', model)
 					}
-					response.render('challenge-create.hbs', model)
+					else{
+						response.redirect('/challenges/' + challengeId + '/preview')
+					}
 				}
-				else{
-					response.redirect('/challenges/' + challengeId + '/preview')
-				}
-		
-				
-			})
-		}
-		else{
+			)
+		}else{
 			response.render("challenge-create.hbs")
 		}
 		
@@ -92,7 +98,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 						challenge: challenge,
 						comments: comments
 					}
-					response.render("challenge-preview.hbs", model)
+					response.render('challenge-preview.hbs', model)
 				}
 			})
 		})
@@ -112,7 +118,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 				const model = {
 					challenge: challenge
 				}
-				response.render("challenge-play.hbs", model)
+				response.render('challenge-play.hbs', model)
 			}
 		})
 		
@@ -143,7 +149,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 						totalNumOfAnswers: totalNumOfAnswers,
 						challengeId: challengeId
 					}
-				response.render('challenge-completed.hbs', model) // POST request should maybe redirect instead? How?
+				response.render('challenge-completed.hbs', model)
 				}
 			}
 		)
@@ -184,7 +190,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 			const requesterUsername = request.session.accountUsername
 			challengeManager.deleteChallengeById(requesterUsername, challengeId, function(errorCodes, results){
 				if(errorCodes.length > 0){
-					response.render("internal-server-error.hbs")
+					response.render('internal-server-error.hbs')
 				}else {
 					const username = request.session.accountUsername
 					response.redirect('/accounts/' + username)
@@ -193,7 +199,6 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 		}else{
 			response.render('challenge-delete.hbs')
 		}
-		
 		
 	})
 
@@ -207,7 +212,7 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 				}else {
 					response.render('internal-server-error.hbs')
 				}	
-			} else {
+			}else {
 				const model = {
 					progLanguages: validationVariabels.ALL_PROG_LANGUAGES,
 					difficulties: validationVariabels.ALL_DIFFICULTIES,
@@ -256,7 +261,6 @@ module.exports = function({challengeManager, commentManager, validationVariabels
 				}
 			)
 		}else{
-			console.log("IS NOT LOGGED IN")
 			response.render('challenge-update.hbs')
 		}
 		

@@ -1,5 +1,4 @@
 
--- Create a table to store user accounts in.
 CREATE TABLE accounts (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(50) NOT NULL,

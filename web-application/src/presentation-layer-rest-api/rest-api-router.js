@@ -37,8 +37,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
         challengeManager.getAllChallenges(function(errorCodes, challenges){     
             if(errorCodes.length == 0){
                 response.status(200).json(challenges)
-            }
-            else{
+            }else{
                 response.status(500).json(errorCodes)
             }
         })
@@ -52,11 +51,9 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
             if(challenge){
                 response.status(200).json(challenge)
-            }
-            else if(errorCodes.length > 0){
+            }else if(errorCodes.length > 0){
                 response.status(500).json(errorCodes)
-            }
-            else{
+            }else{
                 response.status(404).end()
             }
         })
@@ -78,11 +75,9 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                     }
 
                     response.status(200).json(model)
-                }
-                else if(errorCodes.includes(databaseError)){
+                }else if(errorCodes.includes(databaseError)){
                     response.status(500).json(errorCodes)
-                }
-                else{
+                }else{
                     response.status(400).json(errorCodes)
                 }
 
@@ -100,8 +95,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
             jwt.verify(accessToken, secret, function(error, payload){
                 if(error){
                     response.status(401).json(invalidClientError)
-                }
-                else{
+                }else{
     
                     const challengeId = request.params.challengeId
 
@@ -109,30 +103,28 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
                         if(errorCodes.length > 0){
                             response.status(500).json(errorCodes)
-                        }
-                        else if(payload.accountUsername != challenge.accountUsername){
+                        }else if(payload.accountUsername != challenge.accountUsername){
                             response.status(401).json(invalidClientError)
-                        }
-                        else{
-                            challengeManager.deleteChallengeById(payload.accountUsername, challengeId, function(errorCodes, results){
-                                if(results){
-                                    response.status(204).end()
+                        }else{
+                            challengeManager.deleteChallengeById(
+                                payload.accountUsername, 
+                                challengeId, 
+                                function(errorCodes, results){
+                                    if(results){
+                                        response.status(204).end()
+                                    }else if(errorCodes.length > 0){
+                                        response.status(500).json(errorCodes)
+                                    }else{
+                                        response.status(404).end()
+                                    }
                                 }
-                                else if(errorCodes.length > 0){
-                                    response.status(500).json(errorCodes)
-                                }
-                                else{
-                                    response.status(404).end()
-                                }
-            
-                            })
+                            )
                         }
                     })
     
                 }
             })
-        }
-        else{
+        }else{
             response.status(401).json(invalidClientError)
         }
         
@@ -147,19 +139,16 @@ module.exports = function({accountManager, challengeManager, validationVariabels
             jwt.verify(accessToken, secret, function(error, payload){
                 if(error){
                     response.status(401).json(invalidClientError)
-                }
-                else{
+                }else{
                     const challengeId = request.params.challengeId
 
                     challengeManager.getChallengeById(challengeId, function(errorCodes, challenge){
 
                         if(errorCodes.length > 0){
                             response.status(500).json(errorCodes)
-                        }
-                        else if(payload.accountUsername != challenge.accountUsername){
+                        }else if(payload.accountUsername != challenge.accountUsername){
                             response.status(401).json(invalidClientError)
-                        }
-                        else{
+                        }else{
                             const updatedChallenge = {
                                 title: request.body.title,
                                 challengeText: request.body.challengeText,
@@ -169,18 +158,21 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                                 description: request.body.description
                             }
                 
-                            challengeManager.updateChallengeById(payload.accountUsername, challengeId, updatedChallenge, function(errorCodes, results){
-                                if(errorCodes == 0){
-                                    response.status(204).end()
-                                }
-                                else if(errorCodes.includes(databaseError)){
-                                    response.status(500).json(errorCodes)
-                                }
-                                else{
-                                    response.status(400).json(errorCodes)
-                                }
+                            challengeManager.updateChallengeById(
+                                payload.accountUsername, 
+                                challengeId, 
+                                updatedChallenge, 
+                                function(errorCodes, results){
+                                    if(errorCodes == 0){
+                                        response.status(204).end()
+                                    }else if(errorCodes.includes(databaseError)){
+                                        response.status(500).json(errorCodes)
+                                    }else{
+                                        response.status(400).json(errorCodes)
+                                    }
                                 
-                            })
+                                }
+                            )
                         }
 
                     })
@@ -188,8 +180,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                 }
             })
 
-        }
-        else{
+        }else{
             response.status(401).json(invalidClientError)
         }
     })
@@ -204,8 +195,7 @@ module.exports = function({accountManager, challengeManager, validationVariabels
             jwt.verify(accessToken, secret, function(error, payload){
                 if(error){
                     response.status(401).json(invalidClientError)
-                }
-                else{
+                }else{
                     const challenge = {
                         title: request.body.title,
                         challengeText: request.body.challengeText,
@@ -218,22 +208,23 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                         accountUsername: request.body.accountUsername
                     }
             
-                    challengeManager.createChallenge(payload.accountUsername, challenge, function(errorCodes, challengeId){
-                        if(errorCodes.length == 0){
-                            response.setHeader("Location", "/challenges/" + challengeId)
-                            response.status(201).json(challengeId)
+                    challengeManager.createChallenge(
+                        payload.accountUsername, 
+                        challenge, 
+                        function(errorCodes, challengeId){
+                            if(errorCodes.length == 0){
+                                response.setHeader("Location", "/challenges/" + challengeId)
+                                response.status(201).json(challengeId)
+                            }else if(errorCodes.includes(databaseError)){
+                                response.status(500).json(errorCodes)
+                            }else{
+                                response.status(400).json(errorCodes)
+                            }
                         }
-                        else if(errorCodes.includes(databaseError)){
-                            response.status(500).json(errorCodes)
-                        }
-                        else{
-                            response.status(400).json(errorCodes)
-                        }
-                    })
+                    )
                 }
             })
-        }
-        else{
+        }else{
             response.status(401).json(invalidClientError)
         }
         
@@ -256,11 +247,9 @@ module.exports = function({accountManager, challengeManager, validationVariabels
 
                 response.setHeader("Location", "/accounts/" + account.username)
                 response.status(201).json(account)
-            }
-            else if(errorCodes.includes(databaseError)){
+            }else if(errorCodes.includes(databaseError)){
                 response.status(500).json(errorCodes)
-            }
-            else{
+            }else{
                 response.status(400).json(errorCodes)
             }
         })
@@ -287,24 +276,20 @@ module.exports = function({accountManager, challengeManager, validationVariabels
                         if(error){
                             console.log(error)
                             response.status(401).json(invalidClientError)
-                        }
-                        else{
+                        }else{
                             response.status(200).json({
                                 "access_token": token
                             })
                         }                        
                     })
-                }
-                else if(errorCodes.includes(databaseError)){
+                }else if(errorCodes.includes(databaseError)){
                     response.status(500).json(errorCodes)
-                }
-                else{
+                }else{
                     response.status(401).json(errorCodes)
                 }
                 
             })
-        }
-        else{
+        }else{
             response.status(400).json(["unsupported_grant_type"])
         }
     })

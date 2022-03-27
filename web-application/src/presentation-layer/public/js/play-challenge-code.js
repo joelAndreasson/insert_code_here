@@ -6,19 +6,14 @@ document.addEventListener('DOMContentLoaded', function(){
         switch(progLanguage.value){
             case "JavaScript":
                 return configJavascript
-                break;
             case "Python":
                 return configPython
-                break;
             case "C++":
                 return configCPlusPlus
-                break;
             case "SQL":
                 return configSql
-                break;
             case "Swift":
                 return configSwift
-                break;
             default:
                 return configJavascript
         }
@@ -26,4 +21,4 @@ document.addEventListener('DOMContentLoaded', function(){
 
     //Create Codemirror instance
     var codeMirrorInstance = CodeMirror.fromTextArea(textArea, getConfig());
-});
+})

@@ -89,21 +89,26 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 		const profileAccountUsername = request.params.accountUsername
 
 		const requesterUsername = request.session.accountUsername
-		accountManager.updateAccountBio(requesterUsername, newBioText, profileAccountUsername, function(errorCodes, results){
-			if(errorCodes.length > 0){
-				const translatedErrorCodes = errorTranslator.translateErrorCodes(errorCodes)
-				const model = {
-					errors: translatedErrorCodes,
-					account: {
-						username: profileAccountUsername,
-						bio: newBioText
+		accountManager.updateAccountBio(
+			requesterUsername, 
+			newBioText, 
+			profileAccountUsername, 
+			function(errorCodes, results){
+				if(errorCodes.length > 0){
+					const translatedErrorCodes = errorTranslator.translateErrorCodes(errorCodes)
+					const model = {
+						errors: translatedErrorCodes,
+						account: {
+							username: profileAccountUsername,
+							bio: newBioText
+						}
 					}
+					response.render("profile-edit-bio.hbs", model)
+				}else {
+					response.redirect("/accounts/"+profileAccountUsername)
 				}
-				response.render("profile-edit-bio.hbs", model)
-			}else {
-				response.redirect("/accounts/"+profileAccountUsername)
 			}
-		})
+		)
 		
 		
 	})
@@ -121,7 +126,7 @@ module.exports = function({accountManager, challengeManager, errorTranslator}){
 					errors: translatedErrors
 				}
 				response.render("accounts-sign-in.hbs", model)
-			}else{ // no errerrorCodes, login
+			}else{ 
 				request.session.isLoggedIn = true
 				request.session.accountUsername = account.username
 				response.redirect("/")

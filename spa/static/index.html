@@ -190,7 +190,6 @@
                     <div class="field">
                         <label class="label">Challenge Text</label>
                         <div class="control">
-                            <!-- the input tag below should be replaced with codemirror thingy -->
                             <textarea id="new-challenge-text" class="textarea" name="challengeText"
                                 placeholder="Challenge Text"></textarea>
                         </div>
@@ -260,9 +259,7 @@
                             <label class="label">Language</label>
                             <div class="control">
                                 <select id="prog-language-selector" name="progLanguage">
-                                    <!-- Options should not be hardcoded maybe? Stor in db? -->
                                     <option selected>Language</option>
-                                    <!-- iterate through list of progLanguages -->
                                 </select>
                             </div>
                         </div>
@@ -271,7 +268,6 @@
                         <div class="field">
                             <label class="label">Challenge Text</label>
                             <div class="control">
-                                <!-- the input tag below should be replaced with codemirror thingy -->
                                 <textarea id="challenge-text-input" class="textarea"
                                     name="challengeText" placeholder="Challenge Text"></textarea>
                             </div>
@@ -282,7 +278,6 @@
                         <div class="field">
                             <label class="label">Solution Text</label>
                             <div class="control">
-                                <!-- the input tag below should be replaced with codemirror thingy -->
                                 <textarea id="solution-text-input" class="textarea" name="solutionText"
                                     placeholder="Solution Text"></textarea>
                             </div>
@@ -302,7 +297,6 @@
                             <div class="control">
                                 <select id="difficulty-selector" name="difficulty">
                                     <option selected>Difficulty</option>
-                                    <!-- iterate through list of difficulties -->
                                 </select>
                             </div>
                         </div>
@@ -342,7 +336,8 @@
                         freedom in doing soo. The places you want users to enter code into add
                         <b>[[INSERT_CODE_HERE]]</b> and
                         our editor will recognize it as a so called blank that challenge taker must
-                        fill in. You can add as many blanks as you want. The sky is the limit!
+                        fill in. You can add as many blanks as you want. The sky is the limit! 
+                        Remember to add a comment in the text and leave a clue to what the challenge taker should do!
                     </p>
                     <p class="is-size-6">
                         <b>4. Questions needs answers! </b> <br> Now the code is done and it's time
@@ -475,19 +470,13 @@
                 <a class="button is-success page-link" href="/challenges">Play another challenge</a>
             </div>
 
-            <!-- <p id="challenge-numOfRightAnswers"></p>
-                <p>Of</p>
-                <p id="challenge-totalNumOfAnswers"></p> -->
         </section>
 
         <section id="not-found-page" class="page">
             <h2>404 NOT FOUND</h2>
         </section>
 
-        
-
     </main>
-
 
 </body>
 

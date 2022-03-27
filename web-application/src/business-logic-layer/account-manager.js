@@ -1,9 +1,8 @@
 
 const bcrypt = require('bcrypt')
-const { response } = require('express') // UNNECESSARY??
 
 // brcypt variables
-const saltRounds = 10 // globals?
+const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds)
 
 module.exports = function({accountRepository, accountValidator}){
@@ -56,7 +55,7 @@ module.exports = function({accountRepository, accountValidator}){
 
 		updateAccountBio: function(requesterUsername, newBioText, profileAccountUsername, callback){
 
-			const validationErrorCodes = accountValidator.getErrorsUpdateBio(requesterUsername, profileAccountUsername)
+			const validationErrorCodes = accountValidator.getErrorsUpdateBio(requesterUsername, profileAccountUsername, newBioText)
 
 			if(validationErrorCodes.length > 0){
 				callback(validationErrorCodes, null)

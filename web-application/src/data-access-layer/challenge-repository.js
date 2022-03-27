@@ -1,6 +1,6 @@
 
 
-module.exports = function({db}){
+module.exports = function({db, validationVariabels}){
 	return{
 		getAllChallenges: function(callback){
 			const query = 'SELECT * FROM challenges ORDER BY id DESC'
@@ -8,9 +8,8 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
-					callback(['databaseError'], null)
-				}
-				else{
+					callback([validationVariabels.databaseError], null)
+				}else{
 					callback([], challenges)
 				}
 			})
@@ -22,7 +21,7 @@ module.exports = function({db}){
 			
 			db.query(query, values, function(error, challenge){
 				if(error){
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else{
 					callback([], challenge[0])
 				}
@@ -57,9 +56,9 @@ module.exports = function({db}){
 			db.query(query, values, function(error, results){
 				if(error){
 					if(error.code == "ER_NO_REFERENCED_ROW_2"){
-                        callback(['accountNotExist'], null)
+                        callback([validationVariabels.accountNotExist], null)
                     }else {
-						callback(['databaseError'], null)
+						callback([validationVariabels.databaseError], null)
 					}
 				}else{
 					callback([], results.insertId)
@@ -73,20 +72,20 @@ module.exports = function({db}){
 
 			db.query(query, values, function(error, challenges){
 				if(error){
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else {
 					callback([], challenges)
 				}
 			})
 		},
 
-		updateNumOfPlays: function(challengeId, newNumOfPlays, callback){ // numOfPlays should be increased in bussiness logic layer and then call this function  
+		updateNumOfPlays: function(challengeId, newNumOfPlays, callback){
 			const query = `UPDATE challenges SET numOfPlays = ? WHERE id = ?`
 			const values = [newNumOfPlays, challengeId]
 
 			db.query(query, values, function(error, results){
 				if(error){
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else {
 					callback([], results)
 				}
@@ -100,9 +99,8 @@ module.exports = function({db}){
 			db.query(query, values, function(error, results){
 				if(error){
 					console.log(error)
-					callback(['databaseError'], null)
-				}
-				else {
+					callback([validationVariabels.databaseError], null)
+				}else {
 					callback([], results)
 				}
 			})
@@ -128,11 +126,10 @@ module.exports = function({db}){
 				challengeId
 			]
 
-			db.query(query, values, function(error, results){ //Results or challenge?
+			db.query(query, values, function(error, results){
 				if(error){
-					callback(['databaseError'], null)
-				}
-				else {
+					callback([validationVariabels.databaseError], null)
+				}else {
 					callback([], results)
 				}
 			})
@@ -144,7 +141,7 @@ module.exports = function({db}){
 			db.query(query, function(error, challenges){
 				if(error){	
 					console.log(error)
-					callback(['databaseError'], null)
+					callback([validationVariabels.databaseError], null)
 				}else {
 					callback([], challenges)
 				}

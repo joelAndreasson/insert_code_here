@@ -17,8 +17,7 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 				if(errorCodes.length > 0){
 					callback(errorCodes, null, null, null)
 					return
-				}
-				else{
+				}else{
 					const enteredAnswers = changedChallengeText.match(validationVariabels.SOLUTIONS_REGEX)
 					const solutionAnswers = challenge.solutionText.match(validationVariabels.SOLUTIONS_REGEX)
 			
@@ -27,21 +26,24 @@ module.exports = function({challengeRepository, challengeValidator, validationVa
 					if(validationErrorCodes.length > 0){
 						callback(validationErrorCodes, null, null, challenge)
 						return
-					}
-					else{
-						challengeRepository.updateNumOfPlays(challenge.id, (challenge.numOfPlays + increase), function(errorCodes, results){
-							if(errorCodes.length > 0){
-								callback(errorCodes, null)
-							}else {
-								let numOfRightAnswers = 0
-								let totalNumOfAnswers = solutionAnswers.length
-								for(i = 0; i < totalNumOfAnswers; i+=1){
-									numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+					}else{
+						challengeRepository.updateNumOfPlays(
+							challenge.id, 
+							(challenge.numOfPlays + increase), 
+							function(errorCodes, results){
+								if(errorCodes.length > 0){
+									callback(errorCodes, null)
+								}else {
+									let numOfRightAnswers = 0
+									let totalNumOfAnswers = solutionAnswers.length
+									for(i = 0; i < totalNumOfAnswers; i+=1){
+										numOfRightAnswers += enteredAnswers[i] == solutionAnswers[i] ? 1 : 0
+									}
+							
+									callback([], numOfRightAnswers, totalNumOfAnswers, null)
 								}
-						
-								callback([], numOfRightAnswers, totalNumOfAnswers, null)
-								}
-						})
+							}
+						)
 					}
 				}
 			})

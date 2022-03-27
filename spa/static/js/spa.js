@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function(){
     showPage(location.pathname)
 
     //Challenge play form
-    const challengePlayForm = document.getElementById('challenge-play-form') // CURRENTLY ALWAYS TAKES YOU TO RESULTS PAGE, EVEN IF SUBMIT IS NOT VALID
+    const challengePlayForm = document.getElementById('challenge-play-form')
     challengePlayForm.addEventListener('submit', function(event){
         event.preventDefault()
 
@@ -181,7 +181,7 @@ function showPage(url){
     
         default:
             if(url.startsWith("/challenges/")){
-                const [empty, challenges, challengeId, state] = url.split("/") //Should it be state?
+                const [empty, challenges, challengeId, state] = url.split("/")
                 
                 switch(state){
                     case 'results':
@@ -202,8 +202,7 @@ function showPage(url){
                         break
                 }
                 
-            }
-            else{
+            }else{
                 nextPageId = 'not-found-page'
             }
             break
@@ -235,7 +234,7 @@ async function createChallenge(challenge){
             const challengeId = await response.json()
             console.log(challengeId)
             hideCurrentPage()
-            showPage('/challenges/' + challengeId) // NOT WORKING // Hardcoded ???
+            showPage('/challenges/' + challengeId)
             break
 
         case 401:
@@ -368,7 +367,7 @@ async function loadChallengesPage(){
                 
                 const anchor = document.createElement('a')
                 anchor.innerText = challenge.title
-                anchor.classList.add('.page-link') //Unnecessary???
+                anchor.classList.add('.page-link')
                 anchor.setAttribute('href', "/challenges/" + challenge.id)
 
                 makePageLinkListener(anchor)
@@ -739,7 +738,7 @@ getValidationVariables(function(variables){
 function translateErrorCodes(errorCodes){
     
     const errorTranslations = {
-        databaseError: "Internal server error, please try again later...", //What should this say?
+        databaseError: "Internal server error, please try again later...",
         usernameMissing: "Please enter a username",
         usernameTooShort: "The username has to be a minimum of " + validationVariables.MIN_USERNAME_LENGTH + " characters",
         passwordsNotMatch: "Passwords does not match",

@@ -17,12 +17,12 @@ module.exports = function({commentManager, errorTranslator}){
 
         const comment = {
             commentText: request.body.commentText,
-            accountUsername: request.body.accountUsername, // Should come from the body of the request!!!!!!!!!!!!!!
+            accountUsername: request.body.accountUsername,
             challengeId: request.params.challengeId
         }
 
         const requesterUsername = request.session.accountUsername
-        commentManager.createComment(requesterUsername, comment, function(errorCodes, id){ // what is id for? 
+        commentManager.createComment(requesterUsername, comment, function(errorCodes, id){
             if(errorCodes.length > 0){
 				const translatedErrors = errorTranslator.translateErrorCodes(errorCodes)
                 const model = {
@@ -32,9 +32,8 @@ module.exports = function({commentManager, errorTranslator}){
                 }
 
                 response.render('comment-create.hbs', model)
-            }
-            else{
-                response.redirect('/challenges/' + comment.challengeId + '/preview') // REMOVE PREVIEW !!
+            }else{
+                response.redirect('/challenges/' + comment.challengeId + '/preview')
             }
         })
     })
@@ -128,7 +127,7 @@ module.exports = function({commentManager, errorTranslator}){
         })
     })
 
-    router.get('/:commentId/preview', function(request, response){ // REMOVE PREVIEW !!
+    router.get('/:commentId/preview', function(request, response){
         const commentId = request.params.commentId
 
         commentManager.getCommentById(commentId, function(errorCodes, comment){

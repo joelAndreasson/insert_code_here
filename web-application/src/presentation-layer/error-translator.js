@@ -22,7 +22,7 @@ module.exports = function({validationVariabels}){
                 usernameTaken: "Username already taken",
                 challengeNotExist: "Challenge does not exist.",
                 accountNotExist: "Account does not exist.",
-                notAuthorized: "Authorization failed." //BETTER DESC???????
+                notAuthorized: "Authorization failed."
             }
     
             const translations = errorCodes.map(error => errorTranslations[error])
